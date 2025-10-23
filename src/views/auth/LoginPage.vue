@@ -76,7 +76,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useAuthStore } from '../../stores/auth.store';
-import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'LoginPage',
@@ -99,18 +98,17 @@ export default defineComponent({
     async handleLogin() {
       this.error = null;
       const authStore = useAuthStore();
-      const router = useRouter();
 
       try {
         await authStore.login(this.form);
 
         // Redirect based on user role
         if (authStore.isStudent) {
-          router.push('/student/dashboard');
+          this.$router.push('/student/dashboard');
         } else if (authStore.isTutor) {
-          router.push('/tutor/dashboard');
+          this.$router.push('/tutor/dashboard');
         } else if (authStore.isAdmin) {
-          router.push('/admin/dashboard');
+          this.$router.push('/admin/dashboard');
         }
       } catch (error: any) {
         this.error = error.response?.data?.message || 'Login failed. Please check your credentials.';

@@ -62,7 +62,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useAuthStore } from '../../stores/auth.store';
-import { useRouter, useRoute } from 'vue-router';
 
 export default defineComponent({
   name: 'ResetPassword',
@@ -91,8 +90,7 @@ export default defineComponent({
         return;
       }
 
-      const route = useRoute();
-      const token = route.query.token as string;
+      const token = this.$route.query.token as string;
 
       if (!token) {
         this.error = 'Invalid or missing reset token';
@@ -100,13 +98,12 @@ export default defineComponent({
       }
 
       const authStore = useAuthStore();
-      const router = useRouter();
 
       try {
         await authStore.resetPassword(token, this.form.password);
         this.success = 'Password reset successful! Redirecting to login...';
         setTimeout(() => {
-          router.push('/login');
+          this.$router.push('/login');
         }, 2000);
       } catch (error: any) {
         this.error = error.response?.data?.message || 'Failed to reset password';

@@ -47,7 +47,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useAuthStore } from '../../stores/auth.store';
-import { useRoute } from 'vue-router';
 
 export default defineComponent({
   name: 'EmailVerification',
@@ -59,8 +58,7 @@ export default defineComponent({
     };
   },
   async mounted() {
-    const route = useRoute();
-    const token = route.query.token as string;
+    const token = this.$route.query.token as string;
 
     if (!token) {
       this.error = 'Invalid or missing verification token';
