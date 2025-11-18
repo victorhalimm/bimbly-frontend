@@ -75,7 +75,19 @@ const routes = [
     path: '/admin/dashboard',
     name: 'AdminDashboard',
     component: () => import('../views/admin/Dashboard.vue'),
-    meta: { requiresAuth: true, roles: ['admin'] },
+    // meta: { requiresAuth: true, roles: ['admin'] },
+  },
+  {
+    path: '/admin/users',
+    name: 'AdminUsers',
+    component: () => import('../views/admin/UserManagement.vue'),
+    // meta: { requiresAuth: true, roles: ['admin'] },
+  },
+  {
+    path: '/admin/tutor-applications',
+    name: 'AdminTutorApplications',
+    component: () => import('../views/admin/TutorApplications.vue'),
+    // meta: { requiresAuth: true, roles: ['admin'] },
   },
   {
     path: '/unauthorized',

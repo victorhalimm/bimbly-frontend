@@ -243,7 +243,6 @@ export default defineComponent({
     HeroSection,
     NeoCard,
     NeoButton,
-    TutorCard,
   },
   data() {
     return {
