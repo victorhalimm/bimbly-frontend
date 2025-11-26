@@ -31,6 +31,11 @@ const routes = [
     component: () => import('../views/tutors/TutorsPage.vue'),
   },
   {
+    path: '/tutors/:id',
+    name: 'TutorProfilePublic',
+    component: () => import('../views/tutors/TutorProfilePublic.vue'),
+  },
+  {
     path: '/verify-email',
     name: 'VerifyEmail',
     component: () => import('../views/auth/EmailVerification.vue'),
