@@ -10,20 +10,6 @@ export const tutorService = {
     return response.data;
   },
 
-  async createProfile(data) {
-    const response = await axios.post(`${API_URL}/tutors/profile`, data, {
-      withCredentials: true,
-    });
-    return response.data;
-  },
-
-  async updateProfile(data) {
-    const response = await axios.patch(`${API_URL}/tutors/profile`, data, {
-      withCredentials: true,
-    });
-    return response.data;
-  },
-
   async uploadCertification(file, certificationName) {
     const formData = new FormData();
     formData.append('file', file);

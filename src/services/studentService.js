@@ -9,18 +9,4 @@ export const studentService = {
     });
     return response.data;
   },
-
-  async createProfile(data) {
-    const response = await axios.post(`${API_URL}/students/profile`, data, {
-      withCredentials: true,
-    });
-    return response.data;
-  },
-
-  async updateProfile(data) {
-    const response = await axios.patch(`${API_URL}/students/profile`, data, {
-      withCredentials: true,
-    });
-    return response.data;
-  },
 };
