@@ -65,6 +65,24 @@ const routes = [
     meta: { requiresAuth: true, roles: ['student'] },
   },
   {
+    path: '/student/quizzes',
+    name: 'StudentQuizDashboard',
+    component: () => import('../views/student/QuizDashboard.vue'),
+    meta: { requiresAuth: true, roles: ['student'] },
+  },
+  {
+    path: '/student/quiz/:id',
+    name: 'TakeQuiz',
+    component: () => import('../views/student/TakeQuiz.vue'),
+    meta: { requiresAuth: true, roles: ['student'] },
+  },
+  {
+    path: '/student/quiz/:id/results',
+    name: 'QuizResults',
+    component: () => import('../views/student/QuizResults.vue'),
+    meta: { requiresAuth: true, roles: ['student'] },
+  },
+  {
     path: '/tutor/dashboard',
     name: 'TutorDashboard',
     component: () => import('../views/tutor/Dashboard.vue'),
@@ -74,6 +92,42 @@ const routes = [
     path: '/tutor/profile',
     name: 'TutorProfile',
     component: () => import('../views/tutor/TutorProfilePage.vue'),
+    meta: { requiresAuth: true, roles: ['tutor'] },
+  },
+  {
+    path: '/tutor/quizzes',
+    name: 'TutorQuizList',
+    component: () => import('../views/tutor/TutorQuizList.vue'),
+    meta: { requiresAuth: true, roles: ['tutor'] },
+  },
+  {
+    path: '/tutor/quizzes/create',
+    name: 'CreateQuiz',
+    component: () => import('../views/tutor/CreateQuiz.vue'),
+    meta: { requiresAuth: true, roles: ['tutor'] },
+  },
+  {
+    path: '/tutor/quizzes/:id/edit',
+    name: 'EditQuiz',
+    component: () => import('../views/tutor/EditQuiz.vue'),
+    meta: { requiresAuth: true, roles: ['tutor'] },
+  },
+  {
+    path: '/tutor/quizzes/:id/assign',
+    name: 'AssignQuiz',
+    component: () => import('../views/tutor/AssignQuiz.vue'),
+    meta: { requiresAuth: true, roles: ['tutor'] },
+  },
+  {
+    path: '/tutor/assignments',
+    name: 'TutorAssignments',
+    component: () => import('../views/tutor/TutorAssignments.vue'),
+    meta: { requiresAuth: true, roles: ['tutor'] },
+  },
+  {
+    path: '/tutor/assignments/:id/grade',
+    name: 'GradeQuiz',
+    component: () => import('../views/tutor/GradeQuiz.vue'),
     meta: { requiresAuth: true, roles: ['tutor'] },
   },
   {
