@@ -1,5 +1,7 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 py-12 px-6 lg:px-12">
+  <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+    <BHeader :user="headerUser" @logout="handleLogout" />
+    <div class="py-12 px-6 lg:px-12">
     <div class="absolute top-20 right-20 w-64 h-64 bg-blue-200 rounded-full opacity-20 blur-3xl"></div>
     <div class="absolute bottom-20 left-20 w-96 h-96 bg-yellow-100 rounded-full opacity-15 blur-3xl"></div>
 
@@ -27,7 +29,7 @@
                 <button
                   type="button"
                   @click="$refs.avatarInput.click()"
-                  class="absolute -bottom-3 -right-3 w-12 h-12 bg-blue-600 text-white rounded-full shadow-xl hover:bg-blue-700 hover:scale-110 transition-all flex items-center justify-center"
+                  class="absolute -bottom-3 -right-3 w-12 h-12 bg-blue-600 text-white rounded-full shadow-xl hover:bg-blue-700 transition-all ease-in-out flex items-center justify-center cursor-pointer"
                 >
                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
@@ -210,7 +212,7 @@
             <button
               type="submit"
               :disabled="saving"
-              class="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white px-16 py-6 rounded-full text-xl font-black hover:from-blue-700 hover:to-blue-600 hover:scale-105 transition-all shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              class="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white px-16 py-6 rounded-full text-xl font-black hover:from-blue-700 hover:to-blue-600 transition-all ease-in-out shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               <span>{{ saving ? 'Saving...' : (profile ? 'Update Profile' : 'Create Profile') }}</span>
               <div v-if="!saving" class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
@@ -224,21 +226,42 @@
         </main>
       </div>
     </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { computed } from 'vue';
+import { useRouter } from 'vue-router';
 import { studentService } from '@/services/studentService';
 import { userService } from '@/services/userService';
 import { useAuthStore } from '@/stores/auth.store';
 import { useToast } from '@/composables/useToast';
+import BHeader from '@/components/common/layout/Header.vue';
 
 export default {
   name: 'StudentProfilePage',
+  components: {
+    BHeader,
+  },
   setup() {
     const authStore = useAuthStore();
     const toast = useToast();
-    return { authStore, toast };
+    const router = useRouter();
+
+    const headerUser = computed(() => ({
+      name: authStore.user?.fullName || 'Student',
+      email: authStore.user?.email,
+      avatar: authStore.user?.profileImageUrl,
+      role: 'student',
+    }));
+
+    const handleLogout = async () => {
+      await authStore.logout();
+      router.push('/login');
+    };
+
+    return { authStore, toast, headerUser, handleLogout };
   },
   data() {
     return {

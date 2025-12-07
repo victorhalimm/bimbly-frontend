@@ -145,4 +145,61 @@ export const tutorService = {
     const response = await axios.get(`${API_URL}/tutors/${id}/availability`, { params });
     return response.data;
   },
+
+  async submitApplication() {
+    const response = await axios.post(
+      `${API_URL}/tutors/profile/submit-application`,
+      {},
+      { withCredentials: true }
+    );
+    return response.data;
+  },
+
+  async getApplicationStatus() {
+    try {
+      const response = await axios.get(
+        `${API_URL}/tutors/application/status`,
+        {
+          withCredentials: true,
+          validateStatus: (status) => status === 200 || status === 404
+        }
+      );
+
+      if (response.status === 404) {
+        throw { response: { status: 404, data: { message: 'No application found' } } };
+      }
+
+      return response.data;
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        throw error;
+      }
+      throw error;
+    }
+  },
+
+  async getProfile() {
+    const response = await axios.get(`${API_URL}/tutors/profile`, {
+      withCredentials: true,
+    });
+    return response.data;
+  },
+
+  async uploadCertification(file: File, certificationName: string) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('certificationName', certificationName);
+
+    const response = await axios.post(
+      `${API_URL}/tutors/upload-certification`,
+      formData,
+      {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+    return response.data;
+  },
 };

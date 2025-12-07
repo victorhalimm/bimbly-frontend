@@ -2,10 +2,8 @@
   <button
     :class="buttonClasses"
     :disabled="disabled || loading"
-    :type="type"
+    :type="type as 'button' | 'submit' | 'reset'"
     @click="$emit('click', $event)"
-    @mouseenter="hover = true"
-    @mouseleave="hover = false"
   >
     <!-- Loading State -->
     <span v-if="loading" class="inline-flex items-center">
@@ -26,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from 'vue';
+import { defineComponent, computed } from 'vue';
 
 export default defineComponent({
   name: 'NeoButton',
@@ -57,8 +55,6 @@ export default defineComponent({
   },
   emits: ['click'],
   setup(props) {
-    const hover = ref(false);
-
     const buttonClasses = computed(() => {
       const baseClasses = [
         'relative',
@@ -76,13 +72,13 @@ export default defineComponent({
         'focus:ring-opacity-25',
       ];
 
-      const sizeClasses = {
+      const sizeClasses: Record<string, string[]> = {
         sm: ['px-6', 'py-3', 'text-sm'],
         md: ['px-8', 'py-4', 'text-base'],
         lg: ['px-10', 'py-5', 'text-lg'],
       };
 
-      const variantClasses = {
+      const variantClasses: Record<string, string[]> = {
         primary: [
           'bg-primary',
           'text-white',

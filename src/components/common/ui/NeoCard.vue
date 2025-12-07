@@ -2,8 +2,8 @@
   <div
     :class="cardClasses"
     class="relative bg-white border-4 border-black rounded-lg"
-    @mouseenter="hover = true"
-    @mouseleave="hover = false"
+    @mouseenter="internalHover = true"
+    @mouseleave="internalHover = false"
   >
     <!-- Shadow Effect -->
     <div :class="shadowClasses" class="absolute inset-0 rounded-lg"></div>
@@ -47,7 +47,7 @@ export default defineComponent({
     const cardClasses = computed(() => {
       const baseClasses = ['transition-all', 'duration-300'];
 
-      const variantClasses = {
+      const variantClasses: Record<string, string[]> = {
         default: ['shadow-lg'],
         elevated: ['shadow-2xl'],
         bordered: ['shadow-sm'],
@@ -83,6 +83,7 @@ export default defineComponent({
     return {
       cardClasses,
       shadowClasses,
+      internalHover,
     };
   },
 });

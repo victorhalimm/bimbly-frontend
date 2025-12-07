@@ -77,6 +77,12 @@ const routes = [
     meta: { requiresAuth: true, roles: ['tutor'] },
   },
   {
+    path: '/tutor/application-status',
+    name: 'TutorApplicationStatus',
+    component: () => import('../views/tutor/ApplicationStatus.vue'),
+    meta: { requiresAuth: true, roles: ['tutor'] },
+  },
+  {
     path: '/admin/dashboard',
     name: 'AdminDashboard',
     component: () => import('../views/admin/Dashboard.vue'),

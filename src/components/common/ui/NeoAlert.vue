@@ -90,7 +90,7 @@ export default defineComponent({
         'duration-300',
       ];
 
-      const variantClasses = {
+      const variantClasses: Record<string, string[]> = {
         error: [
           'bg-error',
           'text-white',

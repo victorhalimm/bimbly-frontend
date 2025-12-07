@@ -123,13 +123,13 @@ export default defineComponent({
         'duration-200',
       ];
 
-      const sizeClasses = {
+      const sizeClasses: Record<string, string[]> = {
         sm: ['px-2', 'py-1.5', 'text-sm'],
         md: ['px-3', 'py-2', 'text-sm'],
         lg: ['px-4', 'py-3', 'text-base'],
       };
 
-      const resizeClasses = {
+      const resizeClasses: Record<string, string[]> = {
         none: ['resize-none'],
         vertical: ['resize-y'],
         horizontal: ['resize-x'],

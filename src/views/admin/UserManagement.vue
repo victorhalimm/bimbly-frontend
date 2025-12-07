@@ -1,204 +1,191 @@
 <template>
-  <div class="min-h-screen bg-amber-50">
-    <nav class="bg-white border-b-4 border-black shadow-xl">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16 sm:h-20">
-          <div class="flex items-center space-x-4 sm:space-x-8">
-            <h1 class="text-xl sm:text-2xl lg:text-3xl font-black text-gray-900">🎓 <span class="hidden sm:inline">Bimbly</span> Admin</h1>
-            <div class="hidden md:flex space-x-2">
-              <router-link
-                to="/admin/dashboard"
-                class="px-4 py-2 rounded-lg text-sm font-bold text-gray-900 border-4 border-black bg-white shadow-md hover:-translate-y-1 transition-transform"
-              >
-                Dashboard
-              </router-link>
-              <router-link
-                to="/admin/users"
-                class="px-4 py-2 rounded-lg text-sm font-bold bg-primary text-white border-4 border-black shadow-md hover:-translate-y-1 transition-transform"
-              >
-                Users
-              </router-link>
-              <router-link
-                to="/admin/tutor-applications"
-                class="px-4 py-2 rounded-lg text-sm font-bold text-gray-900 border-4 border-black bg-white shadow-md hover:-translate-y-1 transition-transform"
-              >
-                Applications
-              </router-link>
-            </div>
-          </div>
-          <div class="flex items-center space-x-2 sm:space-x-4">
-            <span class="hidden sm:inline text-sm font-bold text-gray-900">{{ userName }}</span>
-            <neo-button variant="danger" size="sm" @click="handleLogout" class="hidden sm:inline-flex">
-              Logout
-            </neo-button>
-            <button
-              @click="mobileMenuOpen = !mobileMenuOpen"
-              class="md:hidden w-10 h-10 bg-primary border-4 border-black rounded-lg flex items-center justify-center hover:-translate-y-1 transition-transform"
-              aria-label="Toggle menu"
-            >
-              <span class="text-white text-xl font-black">{{ mobileMenuOpen ? '✕' : '☰' }}</span>
-            </button>
-          </div>
-        </div>
-
-        <div v-if="mobileMenuOpen" class="md:hidden pb-4 border-t-4 border-black mt-4 pt-4 space-y-2">
-          <router-link
-            to="/admin/dashboard"
-            @click="mobileMenuOpen = false"
-            class="block px-4 py-3 rounded-lg text-sm font-bold text-gray-900 border-4 border-black bg-white shadow-md"
-          >
-            Dashboard
-          </router-link>
-          <router-link
-            to="/admin/users"
-            @click="mobileMenuOpen = false"
-            class="block px-4 py-3 rounded-lg text-sm font-bold bg-primary text-white border-4 border-black shadow-md"
-          >
-            Users
-          </router-link>
-          <router-link
-            to="/admin/tutor-applications"
-            @click="mobileMenuOpen = false"
-            class="block px-4 py-3 rounded-lg text-sm font-bold text-gray-900 border-4 border-black bg-white shadow-md"
-          >
-            Applications
-          </router-link>
-          <div class="pt-2 border-t-2 border-gray-300 mt-2">
-            <p class="text-sm font-bold text-gray-700 px-4 py-2">{{ userName }}</p>
-            <neo-button variant="danger" size="sm" @click="handleLogout" class="w-full">
-              Logout
-            </neo-button>
-          </div>
-        </div>
+  <admin-layout page-title="User Management">
+    <div v-if="loading" class="flex justify-center items-center py-20">
+      <div class="text-center">
+        <div class="w-12 h-12 border-3 border-gray-300 border-t-blue-600 rounded-full animate-spin mx-auto mb-3"></div>
+        <p class="text-sm font-medium text-gray-600">Loading users...</p>
       </div>
-    </nav>
+    </div>
 
-    <main class="max-w-7xl mx-auto py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
-      <div class="mb-6 sm:mb-8">
-        <div class="flex items-center space-x-3 sm:space-x-4">
-          <div class="w-1 sm:w-2 h-8 sm:h-12 bg-primary border-2 border-black"></div>
-          <div>
-            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-900">User Management</h2>
-            <p class="text-xs sm:text-sm font-bold text-gray-700 mt-1">View and manage all platform users</p>
-          </div>
-        </div>
-      </div>
-
-      <div v-if="loading" class="flex justify-center items-center py-20">
-        <div class="text-center">
-          <div class="w-16 h-16 border-4 border-black border-t-primary rounded-full animate-spin mx-auto mb-4"></div>
-          <p class="text-lg font-bold text-gray-900">Loading users...</p>
-        </div>
-      </div>
-
-      <neo-card v-else variant="elevated" class="bg-white overflow-hidden">
-        <div class="p-4 sm:p-6 border-b-4 border-black bg-gradient-to-r from-blue-50 to-purple-50">
-          <div class="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
-            <neo-input
+    <div v-else>
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center space-x-4">
+          <div class="relative">
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input
               v-model="searchQuery"
               type="text"
-              placeholder="Search by name or email..."
-              class="flex-1"
+              placeholder="Search users..."
+              class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm w-64"
             />
-            <select
-              v-model="filterType"
-              class="px-4 sm:px-6 py-3 sm:py-4 text-base sm:text-lg font-bold border-4 border-black rounded-lg focus:ring-4 focus:ring-black focus:ring-opacity-25 bg-white shadow-md transition-all"
-            >
-              <option value="">All Types</option>
-              <option value="student">Student</option>
-              <option value="tutor">Tutor</option>
-              <option value="admin">Admin</option>
-            </select>
           </div>
+          <select
+            v-model="filterType"
+            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm font-medium cursor-pointer"
+          >
+            <option value="">All Types</option>
+            <option value="student">Student</option>
+            <option value="tutor">Tutor</option>
+          </select>
+          <select
+            v-model="filterStatus"
+            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm font-medium cursor-pointer"
+          >
+            <option value="">All Status</option>
+            <option value="active">Active</option>
+            <option value="blocked">Blocked</option>
+          </select>
         </div>
+      </div>
 
-        <div class="overflow-x-auto -mx-4 sm:mx-0">
-          <table class="min-w-full divide-y-4 divide-black">
-            <thead class="bg-gradient-to-r from-gray-100 to-gray-200">
-              <tr>
-                <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-black text-gray-900 uppercase tracking-wider">User</th>
-                <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Type</th>
-                <th class="hidden lg:table-cell px-6 py-4 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Phone</th>
-                <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Status</th>
-                <th class="hidden sm:table-cell px-6 py-4 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Joined</th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y-2 divide-gray-200">
-              <tr v-for="user in filteredUsers" :key="user.id" class="hover:bg-amber-50 transition-colors">
-                <td class="px-3 sm:px-6 py-3 sm:py-4">
+      <div class="bg-white rounded-lg border border-gray-200">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead>
+            <tr class="bg-gray-50">
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">User</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
+              <th class="hidden lg:table-cell px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Phone</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+              <th class="hidden sm:table-cell px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Joined</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr
+              v-for="user in filteredUsers"
+              :key="user.id"
+              class="hover:bg-gray-50 transition-colors"
+            >
+              <td class="px-6 py-4">
+                <div class="flex items-center space-x-3">
+                  <div
+                    :class="[
+                      'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0',
+                      user.userType === 'student' ? 'bg-green-100' :
+                      user.userType === 'tutor' ? 'bg-purple-100' :
+                      'bg-blue-100'
+                    ]"
+                  >
+                    <span
+                      :class="[
+                        'text-sm font-semibold',
+                        user.userType === 'student' ? 'text-green-700' :
+                        user.userType === 'tutor' ? 'text-purple-700' :
+                        'text-blue-700'
+                      ]"
+                    >
+                      {{ getInitials(user.fullName) }}
+                    </span>
+                  </div>
                   <div>
-                    <div class="text-sm sm:text-base font-black text-gray-900">{{ user.fullName }}</div>
-                    <div class="text-xs sm:text-sm font-bold text-gray-600">{{ user.email }}</div>
+                    <div class="text-sm font-semibold text-gray-900">{{ user.fullName }}</div>
+                    <div class="text-sm text-gray-500">{{ user.email }}</div>
                   </div>
-                </td>
-                <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                  <span
-                    class="px-2 sm:px-3 py-1 text-xs font-black rounded-lg border-2 border-black shadow-md"
-                    :class="{
-                      'bg-green-400 text-white': user.userType === 'student',
-                      'bg-blue-400 text-white': user.userType === 'tutor',
-                      'bg-purple-400 text-white': user.userType === 'admin'
-                    }"
-                  >
-                    {{ user.userType }}
-                  </span>
-                </td>
-                <td class="hidden lg:table-cell px-6 py-4 text-sm font-bold text-gray-900">{{ user.phoneNumber }}</td>
-                <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                  <span
-                    class="px-2 sm:px-3 py-1 text-xs font-black rounded-lg border-2 border-black shadow-md"
-                    :class="user.isEmailVerified ? 'bg-green-400 text-white' : 'bg-yellow-400 text-gray-900'"
-                  >
-                    {{ user.isEmailVerified ? 'Verified' : 'Unverified' }}
-                  </span>
-                </td>
-                <td class="hidden sm:table-cell px-6 py-4 text-sm font-bold text-gray-700">
-                  {{ formatDate(user.createdAt) }}
-                </td>
-              </tr>
-              <tr v-if="filteredUsers.length === 0">
-                <td colspan="5" class="px-3 sm:px-6 py-8 sm:py-12 text-center">
-                  <div class="text-center">
-                    <span class="text-6xl mb-4 block">🔍</span>
-                    <p class="text-xl font-black text-gray-900">No users found</p>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </neo-card>
-    </main>
-  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span
+                  class="inline-flex px-2.5 py-0.5 rounded text-xs font-medium"
+                  :class="{
+                    'bg-green-100 text-green-800': user.userType === 'student',
+                    'bg-purple-100 text-purple-800': user.userType === 'tutor',
+                    'bg-blue-100 text-blue-800': user.userType === 'admin'
+                  }"
+                >
+                  {{ user.userType }}
+                </span>
+              </td>
+              <td class="hidden lg:table-cell px-6 py-4 text-sm text-gray-900">{{ user.phoneNumber }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span
+                  class="inline-flex px-2.5 py-0.5 rounded text-xs font-medium"
+                  :class="user.isBlocked ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'"
+                >
+                  {{ user.isBlocked ? 'Blocked' : 'Active' }}
+                </span>
+              </td>
+              <td class="hidden sm:table-cell px-6 py-4 text-sm text-gray-500">
+                {{ formatDate(user.createdAt) }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <button
+                  v-if="!user.isBlocked"
+                  @click="openBlockModal(user)"
+                  class="hover: cursor-pointer px-3 py-1.5 text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700 transition-colors"
+                >
+                  Block
+                </button>
+                <button
+                  v-else
+                  @click="handleUnblockUser(user)"
+                  class="hover: cursor-pointer px-3 py-1.5 text-sm font-medium text-white bg-green-600 rounded-full hover:bg-green-700 transition-colors"
+                >
+                  Unblock
+                </button>
+              </td>
+            </tr>
+            <tr v-if="filteredUsers.length === 0">
+              <td colspan="6" class="px-6 py-12 text-center">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+                </svg>
+                <p class="mt-2 text-sm font-medium text-gray-900">No users found</p>
+                <p class="text-sm text-gray-500">Try adjusting your search or filter.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <confirmation-modal
+      :visible="showBlockModal"
+      title="Block User"
+      description="You are about to block"
+      :target-name="selectedUser?.fullName"
+      prompt-text="Please provide a reason for blocking this user."
+      input-label="Block Reason"
+      placeholder="Enter reason for blocking..."
+      confirm-text="Confirm Block"
+      processing-text="Blocking..."
+      :is-processing="blockingUser"
+      @confirm="handleBlockUserConfirm"
+      @cancel="closeBlockModal"
+    />
+  </admin-layout>
 </template>
 
 <script>
-import { adminService } from '@/services/adminService';
-import { useAuthStore } from '@/stores/auth.store';
-import NeoButton from '@/components/common/ui/NeoButton.vue';
-import NeoCard from '@/components/common/ui/NeoCard.vue';
-import NeoInput from '@/components/common/ui/NeoInput.vue';
+import { adminService } from '@/services/admin.service';
+import AdminLayout from '@/components/admin/AdminLayout.vue';
+import ConfirmationModal from '@/components/common/ConfirmationModal.vue';
+import { useToast } from '@/composables/useToast';
 
 export default {
   name: 'UserManagement',
   components: {
-    NeoButton,
-    NeoCard,
-    NeoInput,
+    AdminLayout,
+    ConfirmationModal,
+  },
+  setup() {
+    const toast = useToast();
+    return { toast };
   },
   data() {
     return {
       loading: true,
-      mobileMenuOpen: false,
       users: [],
       searchQuery: '',
       filterType: '',
+      filterStatus: '',
+      showBlockModal: false,
+      selectedUser: null,
+      blockingUser: false,
     };
   },
   computed: {
-    userName() {
-      return useAuthStore().userName;
-    },
     filteredUsers() {
       let filtered = this.users;
 
@@ -213,6 +200,14 @@ export default {
 
       if (this.filterType) {
         filtered = filtered.filter((user) => user.userType === this.filterType);
+      }
+
+      if (this.filterStatus) {
+        if (this.filterStatus === 'active') {
+          filtered = filtered.filter((user) => !user.isBlocked);
+        } else if (this.filterStatus === 'blocked') {
+          filtered = filtered.filter((user) => user.isBlocked);
+        }
       }
 
       return filtered;
@@ -232,17 +227,53 @@ export default {
         this.loading = false;
       }
     },
+    getInitials(name) {
+      return name
+        .split(' ')
+        .map(word => word[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2);
+    },
     formatDate(date) {
-      return new Date(date).toLocaleDateString('en-US', {
+      return new Date(date).toLocaleDateString('id-ID', {
         year: 'numeric',
         month: 'short',
         day: 'numeric',
+        timeZone: 'Asia/Jakarta'
       });
     },
-    async handleLogout() {
-      const authStore = useAuthStore();
-      await authStore.logout();
-      this.$router.push('/login');
+    openBlockModal(user) {
+      this.selectedUser = user;
+      this.showBlockModal = true;
+    },
+    closeBlockModal() {
+      this.showBlockModal = false;
+      this.selectedUser = null;
+      this.blockingUser = false;
+    },
+    async handleBlockUserConfirm(reason) {
+      try {
+        this.blockingUser = true;
+        await adminService.blockUser(this.selectedUser.id, reason);
+        this.toast.success('User Blocked', `${this.selectedUser.fullName} has been blocked successfully`);
+        this.closeBlockModal();
+        await this.loadUsers();
+      } catch (error) {
+        console.error('Failed to block user:', error);
+        this.toast.error('Block Failed', 'Failed to block user. Please try again.');
+        this.blockingUser = false;
+      }
+    },
+    async handleUnblockUser(user) {
+      try {
+        await adminService.unblockUser(user.id);
+        this.toast.success('User Unblocked', `${user.fullName} has been unblocked successfully`);
+        await this.loadUsers();
+      } catch (error) {
+        console.error('Failed to unblock user:', error);
+        this.toast.error('Unblock Failed', 'Failed to unblock user. Please try again.');
+      }
     },
   },
 };
