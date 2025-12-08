@@ -95,6 +95,11 @@ const routes = [
     meta: { requiresAuth: true, roles: ['tutor'] },
   },
   {
+    path: '/tutor/application-status',
+    name: 'TutorApplicationStatus',
+    component: () => import('../views/tutor/ApplicationStatus.vue'),
+  },
+  {
     path: '/tutor/quizzes',
     name: 'TutorQuizList',
     component: () => import('../views/tutor/TutorQuizList.vue'),
