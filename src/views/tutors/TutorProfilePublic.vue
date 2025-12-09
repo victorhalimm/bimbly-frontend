@@ -416,9 +416,10 @@ export default defineComponent({
     },
     memberSince(): string {
       if (!this.tutor) return '';
-      return new Date(this.tutor.createdAt).toLocaleDateString('en-US', {
+      return new Date(this.tutor.createdAt).toLocaleDateString('id-ID', {
         month: 'long',
         year: 'numeric',
+        timeZone: 'Asia/Jakarta'
       });
     },
   },
@@ -443,10 +444,11 @@ export default defineComponent({
       }
     },
     formatDate(dateString: string): string {
-      return new Date(dateString).toLocaleDateString('en-US', {
+      return new Date(dateString).toLocaleDateString('id-ID', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
+        timeZone: 'Asia/Jakarta'
       });
     },
   },

@@ -1,185 +1,184 @@
 <template>
-  <div class="space-y-4 sm:space-y-6">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-      <neo-card variant="elevated" class="bg-gradient-to-br from-blue-50 to-cyan-50">
-        <div class="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
-          <div class="w-8 h-8 sm:w-10 sm:h-10 bg-blue-400 border-2 sm:border-4 border-black rounded-lg flex items-center justify-center">
-            <span class="text-base sm:text-xl">👤</span>
+  <div class="space-y-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-gray-50 rounded-lg border border-gray-200 p-5">
+        <h4 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-4">Personal Information</h4>
+        <div class="space-y-2 text-sm">
+          <div class="flex">
+            <span class="font-medium text-gray-500 w-24">Name:</span>
+            <span class="text-gray-900">{{ application.tutorProfile.user.fullName }}</span>
           </div>
-          <h4 class="text-base sm:text-lg font-black text-gray-900">Personal Information</h4>
-        </div>
-        <div class="space-y-2 sm:space-y-3 text-xs sm:text-sm">
-          <div class="flex items-start flex-col sm:flex-row">
-            <span class="font-black text-gray-900 sm:min-w-[80px] mb-1 sm:mb-0">Name:</span>
-            <span class="font-bold text-gray-700">{{ application.tutorProfile.user.fullName }}</span>
+          <div class="flex">
+            <span class="font-medium text-gray-500 w-24">Email:</span>
+            <span class="text-gray-900 break-all">{{ application.tutorProfile.user.email }}</span>
           </div>
-          <div class="flex items-start flex-col sm:flex-row">
-            <span class="font-black text-gray-900 sm:min-w-[80px] mb-1 sm:mb-0">Email:</span>
-            <span class="font-bold text-gray-700 break-all">{{ application.tutorProfile.user.email }}</span>
+          <div class="flex">
+            <span class="font-medium text-gray-500 w-24">Phone:</span>
+            <span class="text-gray-900">{{ application.tutorProfile.user.phoneNumber }}</span>
           </div>
-          <div class="flex items-start flex-col sm:flex-row">
-            <span class="font-black text-gray-900 sm:min-w-[80px] mb-1 sm:mb-0">Phone:</span>
-            <span class="font-bold text-gray-700">{{ application.tutorProfile.user.phoneNumber }}</span>
+          <div class="flex">
+            <span class="font-medium text-gray-500 w-24">City:</span>
+            <span class="text-gray-900">{{ application.tutorProfile.city }}</span>
           </div>
-          <div class="flex items-start flex-col sm:flex-row">
-            <span class="font-black text-gray-900 sm:min-w-[80px] mb-1 sm:mb-0">City:</span>
-            <span class="font-bold text-gray-700">{{ application.tutorProfile.city }}</span>
-          </div>
-          <div class="flex items-start flex-col sm:flex-row">
-            <span class="font-black text-gray-900 sm:min-w-[80px] mb-1 sm:mb-0">Province:</span>
-            <span class="font-bold text-gray-700">{{ application.tutorProfile.province }}</span>
+          <div class="flex">
+            <span class="font-medium text-gray-500 w-24">Province:</span>
+            <span class="text-gray-900">{{ application.tutorProfile.province }}</span>
           </div>
         </div>
-      </neo-card>
+      </div>
 
-      <neo-card variant="elevated" class="bg-gradient-to-br from-purple-50 to-pink-50">
-        <div class="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
-          <div class="w-8 h-8 sm:w-10 sm:h-10 bg-purple-400 border-2 sm:border-4 border-black rounded-lg flex items-center justify-center">
-            <span class="text-base sm:text-xl">📚</span>
+      <div class="bg-gray-50 rounded-lg border border-gray-200 p-5">
+        <h4 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-4">Teaching Details</h4>
+        <div class="space-y-2 text-sm">
+          <div class="flex">
+            <span class="font-medium text-gray-500 w-32">Experience:</span>
+            <span class="text-gray-900">{{ application.tutorProfile.teachingExperienceYears }} years</span>
           </div>
-          <h4 class="text-base sm:text-lg font-black text-gray-900">Teaching Details</h4>
-        </div>
-        <div class="space-y-2 sm:space-y-3 text-xs sm:text-sm">
-          <div class="flex items-start flex-col sm:flex-row">
-            <span class="font-black text-gray-900 sm:min-w-[100px] mb-1 sm:mb-0">Experience:</span>
-            <span class="font-bold text-gray-700">{{ application.tutorProfile.teachingExperienceYears }} years</span>
+          <div class="flex">
+            <span class="font-medium text-gray-500 w-32">Subjects:</span>
+            <span class="text-gray-900">{{ application.tutorProfile.subjects?.join(', ') }}</span>
           </div>
-          <div class="flex items-start flex-col sm:flex-row">
-            <span class="font-black text-gray-900 sm:min-w-[100px] mb-1 sm:mb-0">Subjects:</span>
-            <span class="font-bold text-gray-700">{{ application.tutorProfile.subjects?.join(', ') }}</span>
+          <div class="flex">
+            <span class="font-medium text-gray-500 w-32">Grade Levels:</span>
+            <span class="text-gray-900">{{ application.tutorProfile.gradeLevels?.join(', ') }}</span>
           </div>
-          <div class="flex items-start flex-col sm:flex-row">
-            <span class="font-black text-gray-900 sm:min-w-[100px] mb-1 sm:mb-0">Grade Levels:</span>
-            <span class="font-bold text-gray-700">{{ application.tutorProfile.gradeLevels?.join(', ') }}</span>
+          <div class="flex">
+            <span class="font-medium text-gray-500 w-32">Methods:</span>
+            <span class="text-gray-900">{{ application.tutorProfile.teachingMethods?.join(', ') }}</span>
           </div>
-          <div class="flex items-start flex-col sm:flex-row">
-            <span class="font-black text-gray-900 sm:min-w-[100px] mb-1 sm:mb-0">Methods:</span>
-            <span class="font-bold text-gray-700">{{ application.tutorProfile.teachingMethods?.join(', ') }}</span>
-          </div>
-          <div class="flex items-start flex-col sm:flex-row">
-            <span class="font-black text-gray-900 sm:min-w-[100px] mb-1 sm:mb-0">Hourly Rate:</span>
-            <span class="font-bold text-green-600">Rp {{ formatNumber(application.tutorProfile.hourlyRate) }}</span>
+          <div class="flex">
+            <span class="font-medium text-gray-500 w-32">Hourly Rate:</span>
+            <span class="font-semibold text-green-600">Rp {{ formatNumber(application.tutorProfile.hourlyRate) }}</span>
           </div>
         </div>
-      </neo-card>
+      </div>
     </div>
 
-    <neo-card variant="elevated" class="bg-gradient-to-br from-green-50 to-emerald-50">
-      <div class="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
-        <div class="w-8 h-8 sm:w-10 sm:h-10 bg-green-400 border-2 sm:border-4 border-black rounded-lg flex items-center justify-center">
-          <span class="text-base sm:text-xl">🎓</span>
-        </div>
-        <h4 class="text-base sm:text-lg font-black text-gray-900">Education Background</h4>
-      </div>
-      <p class="text-xs sm:text-sm font-bold text-gray-700">{{ application.tutorProfile.educationBackground }}</p>
-    </neo-card>
+    <div class="bg-gray-50 rounded-lg border border-gray-200 p-5">
+      <h4 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">Education Background</h4>
+      <p class="text-sm text-gray-900">{{ application.tutorProfile.educationBackground }}</p>
+    </div>
 
-    <neo-card variant="elevated" class="bg-gradient-to-br from-yellow-50 to-orange-50">
-      <div class="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
-        <div class="w-8 h-8 sm:w-10 sm:h-10 bg-yellow-400 border-2 sm:border-4 border-black rounded-lg flex items-center justify-center">
-          <span class="text-base sm:text-xl">✍️</span>
-        </div>
-        <h4 class="text-base sm:text-lg font-black text-gray-900">Bio</h4>
-      </div>
-      <p class="text-xs sm:text-sm font-bold text-gray-700">{{ application.tutorProfile.bio }}</p>
-    </neo-card>
+    <div class="bg-gray-50 rounded-lg border border-gray-200 p-5">
+      <h4 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">Bio</h4>
+      <p class="text-sm text-gray-900 leading-relaxed">{{ application.tutorProfile.bio }}</p>
+    </div>
 
-    <neo-card v-if="application.tutorProfile.certifications && application.tutorProfile.certifications.length > 0" variant="elevated" class="bg-gradient-to-br from-indigo-50 to-purple-50">
-      <div class="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
-        <div class="w-8 h-8 sm:w-10 sm:h-10 bg-indigo-400 border-2 sm:border-4 border-black rounded-lg flex items-center justify-center">
-          <span class="text-base sm:text-xl">🏆</span>
-        </div>
-        <h4 class="text-base sm:text-lg font-black text-gray-900">Certifications</h4>
-      </div>
-      <div class="space-y-2 sm:space-y-3">
+    <div v-if="application.tutorProfile.certifications && application.tutorProfile.certifications.length > 0" class="bg-gray-50 rounded-lg border border-gray-200 p-5">
+      <h4 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-4">Certifications</h4>
+      <div class="space-y-2">
         <div
           v-for="(cert, index) in application.tutorProfile.certifications"
           :key="index"
-          class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3 sm:p-4 bg-white border-2 sm:border-4 border-black rounded-lg shadow-md hover:-translate-y-1 transition-transform"
+          class="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200"
         >
-          <span class="text-xs sm:text-sm font-black text-gray-900">{{ cert.name }}</span>
-          <a :href="cert.fileUrl" target="_blank" class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold text-white bg-indigo-500 border-2 border-black rounded-lg hover:bg-indigo-600 transition-colors w-full sm:w-auto text-center">View</a>
+          <span class="text-sm font-medium text-gray-900">{{ cert.name }}</span>
+          <a :href="`http://localhost:3000${cert.fileUrl}`" target="_blank" class="px-4 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors ease-in-out cursor-pointer">View File</a>
         </div>
       </div>
-    </neo-card>
+    </div>
 
-    <div class="pt-4 sm:pt-6 border-t-4 border-black">
-      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
-        <neo-button
+    <div v-if="application.additionalInfoRequested" class="bg-yellow-50 border border-yellow-300 rounded-lg p-5">
+      <h4 class="text-sm font-semibold text-yellow-900 uppercase tracking-wide mb-3">Additional Information Requested</h4>
+      <div class="bg-white rounded-lg border border-yellow-200 p-4 mb-4">
+        <p class="text-xs text-gray-500 font-medium mb-2">Your Request:</p>
+        <p class="text-sm text-gray-900 mb-2">{{ application.requestMessage }}</p>
+        <p class="text-xs text-gray-400">{{ formatDate(application.requestedAt) }}</p>
+      </div>
+      <div v-if="isProfileUpdatedAfterRequest" class="bg-green-50 border border-green-200 rounded-lg p-4">
+        <p class="text-sm font-medium text-green-900 mb-1">✓ Tutor has updated their profile</p>
+        <p class="text-xs text-green-700">Updated: {{ formatDate(application.tutorProfile.updatedAt) }}</p>
+        <p class="text-xs text-green-700 mt-2">Review the changes and make your decision below.</p>
+      </div>
+    </div>
+
+    <div class="pt-4 border-t border-gray-200">
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+        <button
           v-if="application.status === 'pending'"
-          variant="success"
-          size="md"
-          class="flex-1 w-full sm:w-auto"
           @click="$emit('approve', application.id)"
+          class="flex-1 px-6 py-2.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors ease-in-out cursor-pointer"
         >
           Approve Application
-        </neo-button>
-        <neo-button
+        </button>
+        <button
           v-if="application.status === 'pending'"
-          variant="danger"
-          size="md"
-          class="flex-1 w-full sm:w-auto"
+          @click="showRequestInfoForm = true"
+          class="flex-1 px-6 py-2.5 text-sm font-medium text-white bg-yellow-600 rounded-lg hover:bg-yellow-700 transition-colors ease-in-out cursor-pointer"
+        >
+          Request More Info
+        </button>
+        <button
+          v-if="application.status === 'pending'"
           @click="showRejectForm = true"
+          class="flex-1 px-6 py-2.5 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors ease-in-out cursor-pointer"
         >
           Reject Application
-        </neo-button>
-        <neo-button
-          variant="secondary"
-          size="md"
-          class="w-full sm:w-auto"
+        </button>
+        <button
           @click="$emit('close')"
+          class="px-6 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors ease-in-out cursor-pointer"
         >
           Close
-        </neo-button>
+        </button>
       </div>
 
-      <neo-card v-if="showRejectForm" variant="elevated" class="mt-4 sm:mt-6 bg-gradient-to-br from-red-50 to-pink-50">
-        <div class="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
-          <div class="w-8 h-8 sm:w-10 sm:h-10 bg-red-500 border-2 sm:border-4 border-black rounded-lg flex items-center justify-center">
-            <span class="text-base sm:text-xl">❌</span>
-          </div>
-          <label class="text-base sm:text-lg font-black text-gray-900">Rejection Reason</label>
+      <div v-if="showRequestInfoForm" class="mt-4 bg-yellow-50 border border-yellow-300 rounded-lg p-5">
+        <label class="text-sm font-semibold text-gray-900 mb-3 block">Request Additional Information</label>
+        <textarea
+          v-model="requestMessage"
+          rows="4"
+          class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-yellow-500 focus:ring-2 focus:ring-yellow-100 transition-all resize-none"
+          placeholder="Specify what additional information you need from the tutor (min 20 characters)..."
+        ></textarea>
+        <div class="mt-3 flex gap-2">
+          <button
+            :disabled="!requestMessage.trim() || requestMessage.trim().length < 20"
+            @click="handleRequestInfo"
+            class="flex-1 px-4 py-2 text-sm font-medium text-white bg-yellow-600 rounded-lg hover:bg-yellow-700 transition-colors ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Send Request
+          </button>
+          <button
+            @click="showRequestInfoForm = false; requestMessage = ''"
+            class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors ease-in-out cursor-pointer"
+          >
+            Cancel
+          </button>
         </div>
+      </div>
+
+      <div v-if="showRejectForm" class="mt-4 bg-red-50 border border-red-300 rounded-lg p-5">
+        <label class="text-sm font-semibold text-gray-900 mb-3 block">Rejection Reason</label>
         <textarea
           v-model="rejectionReason"
           rows="3"
-          class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border-2 sm:border-4 border-black rounded-lg focus:ring-4 focus:ring-black focus:ring-opacity-25 font-medium"
+          class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-100 transition-all resize-none"
           placeholder="Enter the reason for rejection..."
         ></textarea>
-        <div class="mt-3 sm:mt-4 flex flex-col sm:flex-row gap-2 sm:gap-0 sm:space-x-3">
-          <neo-button
-            variant="danger"
-            size="sm"
+        <div class="mt-3 flex gap-2">
+          <button
             :disabled="!rejectionReason.trim()"
             @click="handleReject"
-            class="w-full sm:w-auto"
+            class="flex-1 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Confirm Rejection
-          </neo-button>
-          <neo-button
-            variant="secondary"
-            size="sm"
+          </button>
+          <button
             @click="showRejectForm = false; rejectionReason = ''"
-            class="w-full sm:w-auto"
+            class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors ease-in-out cursor-pointer"
           >
             Cancel
-          </neo-button>
+          </button>
         </div>
-      </neo-card>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import NeoButton from '@/components/common/ui/NeoButton.vue';
-import NeoCard from '@/components/common/ui/NeoCard.vue';
-
 export default {
   name: 'ApplicationReview',
-  components: {
-    NeoButton,
-    NeoCard,
-  },
   props: {
     application: {
       type: Object,
@@ -190,11 +189,44 @@ export default {
     return {
       showRejectForm: false,
       rejectionReason: '',
+      showRequestInfoForm: false,
+      requestMessage: '',
     };
+  },
+  computed: {
+    isProfileUpdatedAfterRequest() {
+      if (!this.application.additionalInfoRequested || !this.application.requestedAt) return false;
+      if (!this.application.tutorProfile?.updatedAt) return false;
+
+      const profileUpdated = new Date(this.application.tutorProfile.updatedAt);
+      const infoRequested = new Date(this.application.requestedAt);
+
+      console.log('=== Profile Update Check ===');
+      console.log('Tutor:', this.application.tutorProfile?.user?.fullName);
+      console.log('Profile updatedAt:', this.application.tutorProfile.updatedAt);
+      console.log('Request requestedAt:', this.application.requestedAt);
+      console.log('Profile Date obj:', profileUpdated);
+      console.log('Request Date obj:', infoRequested);
+      console.log('Is Updated?:', profileUpdated > infoRequested);
+      console.log('==========================');
+
+      return profileUpdated > infoRequested;
+    },
   },
   methods: {
     formatNumber(num) {
       return new Intl.NumberFormat('id-ID').format(num);
+    },
+    formatDate(date) {
+      if (!date) return '-';
+      return new Date(date).toLocaleDateString('id-ID', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'Asia/Jakarta'
+      });
     },
     handleReject() {
       if (this.rejectionReason.trim()) {
@@ -204,6 +236,16 @@ export default {
         });
         this.showRejectForm = false;
         this.rejectionReason = '';
+      }
+    },
+    handleRequestInfo() {
+      if (this.requestMessage.trim() && this.requestMessage.trim().length >= 20) {
+        this.$emit('request-info', {
+          id: this.application.id,
+          message: this.requestMessage,
+        });
+        this.showRequestInfoForm = false;
+        this.requestMessage = '';
       }
     },
   },

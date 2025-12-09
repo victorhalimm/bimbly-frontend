@@ -104,6 +104,7 @@ interface NavigationItem {
   name: string;
   href: string;
   icon: string;
+  current?: boolean;
   badge?: {
     text: string;
     type: 'success' | 'warning' | 'error' | 'info';
@@ -113,6 +114,7 @@ interface NavigationItem {
 interface User {
   name: string;
   role: 'student' | 'tutor' | 'admin';
+  avatar?: string;
 }
 
 const HomeIcon = {
@@ -228,7 +230,7 @@ export default defineComponent({
         { name: 'Settings', href: '/settings', icon: 'CogIcon' },
       ];
 
-      const roleSpecificItems = {
+      const roleSpecificItems: Record<string, NavigationItem[]> = {
         tutor: [
           { name: 'My Profile', href: '/tutor/profile', icon: 'UserIcon' },
         ],
@@ -258,7 +260,7 @@ export default defineComponent({
     };
 
     const getIconComponent = (iconName: string) => {
-      const icons = {
+      const icons: Record<string, any> = {
         HomeIcon,
         UserIcon,
         CalendarIcon,
@@ -270,7 +272,7 @@ export default defineComponent({
     };
 
     const getBadgeClasses = (type: string): string => {
-      const classes = {
+      const classes: Record<string, string> = {
         success: 'bg-success-100 text-success-800',
         warning: 'bg-warning-100 text-warning-800',
         error: 'bg-error-100 text-error-800',
