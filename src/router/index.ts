@@ -35,6 +35,11 @@ const routes = [
     component: () => import('../views/tutors/TutorsPage.vue'),
   },
   {
+    path: '/tutors/search',
+    name: 'TutorsSearch',
+    component: () => import('../views/tutors/TutorsSearchPage.vue'),
+  },
+  {
     path: '/tutors/:id',
     name: 'TutorProfilePublic',
     component: () => import('../views/tutors/TutorProfilePublic.vue'),
@@ -126,13 +131,13 @@ const routes = [
     path: '/tutor/quizzes',
     name: 'TutorQuizList',
     component: () => import('../views/tutor/TutorQuizList.vue'),
-    meta: { requiresAuth: true, roles: ['tutor'] },
+    // meta: { requiresAuth: true, roles: ['tutor'] },
   },
   {
     path: '/tutor/quizzes/create',
     name: 'CreateQuiz',
     component: () => import('../views/tutor/CreateQuiz.vue'),
-    meta: { requiresAuth: true, roles: ['tutor'] },
+    // meta: { requiresAuth: true, roles: ['tutor'] },
   },
   {
     path: '/tutor/quizzes/:id/edit',
@@ -144,7 +149,7 @@ const routes = [
     path: '/tutor/quizzes/:id/assign',
     name: 'AssignQuiz',
     component: () => import('../views/tutor/AssignQuiz.vue'),
-    meta: { requiresAuth: true, roles: ['tutor'] },
+    // meta: { requiresAuth: true, roles: ['tutor'] },
   },
   {
     path: '/tutor/assignments',
