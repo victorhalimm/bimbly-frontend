@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-white">
     <HeroSection
-      @get-started="handleGetStarted"
+      @get-started="handleViewAllTutors"
       @become-tutor="handleBecomeTutor"
     />
 
@@ -223,7 +223,7 @@
             </p>
             <div class="flex flex-col sm:flex-row gap-4">
               <button
-                @click="handleGetStarted"
+                @click="handleViewAllTutors"
                 class="inline-flex items-center gap-3 bg-white text-blue-600 px-8 py-4 rounded-full font-bold hover:bg-blue-50 transition-all hover:scale-105 shadow-lg"
               >
                 Find Your Tutor
@@ -504,9 +504,6 @@ export default defineComponent({
     }
   },
   methods: {
-    handleGetStarted(): void {
-      this.$router.push('/register')
-    },
     handleBecomeTutor(): void {
       this.$router.push('/become-tutor')
     },

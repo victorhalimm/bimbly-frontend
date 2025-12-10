@@ -1,160 +1,227 @@
 <template>
-  <div class="bg-white border-4 border-black rounded-2xl shadow-2xl p-6">
-    <h3 class="text-xl font-black text-gray-900 mb-6">Filter Tutors</h3>
-
-    <div class="space-y-6">
-      <div>
-        <label class="block text-sm font-bold text-gray-700 mb-2">Subject</label>
-        <select
-          v-model="localFilters.subject"
-          class="w-full px-4 py-3 border-4 border-black rounded-xl font-semibold focus:outline-none focus:ring-4 focus:ring-primary-300"
+  <div class="space-y-4">
+    <div class="bg-white rounded-[2rem] p-6 shadow-lg">
+      <button
+        class="w-full flex items-center justify-between text-left"
+        @click="toggleSection('subject')"
+      >
+        <span class="text-base font-bold text-gray-900">Subject</span>
+        <svg
+          class="h-5 w-5 text-gray-400 transition-transform"
+          :class="{ 'rotate-180': openSections.subject }"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
         >
-          <option value="">All Subjects</option>
-          <option v-for="subject in subjects" :key="subject" :value="subject">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <div v-show="openSections.subject" class="mt-4">
+        <div class="flex flex-wrap gap-2">
+          <button
+            v-for="subject in subjects"
+            :key="subject"
+            class="px-4 py-2 text-sm rounded-full transition-all font-medium"
+            :class="localFilters.subject === subject
+              ? 'bg-blue-600 text-white shadow-md'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+            @click="toggleSubject(subject)"
+          >
             {{ subject }}
-          </option>
-        </select>
-      </div>
-
-      <div>
-        <label class="block text-sm font-bold text-gray-700 mb-2">Grade Level</label>
-        <select
-          v-model="localFilters.gradeLevel"
-          class="w-full px-4 py-3 border-4 border-black rounded-xl font-semibold focus:outline-none focus:ring-4 focus:ring-primary-300"
-        >
-          <option :value="undefined">All Grades</option>
-          <option v-for="grade in 12" :key="grade" :value="grade">Grade {{ grade }}</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="block text-sm font-bold text-gray-700 mb-2">City</label>
-        <input
-          v-model="localFilters.city"
-          type="text"
-          placeholder="Enter city name"
-          class="w-full px-4 py-3 border-4 border-black rounded-xl font-semibold focus:outline-none focus:ring-4 focus:ring-primary-300"
-        />
-      </div>
-
-      <div>
-        <label class="block text-sm font-bold text-gray-700 mb-2">Province</label>
-        <select
-          v-model="localFilters.province"
-          class="w-full px-4 py-3 border-4 border-black rounded-xl font-semibold focus:outline-none focus:ring-4 focus:ring-primary-300"
-        >
-          <option value="">All Provinces</option>
-          <option v-for="prov in provinces" :key="prov" :value="prov">{{ prov }}</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="block text-sm font-bold text-gray-700 mb-2">
-          Price Range (IDR/hour)
-        </label>
-        <div class="flex items-center gap-2">
-          <input
-            v-model.number="localFilters.minPrice"
-            type="number"
-            placeholder="Min"
-            min="0"
-            class="w-full px-3 py-2 border-4 border-black rounded-lg font-semibold focus:outline-none focus:ring-4 focus:ring-primary-300"
-          />
-          <span class="font-bold">-</span>
-          <input
-            v-model.number="localFilters.maxPrice"
-            type="number"
-            placeholder="Max"
-            min="0"
-            class="w-full px-3 py-2 border-4 border-black rounded-lg font-semibold focus:outline-none focus:ring-4 focus:ring-primary-300"
-          />
-        </div>
-      </div>
-
-      <div>
-        <label class="block text-sm font-bold text-gray-700 mb-2">Teaching Method</label>
-        <div class="space-y-2">
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input
-              type="radio"
-              v-model="localFilters.teachingMethod"
-              :value="undefined"
-              class="w-5 h-5 border-4 border-black"
-            />
-            <span class="font-semibold">All Methods</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input
-              type="radio"
-              v-model="localFilters.teachingMethod"
-              value="online"
-              class="w-5 h-5 border-4 border-black"
-            />
-            <span class="font-semibold">Online Only</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input
-              type="radio"
-              v-model="localFilters.teachingMethod"
-              value="offline"
-              class="w-5 h-5 border-4 border-black"
-            />
-            <span class="font-semibold">Offline Only</span>
-          </label>
-        </div>
-      </div>
-
-      <div>
-        <label class="block text-sm font-bold text-gray-700 mb-2">Minimum Rating</label>
-        <div class="flex items-center gap-2">
-          <button
-            v-for="rating in 5"
-            :key="rating"
-            class="p-2 rounded-lg transition-all"
-            :class="
-              localFilters.minRating === rating
-                ? 'bg-warning-100 border-2 border-warning-500'
-                : 'hover:bg-gray-100'
-            "
-            @click="setMinRating(rating)"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
-              :class="
-                rating <= (localFilters.minRating || 0) ? 'text-warning-500' : 'text-gray-300'
-              "
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-              />
-            </svg>
-          </button>
-          <button
-            v-if="localFilters.minRating"
-            class="text-sm text-gray-500 hover:text-gray-700 font-semibold"
-            @click="clearMinRating"
-          >
-            Clear
           </button>
         </div>
       </div>
     </div>
 
-    <div class="mt-8 space-y-3">
+    <div class="bg-white rounded-[2rem] p-6 shadow-lg">
       <button
-        class="w-full bg-primary-500 text-white font-black py-3 px-6 rounded-xl border-4 border-black shadow-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-xl active:translate-y-0"
+        class="w-full flex items-center justify-between text-left"
+        @click="toggleSection('grade')"
+      >
+        <span class="text-base font-bold text-gray-900">Grade Level</span>
+        <svg
+          class="h-5 w-5 text-gray-400 transition-transform"
+          :class="{ 'rotate-180': openSections.grade }"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <div v-show="openSections.grade" class="mt-4">
+        <div class="grid grid-cols-4 gap-2">
+          <button
+            v-for="grade in 12"
+            :key="grade"
+            class="py-2.5 text-sm rounded-xl transition-all font-medium"
+            :class="localFilters.gradeLevel === grade
+              ? 'bg-blue-600 text-white shadow-md'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+            @click="toggleGrade(grade)"
+          >
+            {{ grade }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-[2rem] p-6 shadow-lg">
+      <button
+        class="w-full flex items-center justify-between text-left"
+        @click="toggleSection('location')"
+      >
+        <span class="text-base font-bold text-gray-900">Location</span>
+        <svg
+          class="h-5 w-5 text-gray-400 transition-transform"
+          :class="{ 'rotate-180': openSections.location }"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <div v-show="openSections.location" class="mt-4 space-y-3">
+        <input
+          v-model="localFilters.city"
+          type="text"
+          placeholder="City"
+          class="w-full px-4 py-3 text-sm bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 font-medium"
+        />
+        <select
+          v-model="localFilters.province"
+          class="w-full px-4 py-3 text-sm bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 font-medium"
+        >
+          <option value="">All Provinces</option>
+          <option v-for="prov in provinces" :key="prov" :value="prov">{{ prov }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-[2rem] p-6 shadow-lg">
+      <button
+        class="w-full flex items-center justify-between text-left"
+        @click="toggleSection('price')"
+      >
+        <span class="text-base font-bold text-gray-900">Price Range</span>
+        <svg
+          class="h-5 w-5 text-gray-400 transition-transform"
+          :class="{ 'rotate-180': openSections.price }"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <div v-show="openSections.price" class="mt-4">
+        <div class="flex items-center gap-3">
+          <div class="flex-1 relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">IDR</span>
+            <input
+              v-model.number="localFilters.minPrice"
+              type="number"
+              placeholder="Min"
+              min="0"
+              class="w-full pl-12 pr-4 py-3 text-sm bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 font-medium"
+            />
+          </div>
+          <span class="text-gray-300 font-bold">—</span>
+          <div class="flex-1 relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">IDR</span>
+            <input
+              v-model.number="localFilters.maxPrice"
+              type="number"
+              placeholder="Max"
+              min="0"
+              class="w-full pl-12 pr-4 py-3 text-sm bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 font-medium"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-[2rem] p-6 shadow-lg">
+      <span class="text-base font-bold text-gray-900 block mb-4">Teaching Method</span>
+      <div class="flex gap-2">
+        <button
+          class="flex-1 py-3 text-sm rounded-xl transition-all flex items-center justify-center gap-2 font-medium"
+          :class="!localFilters.teachingMethod
+            ? 'bg-blue-600 text-white shadow-md'
+            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+          @click="localFilters.teachingMethod = undefined"
+        >
+          All
+        </button>
+        <button
+          class="flex-1 py-3 text-sm rounded-xl transition-all flex items-center justify-center gap-2 font-medium"
+          :class="localFilters.teachingMethod === 'online'
+            ? 'bg-green-500 text-white shadow-md'
+            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+          @click="localFilters.teachingMethod = 'online'"
+        >
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+          Online
+        </button>
+        <button
+          class="flex-1 py-3 text-sm rounded-xl transition-all flex items-center justify-center gap-2 font-medium"
+          :class="localFilters.teachingMethod === 'offline'
+            ? 'bg-yellow-500 text-white shadow-md'
+            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+          @click="localFilters.teachingMethod = 'offline'"
+        >
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+          </svg>
+          In-Person
+        </button>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-[2rem] p-6 shadow-lg">
+      <span class="text-base font-bold text-gray-900 block mb-4">Minimum Rating</span>
+      <div class="flex items-center justify-center gap-1">
+        <button
+          v-for="rating in 5"
+          :key="rating"
+          class="p-2 rounded-xl transition-all"
+          :class="localFilters.minRating === rating ? 'bg-yellow-50' : 'hover:bg-gray-50'"
+          @click="setMinRating(rating)"
+        >
+          <svg
+            class="h-7 w-7 transition-colors"
+            :class="rating <= (localFilters.minRating || 0) ? 'text-yellow-400' : 'text-gray-200'"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+          </svg>
+        </button>
+      </div>
+      <button
+        v-if="localFilters.minRating"
+        class="mt-2 w-full text-sm text-gray-500 hover:text-gray-700 font-medium"
+        @click="clearMinRating"
+      >
+        Clear
+      </button>
+    </div>
+
+    <div class="flex gap-3 pt-2">
+      <button
+        class="flex-1 py-3.5 text-base font-bold text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200 transition-all"
+        @click="clearFilters"
+      >
+        Clear
+      </button>
+      <button
+        class="flex-1 py-3.5 text-base font-bold text-white bg-blue-600 rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg"
         @click="applyFilters"
       >
         Apply Filters
-      </button>
-      <button
-        class="w-full bg-gray-100 text-gray-700 font-bold py-3 px-6 rounded-xl border-4 border-black shadow-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-xl active:translate-y-0"
-        @click="clearFilters"
-      >
-        Clear All Filters
       </button>
     </div>
   </div>
@@ -162,17 +229,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-
-interface FilterData {
-  subject?: string;
-  gradeLevel?: number;
-  city?: string;
-  province?: string;
-  minPrice?: number;
-  maxPrice?: number;
-  teachingMethod?: 'online' | 'offline';
-  minRating?: number;
-}
+import type { FilterData } from '@/types/filters';
 
 export default defineComponent({
   name: 'TutorFilters',
@@ -186,6 +243,12 @@ export default defineComponent({
   data() {
     return {
       localFilters: { ...this.modelValue } as FilterData,
+      openSections: {
+        subject: true,
+        grade: false,
+        location: false,
+        price: false,
+      } as Record<string, boolean>,
       subjects: [
         'Matematika',
         'Fisika',
@@ -224,8 +287,29 @@ export default defineComponent({
     },
   },
   methods: {
+    toggleSection(section: string) {
+      this.openSections[section] = !this.openSections[section];
+    },
+    toggleSubject(subject: string) {
+      if (this.localFilters.subject === subject) {
+        this.localFilters.subject = undefined;
+      } else {
+        this.localFilters.subject = subject;
+      }
+    },
+    toggleGrade(grade: number) {
+      if (this.localFilters.gradeLevel === grade) {
+        this.localFilters.gradeLevel = undefined;
+      } else {
+        this.localFilters.gradeLevel = grade;
+      }
+    },
     setMinRating(rating: number) {
-      this.localFilters.minRating = rating;
+      if (this.localFilters.minRating === rating) {
+        this.localFilters.minRating = undefined;
+      } else {
+        this.localFilters.minRating = rating;
+      }
     },
     clearMinRating() {
       this.localFilters.minRating = undefined;
