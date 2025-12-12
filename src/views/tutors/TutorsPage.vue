@@ -216,25 +216,8 @@ import { defineComponent } from 'vue';
 import { useTutorStore } from '@/stores/tutor.store';
 import { NeoAlert } from '@/components/common/ui';
 import TutorCard from '@/components/tutor/TutorCard.vue';
-import Navbar from '@/components/common/layout/Navbar.vue';
-import {
-  IconLanguage,
-  IconMath,
-  IconBook,
-  IconWorld,
-  IconPiano,
-  IconSwimming,
-  IconRocket,
-  IconFlask2,
-  IconPlant,
-  IconLetterA,
-  IconAtom,
-  IconVocabulary,
-  IconCoin,
-  IconArticle,
-  IconDeviceDesktop,
-  IconFriends
-} from '@tabler/icons-vue';
+import TutorFilters from '@/components/tutor/TutorFilters.vue';
+import type { FilterData } from '@/types/tutor';
 
 export default defineComponent({
   name: 'TutorsPage',
