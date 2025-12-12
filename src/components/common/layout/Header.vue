@@ -169,24 +169,13 @@
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
-
-interface NavigationItem {
-  name: string;
-  href: string;
-}
-
-interface User {
-  name: string;
-  email?: string;
-  avatar?: string;
-  role: 'student' | 'tutor' | 'admin';
-}
+import type { NavigationItem, HeaderUser } from '@/types/common';
 
 export default defineComponent({
   name: 'BHeader',
   props: {
     user: {
-      type: Object as () => User,
+      type: Object as () => HeaderUser,
       required: true,
     },
   },

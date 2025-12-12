@@ -81,7 +81,7 @@
         </div>
 
         <div v-else class="space-y-4">
-          <div v-for="(score, subtopic, index) in formData.subtopicScores" :key="index" class="flex items-center gap-4">
+          <div v-for="(_score, subtopic, index) in formData.subtopicScores" :key="index" class="flex items-center gap-4">
             <input
               v-model="Object.keys(formData.subtopicScores)[index]"
               type="text"
@@ -142,9 +142,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useAcademicReportsStore } from '../../stores/academic-reports.store';
-import type { CreateAcademicReportDto, AcademicReport } from '../../services/academic-reports.service';
+import type { AcademicReport } from '../../services/academic-reports.service';
 
-interface FormData {
+export interface ReportFormData {
   grade: number | '';
   subjectId: string;
   subtopicScores: Record<string, number>;
@@ -164,7 +164,7 @@ export default defineComponent({
   },
   emits: ['cancel', 'success'],
   data(): {
-    formData: FormData;
+    formData: ReportFormData;
     selectedCurriculum: string;
     templateSubtopics: string[];
     loading: boolean;

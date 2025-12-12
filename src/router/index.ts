@@ -83,6 +83,12 @@ const routes = [
     meta: { requiresAuth: true, roles: ['student'] },
   },
   {
+    path: '/chat',
+    name: 'Chat',
+    component: () => import('../views/chat/ChatPage.vue'),
+    meta: { requiresAuth: true, roles: ['student', 'tutor'] },
+  },
+  {
     path: '/tutor/dashboard',
     name: 'TutorDashboard',
     component: () => import('../views/tutor/Dashboard.vue'),

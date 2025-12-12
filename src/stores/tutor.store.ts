@@ -9,7 +9,7 @@ import {
   type AvailabilityResponse,
 } from '@/services/tutor.service';
 
-interface TutorState {
+export interface TutorState {
   tutors: TutorListItem[];
   selectedTutor: TutorProfile | null;
   filters: TutorSearchFilters;

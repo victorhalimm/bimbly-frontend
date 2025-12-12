@@ -8,7 +8,7 @@ import {
 } from '../services/academic-reports.service';
 import { subjectsService } from '../services/subjects.service';
 
-interface AcademicReportsState {
+export interface AcademicReportsState {
   reports: AcademicReport[];
   subjects: Array<{ id: string; name: string }>;
   loading: boolean;

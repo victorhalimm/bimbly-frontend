@@ -58,7 +58,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 
-interface RadioOption {
+export interface RadioOption {
   label: string;
   value: string | number;
 }

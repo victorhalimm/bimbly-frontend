@@ -189,17 +189,7 @@ import { useTutorStore } from '@/stores/tutor.store';
 import { NeoAlert } from '@/components/common/ui';
 import TutorCard from '@/components/tutor/TutorCard.vue';
 import TutorFilters from '@/components/tutor/TutorFilters.vue';
-
-interface FilterData {
-  subject?: string;
-  gradeLevel?: number;
-  city?: string;
-  province?: string;
-  minPrice?: number;
-  maxPrice?: number;
-  teachingMethod?: 'online' | 'offline';
-  minRating?: number;
-}
+import type { FilterData } from '@/types/tutor';
 
 export default defineComponent({
   name: 'TutorsPage',

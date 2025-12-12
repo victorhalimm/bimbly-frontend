@@ -5,24 +5,24 @@
         <h4 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-4">Personal Information</h4>
         <div class="space-y-2 text-sm">
           <div class="flex">
-            <span class="font-medium text-gray-500 w-24">Name:</span>
-            <span class="text-gray-900">{{ application.tutorProfile.user.fullName }}</span>
+            <span class="font-medium text-gray-500 w-24 flex-shrink-0">Name:</span>
+            <span class="text-gray-900 flex-1 min-w-0 break-words">{{ application.tutorProfile.user.fullName }}</span>
           </div>
           <div class="flex">
-            <span class="font-medium text-gray-500 w-24">Email:</span>
-            <span class="text-gray-900 break-all">{{ application.tutorProfile.user.email }}</span>
+            <span class="font-medium text-gray-500 w-24 flex-shrink-0">Email:</span>
+            <span class="text-gray-900 flex-1 min-w-0 break-all">{{ application.tutorProfile.user.email }}</span>
           </div>
           <div class="flex">
-            <span class="font-medium text-gray-500 w-24">Phone:</span>
-            <span class="text-gray-900">{{ application.tutorProfile.user.phoneNumber }}</span>
+            <span class="font-medium text-gray-500 w-24 flex-shrink-0">Phone:</span>
+            <span class="text-gray-900 flex-1 min-w-0 break-words">{{ application.tutorProfile.user.phoneNumber }}</span>
           </div>
           <div class="flex">
-            <span class="font-medium text-gray-500 w-24">City:</span>
-            <span class="text-gray-900">{{ application.tutorProfile.city }}</span>
+            <span class="font-medium text-gray-500 w-24 flex-shrink-0">City:</span>
+            <span class="text-gray-900 flex-1 min-w-0 break-words">{{ application.tutorProfile.city }}</span>
           </div>
           <div class="flex">
-            <span class="font-medium text-gray-500 w-24">Province:</span>
-            <span class="text-gray-900">{{ application.tutorProfile.province }}</span>
+            <span class="font-medium text-gray-500 w-24 flex-shrink-0">Province:</span>
+            <span class="text-gray-900 flex-1 min-w-0 break-words">{{ application.tutorProfile.province }}</span>
           </div>
         </div>
       </div>
@@ -31,24 +31,24 @@
         <h4 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-4">Teaching Details</h4>
         <div class="space-y-2 text-sm">
           <div class="flex">
-            <span class="font-medium text-gray-500 w-32">Experience:</span>
-            <span class="text-gray-900">{{ application.tutorProfile.teachingExperienceYears }} years</span>
+            <span class="font-medium text-gray-500 w-32 flex-shrink-0">Experience:</span>
+            <span class="text-gray-900 flex-1 min-w-0 break-words">{{ application.tutorProfile.teachingExperienceYears }} years</span>
           </div>
           <div class="flex">
-            <span class="font-medium text-gray-500 w-32">Subjects:</span>
-            <span class="text-gray-900">{{ application.tutorProfile.subjects?.join(', ') }}</span>
+            <span class="font-medium text-gray-500 w-32 flex-shrink-0">Subjects:</span>
+            <span class="text-gray-900 flex-1 min-w-0 break-words">{{ application.tutorProfile.subjects?.join(', ') }}</span>
           </div>
           <div class="flex">
-            <span class="font-medium text-gray-500 w-32">Grade Levels:</span>
-            <span class="text-gray-900">{{ application.tutorProfile.gradeLevels?.join(', ') }}</span>
+            <span class="font-medium text-gray-500 w-32 flex-shrink-0">Grade Levels:</span>
+            <span class="text-gray-900 flex-1 min-w-0 break-words">{{ application.tutorProfile.gradeLevels?.join(', ') }}</span>
           </div>
           <div class="flex">
-            <span class="font-medium text-gray-500 w-32">Methods:</span>
-            <span class="text-gray-900">{{ application.tutorProfile.teachingMethods?.join(', ') }}</span>
+            <span class="font-medium text-gray-500 w-32 flex-shrink-0">Methods:</span>
+            <span class="text-gray-900 flex-1 min-w-0 break-words">{{ application.tutorProfile.teachingMethods?.join(', ') }}</span>
           </div>
           <div class="flex">
-            <span class="font-medium text-gray-500 w-32">Hourly Rate:</span>
-            <span class="font-semibold text-green-600">Rp {{ formatNumber(application.tutorProfile.hourlyRate) }}</span>
+            <span class="font-medium text-gray-500 w-32 flex-shrink-0">Hourly Rate:</span>
+            <span class="font-semibold text-green-600 flex-1 min-w-0 break-words">Rp {{ formatNumber(application.tutorProfile.hourlyRate) }}</span>
           </div>
         </div>
       </div>
@@ -56,12 +56,12 @@
 
     <div class="bg-gray-50 rounded-lg border border-gray-200 p-5">
       <h4 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">Education Background</h4>
-      <p class="text-sm text-gray-900">{{ application.tutorProfile.educationBackground }}</p>
+      <p class="text-sm text-gray-900 break-words">{{ application.tutorProfile.educationBackground }}</p>
     </div>
 
     <div class="bg-gray-50 rounded-lg border border-gray-200 p-5">
       <h4 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">Bio</h4>
-      <p class="text-sm text-gray-900 leading-relaxed">{{ application.tutorProfile.bio }}</p>
+      <p class="text-sm text-gray-900 leading-relaxed break-words">{{ application.tutorProfile.bio }}</p>
     </div>
 
     <div v-if="application.tutorProfile.certifications && application.tutorProfile.certifications.length > 0" class="bg-gray-50 rounded-lg border border-gray-200 p-5">
@@ -70,10 +70,10 @@
         <div
           v-for="(cert, index) in application.tutorProfile.certifications"
           :key="index"
-          class="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200"
+          class="flex items-center justify-between gap-3 p-3 bg-white rounded-lg border border-gray-200"
         >
-          <span class="text-sm font-medium text-gray-900">{{ cert.name }}</span>
-          <a :href="`http://localhost:3000${cert.fileUrl}`" target="_blank" class="px-4 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors ease-in-out cursor-pointer">View File</a>
+          <span class="text-sm font-medium text-gray-900 flex-1 min-w-0 break-words">{{ cert.name }}</span>
+          <a :href="`http://localhost:3000${cert.fileUrl}`" target="_blank" class="px-4 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors ease-in-out cursor-pointer flex-shrink-0">View File</a>
         </div>
       </div>
     </div>
@@ -82,7 +82,7 @@
       <h4 class="text-sm font-semibold text-yellow-900 uppercase tracking-wide mb-3">Additional Information Requested</h4>
       <div class="bg-white rounded-lg border border-yellow-200 p-4 mb-4">
         <p class="text-xs text-gray-500 font-medium mb-2">Your Request:</p>
-        <p class="text-sm text-gray-900 mb-2">{{ application.requestMessage }}</p>
+        <p class="text-sm text-gray-900 mb-2 break-words">{{ application.requestMessage }}</p>
         <p class="text-xs text-gray-400">{{ formatDate(application.requestedAt) }}</p>
       </div>
       <div v-if="isProfileUpdatedAfterRequest" class="bg-green-50 border border-green-200 rounded-lg p-4">
