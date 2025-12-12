@@ -225,11 +225,7 @@ import { defineComponent } from 'vue';
 import { useAcademicReportsStore } from '../../stores/academic-reports.store';
 import { subjectsService } from '../../services/subjects.service';
 import type { AcademicReport, CurriculumTemplate } from '../../services/academic-reports.service';
-
-interface SubtopicEntry {
-  name: string;
-  score: number;
-}
+import type { SubtopicEntry } from '../../types/academic-reports';
 
 export default defineComponent({
   name: 'AcademicReportForm',

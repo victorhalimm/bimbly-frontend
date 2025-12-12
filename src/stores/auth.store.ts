@@ -14,7 +14,7 @@ export interface AuthUser {
 }
 
 export interface AuthState {
-  user: AuthUser | null;
+  user: User | null;
   isAuthenticated: boolean;
   loading: boolean;
   error: string | null;

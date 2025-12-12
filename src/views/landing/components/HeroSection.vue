@@ -1,5 +1,5 @@
 <template>
-  <section class="relative bg-gradient-to-br from-blue-50 via-white to-blue-50 overflow-hidden py-20 lg:py-32">
+  <section class="relative bg-gradient-to-br from-blue-50 via-white to-blue-50 overflow-hidden py-20 lg:py-40 min-h-screen">
     <div class="absolute top-10 right-20 w-64 h-64 bg-blue-200 rounded-full opacity-30 blur-3xl animate-blob"></div>
     <div class="absolute bottom-20 left-10 w-96 h-96 bg-yellow-200 rounded-full opacity-20 blur-3xl animate-blob animation-delay-2000"></div>
 

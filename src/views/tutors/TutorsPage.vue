@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-white">
-    <div class="bg-blue-100 py-16 px-4 sm:px-6 lg:px-8">
+    <div class="bg-blue-100 py-16 pt-40 px-4 sm:px-6 lg:px-8">
       <div class="max-w-7xl mx-auto">
         <h1 class="text-5xl md:text-6xl font-black text-gray-900 mb-4">
           Find Your
@@ -216,6 +216,7 @@ import { defineComponent } from 'vue';
 import { useTutorStore } from '@/stores/tutor.store';
 import { NeoAlert } from '@/components/common/ui';
 import TutorCard from '@/components/tutor/TutorCard.vue';
+import Navbar from '@/components/common/layout/Navbar.vue';
 import {
   IconLanguage,
   IconMath,
@@ -255,7 +256,8 @@ export default defineComponent({
     IconCoin,
     IconArticle,
     IconDeviceDesktop,
-    IconFriends
+    IconFriends,
+    Navbar
   },
   data() {
     return {

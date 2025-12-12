@@ -1,3 +1,4 @@
+
 <template>
   <div class="min-h-screen bg-white">
     <HeroSection
@@ -412,6 +413,7 @@ import {
   IconChartBar,
   IconSchool
 } from '@tabler/icons-vue'
+import Navbar from '@/components/common/layout/Navbar.vue'
 
 export default defineComponent({
   name: 'LandingPage',
@@ -423,7 +425,8 @@ export default defineComponent({
     IconBook,
     IconMessageCircle,
     IconChartBar,
-    IconSchool
+    IconSchool,
+    Navbar
   },
   data() {
     return {
