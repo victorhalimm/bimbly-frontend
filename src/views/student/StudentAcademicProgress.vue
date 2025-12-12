@@ -206,7 +206,7 @@ import { defineComponent } from 'vue';
 import { useAcademicReportsStore } from '../../stores/academic-reports.store';
 import { useAuthStore } from '../../stores/auth.store';
 import { useToast } from '../../composables/useToast';
-import { studentService } from '../../services/studentService';
+import { studentService } from '../../services/student.service';
 import AcademicReportForm from '../../components/academic-reports/AcademicReportForm.vue';
 import SubjectDetailModal from '../../components/academic-reports/SubjectDetailModal.vue';
 import type { AcademicReport } from '../../services/academic-reports.service';
