@@ -233,8 +233,8 @@
 <script>
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { studentService } from '@/services/studentService';
-import { userService } from '@/services/userService';
+import { studentService } from '@/services/student.service';
+import { userService } from '@/services/user.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { useToast } from '@/composables/useToast';
 import BHeader from '@/components/common/layout/Header.vue';

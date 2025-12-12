@@ -2,11 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { authGuard } from './guards';
 
 const routes = [
+  // ==================== Landing ====================
   {
     path: '/',
     name: 'Landing',
     component: () => import('../views/landing/LandingPage.vue'),
   },
+
+  // ==================== Authentication ====================
   {
     path: '/login',
     name: 'Login',
@@ -19,6 +22,7 @@ const routes = [
     component: () => import('../views/auth/RegisterPage.vue'),
     meta: { requiresGuest: true },
   },
+  // ==================== Tutor Discovery ====================
   {
     path: '/become-tutor',
     name: 'BecomeTutor',
@@ -57,6 +61,8 @@ const routes = [
     component: () => import('../views/auth/ResetPassword.vue'),
     meta: { requiresGuest: true },
   },
+
+  // ==================== Student - Profiles ====================
   {
     path: '/student/dashboard',
     name: 'StudentDashboard',
@@ -69,6 +75,14 @@ const routes = [
     component: () => import('../views/student/StudentProfilePage.vue'),
     meta: { requiresAuth: true, roles: ['student'] },
   },
+  {
+    path: '/student/academic-progress',
+    name: 'StudentAcademicProgress',
+    component: () => import('../views/student/StudentAcademicProgress.vue'),
+    meta: { requiresAuth: true, roles: ['student'] },
+  },
+
+  // ==================== Student - Quiz System ====================
   {
     path: '/student/quizzes',
     name: 'StudentQuizDashboard',
@@ -87,6 +101,7 @@ const routes = [
     component: () => import('../views/student/QuizResults.vue'),
     meta: { requiresAuth: true, roles: ['student'] },
   },
+  // ==================== Tutor - Profiles ====================
   {
     path: '/tutor/dashboard',
     name: 'TutorDashboard',
@@ -99,6 +114,8 @@ const routes = [
     component: () => import('../views/tutor/TutorProfilePage.vue'),
     meta: { requiresAuth: true, roles: ['tutor'] },
   },
+
+  // ==================== Tutor - Quiz System ====================
   {
     path: '/tutor/application-status',
     name: 'TutorApplicationStatus',
@@ -140,6 +157,7 @@ const routes = [
     component: () => import('../views/tutor/GradeQuiz.vue'),
     meta: { requiresAuth: true, roles: ['tutor'] },
   },
+  // ==================== Admin Panel ====================
   {
     path: '/admin/dashboard',
     name: 'AdminDashboard',
@@ -158,6 +176,7 @@ const routes = [
     component: () => import('../views/admin/TutorApplications.vue'),
     meta: { requiresAuth: true, roles: ['admin'] },
   },
+  // ==================== Error Pages ====================
   {
     path: '/unauthorized',
     name: 'Unauthorized',

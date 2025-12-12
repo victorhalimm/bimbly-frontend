@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-white">
-    <div class="bg-blue-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="bg-blue-50 py-12 px-4 pt-40 sm:px-6 lg:px-8">
       <div class="max-w-7xl mx-auto">
         <h1 class="text-4xl md:text-5xl font-black text-gray-900 text-center mb-8">
           Find Your Perfect Tutor
@@ -393,6 +393,7 @@ import { defineComponent } from 'vue';
 import { useTutorStore } from '@/stores/tutor.store';
 import { NeoAlert } from '@/components/common/ui';
 import TutorCard from '@/components/tutor/TutorCard.vue';
+import Navbar from '@/components/common/layout/Navbar.vue';
 import type { FilterData } from '@/types/filters';
 
 export default defineComponent({
@@ -400,6 +401,7 @@ export default defineComponent({
   components: {
     NeoAlert,
     TutorCard,
+    Navbar
   },
   data() {
     return {
