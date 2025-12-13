@@ -470,6 +470,19 @@
             </div>
           </div>
 
+          <div class="bg-white rounded-[2.5rem] shadow-xl p-8 md:p-12">
+            <div class="flex items-center gap-4 mb-8 pb-6 border-b-2 border-green-50">
+              <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center shadow-lg">
+                <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                </svg>
+              </div>
+              <h3 class="text-3xl font-black text-gray-900">Weekly Availability</h3>
+            </div>
+
+            <WeeklyAvailabilityInput v-model="form.availabilitySchedule" />
+          </div>
+
           <div class="flex justify-center">
             <button
               type="submit"
@@ -530,9 +543,13 @@ import { tutorService } from '@/services/tutor.service';
 import { userService } from '@/services/user.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { useToast } from '@/composables/useToast';
+import WeeklyAvailabilityInput from '@/components/tutor/WeeklyAvailabilityInput.vue';
 
 export default {
   name: 'TutorProfilePage',
+  components: {
+    WeeklyAvailabilityInput,
+  },
   setup() {
     const authStore = useAuthStore();
     const toast = useToast();
@@ -566,6 +583,7 @@ export default {
         hourlyRate: 100000,
         city: '',
         province: '',
+        availabilitySchedule: null,
       },
       subjectsInput: '',
       gradeLevelsInput: '',
@@ -628,6 +646,7 @@ export default {
           this.form.hourlyRate = parseInt(this.profile.hourlyRate) || 100000;
           this.form.city = this.profile.city || '';
           this.form.province = this.profile.province || '';
+          this.form.availabilitySchedule = this.profile.availabilitySchedule || null;
           this.subjectsInput = this.form.subjects.join(', ');
           this.gradeLevelsInput = this.form.gradeLevels.join(', ');
         }
@@ -791,6 +810,7 @@ export default {
           hourlyRate: parseInt(this.form.hourlyRate) || 100000,
           city: this.form.city,
           province: this.form.province,
+          availabilitySchedule: this.form.availabilitySchedule || undefined,
         };
 
         if (this.avatarFile) {

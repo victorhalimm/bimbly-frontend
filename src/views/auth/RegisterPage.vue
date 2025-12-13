@@ -454,6 +454,18 @@
             </div>
           </div>
 
+          <!-- Step 7: Tutor Availability (Optional) -->
+          <div v-else-if="currentStep === 7 && form.userType === 'tutor'">
+            <h1 class="text-3xl lg:text-4xl font-black text-gray-900 mb-3">Set Your Availability</h1>
+            <p class="text-lg text-gray-600 mb-8">Let students know when you're available for sessions</p>
+
+            <WeeklyAvailabilityInput v-model="form.tutorProfile.availabilitySchedule" />
+
+            <p class="text-sm text-gray-500 mt-4">
+              This step is optional. You can skip it and set your availability later from your profile.
+            </p>
+          </div>
+
           <!-- Error Alert -->
           <div v-if="globalError" class="mt-6 flex items-start gap-3 px-5 py-4 bg-red-50 text-red-900 rounded-xl border-2 border-red-200">
             <IconAlertCircle size="20" class="shrink-0 mt-0.5" />
@@ -567,6 +579,8 @@ import {
 } from '@tabler/icons-vue';
 import { authService } from '@/services/auth.service';
 import logoBox from '@assets/images/logo/logo-box.png';
+import WeeklyAvailabilityInput from '@/components/tutor/WeeklyAvailabilityInput.vue';
+import type { AvailabilitySchedule } from '@/types/availability';
 
 interface StudentProfileForm {
   currentGrade: number | '';
@@ -587,6 +601,7 @@ interface TutorProfileForm {
   hourlyRate: number;
   city: string;
   province: string;
+  availabilitySchedule: AvailabilitySchedule | null;
 }
 
 interface FormData {
@@ -618,6 +633,7 @@ export default defineComponent({
     IconAlertCircle,
     IconDeviceLaptop,
     IconUsers,
+    WeeklyAvailabilityInput,
   },
   data() {
     return {
@@ -654,6 +670,7 @@ export default defineComponent({
           hourlyRate: 100000,
           city: '',
           province: '',
+          availabilitySchedule: null,
         },
       } as FormData,
       errors: {} as FormErrors,
@@ -678,7 +695,7 @@ export default defineComponent({
       if (this.form.userType === 'student') {
         return 4;
       } else if (this.form.userType === 'tutor') {
-        return 6;
+        return 7;
       }
       return 4;
     },
@@ -857,6 +874,7 @@ export default defineComponent({
               hourlyRate: this.form.tutorProfile.hourlyRate,
               city: this.form.tutorProfile.city,
               province: this.form.tutorProfile.province,
+              availabilitySchedule: this.form.tutorProfile.availabilitySchedule || undefined,
             },
           });
         }
