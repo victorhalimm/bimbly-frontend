@@ -1,32 +1,16 @@
 <template>
   <div
-    class="group relative bg-white rounded-4xl overflow-hidden transition-all duration-300 hover:shadow-xl cursor-pointer shadow-lg"
+    class="group relative bg-white overflow-hidden cursor-pointer"
     @click="handleViewProfile"
   >
-    <div class="absolute top-4 right-4 z-10">
-      <button
-        class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-gray-50 transition-all"
-        @click.stop="toggleFavorite"
-      >
-        <svg
-          class="h-5 w-5 transition-colors"
-          :class="isFavorite ? 'text-red-500 fill-current' : 'text-gray-400'"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-        </svg>
-      </button>
-    </div>
 
-    <div class="relative h-72" :class="cardBgClass">
+    <div class="relative h-72">
       <img
         :src="tutor.profileImageUrl || defaultAvatar"
         :alt="tutor.fullName"
-        class="w-full h-full object-cover"
+        class="w-full h-full rounded-4xl object-cover"
       />
-      <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
+      <div class="absolute rounded-4xl bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
         <h3 class="text-xl font-black text-white mb-1 break-words">{{ tutor.fullName }}</h3>
         <p class="text-sm text-white/90 font-medium break-words">
           {{ tutor.city }} ({{ teachingMethodLabel }})
@@ -34,7 +18,7 @@
       </div>
     </div>
 
-    <div class="p-6">
+    <div class="py-6 px-2">
       <div class="flex items-center justify-between mb-3">
         <div class="flex items-center gap-2">
           <div class="flex items-center gap-1">
@@ -107,7 +91,6 @@ export default defineComponent({
   emits: ['view-profile'],
   data() {
     return {
-      isFavorite: false,
       defaultAvatar:
         'https://ui-avatars.com/api/?name=' +
         encodeURIComponent(this.tutor.fullName) +
@@ -150,27 +133,11 @@ export default defineComponent({
       if (methods.length === 2) return 'in-person & online';
       if (methods.includes('online')) return 'online';
       return 'in-person';
-    },
-    cardBgClass(): string {
-      const colors = [
-        'bg-blue-100',
-        'bg-purple-100',
-        'bg-pink-100',
-        'bg-green-100',
-        'bg-yellow-100',
-      ];
-      const hash = this.tutor.id.split('').reduce((a, b) => {
-        return a + b.charCodeAt(0);
-      }, 0);
-      return colors[hash % colors.length];
-    },
+    }
   },
   methods: {
     handleViewProfile() {
       this.$emit('view-profile', this.tutor.id);
-    },
-    toggleFavorite() {
-      this.isFavorite = !this.isFavorite;
     },
     getSubjectStyle(subject: string): string {
       const styles: Record<string, string> = {

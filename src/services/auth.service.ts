@@ -2,6 +2,27 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
+interface StudentProfileData {
+  currentGrade: number;
+  schoolName: string;
+  city: string;
+  province: string;
+  address?: string;
+}
+
+interface TutorProfileData {
+  bio: string;
+  educationBackground: string;
+  teachingExperienceYears: number;
+  specializations?: string[];
+  subjects: string[];
+  gradeLevels: number[];
+  teachingMethods: ('online' | 'offline')[];
+  hourlyRate: number;
+  city: string;
+  province: string;
+}
+
 export const authService = {
   async register(userData: {
     email: string;
@@ -11,6 +32,28 @@ export const authService = {
     userType: 'student' | 'tutor';
   }) {
     const response = await axios.post(`${API_URL}/auth/register`, userData);
+    return response.data;
+  },
+
+  async registerStudent(userData: {
+    email: string;
+    password: string;
+    fullName: string;
+    phoneNumber: string;
+    studentProfile: StudentProfileData;
+  }) {
+    const response = await axios.post(`${API_URL}/auth/register/student`, userData);
+    return response.data;
+  },
+
+  async registerTutor(userData: {
+    email: string;
+    password: string;
+    fullName: string;
+    phoneNumber: string;
+    tutorProfile: TutorProfileData;
+  }) {
+    const response = await axios.post(`${API_URL}/auth/register/tutor`, userData);
     return response.data;
   },
 

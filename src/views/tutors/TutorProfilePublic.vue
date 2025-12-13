@@ -5,7 +5,6 @@
     </div>
 
     <div v-else-if="error" class="max-w-4xl mx-auto px-4 pt-28 pb-12">
-      <NeoAlert variant="error" :message="error" />
       <div class="text-center mt-8">
         <button
           class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg cursor-pointer"
@@ -108,7 +107,7 @@
                   <p class="text-sm text-gray-500 mb-1">Hourly Rate</p>
                   <p class="text-3xl font-black text-blue-600 mb-4">{{ formattedPrice }}</p>
                   <div class="space-y-3">
-                    <button class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg cursor-pointer">
+                    <button @click="handleBookSession" class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg cursor-pointer">
                       Book Session
                     </button>
                     <button
@@ -380,13 +379,9 @@ import { defineComponent } from 'vue';
 import { useTutorStore } from '@/stores/tutor.store';
 import { useChatStore } from '@/stores/chat.store';
 import { useAuthStore } from '@/stores/auth.store';
-import { NeoAlert } from '@/components/common/ui';
 
 export default defineComponent({
   name: 'TutorProfilePublic',
-  components: {
-    NeoAlert,
-  },
   data() {
     return {
       selectedDate: new Date().toISOString().split('T')[0],
@@ -487,6 +482,14 @@ export default defineComponent({
         day: 'numeric',
         timeZone: 'Asia/Jakarta'
       });
+    },
+    handleBookSession() {
+      const authStore = useAuthStore();
+      if (!authStore.isAuthenticated) {
+        this.$router.push('/login');
+        return;
+      }
+      this.$router.push(`/book/${this.tutor?.id}`);
     },
     async handleSendMessage() {
       const authStore = useAuthStore();

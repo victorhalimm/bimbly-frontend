@@ -304,7 +304,7 @@
           </p>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
           <div class="space-y-6">
             <div
               class="bg-white rounded-[2rem] p-6 shadow-lg flex items-start gap-4 hover:shadow-xl transition-shadow"
@@ -370,28 +370,38 @@
 
           <div class="relative">
             <div
-              class="bg-gradient-to-br from-blue-200 via-blue-100 to-yellow-100 rounded-[3rem] aspect-square flex items-center justify-center"
+              class="overflow-hidden"
             >
-              <div class="text-center">
-                <div class="mb-4 flex justify-center">
-                  <IconSchool size="120" stroke="2" class="text-blue-600" />
-                </div>
-                <div
-                  class="text-3xl font-black text-gray-900"
-                  style="
-                    font-family: 'Comic Sans MS', cursive;
-                    font-style: italic;
-                  "
-                >
-                  Your Success Starts Here!
-                </div>
+              <div class="aspect-video w-full relative">
+                <img
+                  :src="studentTutor"
+                  alt="Student success"
+                  class="w-full h-full object-cover"
+                />
               </div>
             </div>
+
             <div
-              class="absolute -bottom-6 -right-6 w-32 h-32 bg-yellow-300 rounded-full opacity-50"
-            ></div>
+              class="absolute bottom-4 -left-2 lg:bottom-12 bg-white rounded-2xl shadow-xl p-3 lg:p-4 flex items-center gap-3 z-20"
+            >
+          
+              <div>
+                <p class="text-lg lg:text-xl font-black text-gray-900">5K+</p>
+                <p class="text-xs lg:text-sm text-gray-500">Total Students</p>
+              </div>
+            </div>
+
             <div
-              class="absolute -top-6 -left-6 w-24 h-24 bg-blue-400 rounded-full opacity-40"
+              class="absolute -top-4 -right-2 lg:-top-6 lg:-right-6 bg-white rounded-2xl shadow-xl p-3 lg:p-4 flex items-center gap-3 z-20"
+            >
+              <div>
+                <p class="text-lg lg:text-xl font-black text-gray-900">100+</p>
+                <p class="text-xs lg:text-sm text-gray-500">Expert Tutors</p>
+              </div>
+            </div>
+
+            <div
+              class="absolute -bottom-6 -right-6 w-32 h-32 bg-blue-300 rounded-full opacity-50"
             ></div>
           </div>
         </div>
@@ -414,6 +424,7 @@ import {
   IconSchool
 } from '@tabler/icons-vue'
 import Navbar from '@/components/common/layout/Navbar.vue'
+import studentTutor from '@/assets/images/student-tutor.png'
 
 export default defineComponent({
   name: 'LandingPage',
@@ -503,7 +514,8 @@ export default defineComponent({
           totalSessions: 220,
           teachingExperienceYears: 7
         }
-      ] as (TutorData & { emoji: string })[]
+      ] as (TutorData & { emoji: string })[],
+      studentTutor
     }
   },
   methods: {
@@ -540,5 +552,24 @@ export default defineComponent({
 
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+.highlight-box-landing {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(100% + 12px);
+  height: 75%;
+  transform: translate(-50%, -50%) rotate(-2deg);
+  border-radius: 6px;
+  z-index: 0;
+}
+
+.highlight-box-landing-blue {
+  background-color: rgba(191, 219, 254, 0.8);
+}
+
+.highlight-box-landing-yellow {
+  background-color: rgba(250, 204, 21, 0.8);
 }
 </style>

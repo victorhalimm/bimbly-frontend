@@ -1,23 +1,30 @@
 <template>
   <div class="min-h-screen bg-white">
-    <div class="bg-blue-100 py-16 pt-40 px-4 sm:px-6 lg:px-8">
-      <div class="max-w-7xl mx-auto">
-        <h1 class="text-5xl md:text-6xl font-black text-gray-900 mb-4">
+    <div class="bg-gradient-to-br from-blue-50 via-blue-100 to-blue-50 py-24 pt-44 pb-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <div class="absolute top-20 right-20 w-48 h-48 bg-blue-200 rounded-full opacity-40 blur-3xl animate-blob"></div>
+      <div class="absolute bottom-32 left-10 w-64 h-64 bg-yellow-200 rounded-full opacity-30 blur-3xl animate-blob animation-delay-2000"></div>
+
+      <div class="absolute top-1/4 left-16 w-3 h-3 bg-blue-400 rounded-full animate-float"></div>
+      <div class="absolute top-1/3 right-1/4 w-2 h-2 bg-blue-300 rounded-full animate-float animation-delay-500"></div>
+      <div class="absolute bottom-1/3 right-24 w-4 h-4 bg-yellow-400 rounded-full animate-float animation-delay-1000"></div>
+      <div class="absolute top-1/2 left-1/4 w-2 h-2 bg-green-400 rounded-full animate-float animation-delay-1500"></div>
+
+      <div class="max-w-7xl mx-auto relative z-10">
+        <h1 class="text-5xl text-center md:text-6xl mx-auto font-black text-gray-900 mb-4">
           Find Your
           <span class="relative inline-block px-1">
             <span class="relative z-20">Perfect</span>
             <svg class="absolute -bottom-2 left-0 w-full h-4 z-10" viewBox="0 0 100 12" preserveAspectRatio="none" fill="none">
               <path d="M2,8 Q25,2 50,8 T98,6" stroke="#3b82f6" stroke-width="4" stroke-linecap="round" opacity="0.4"/>
-              <path d="M5,6 Q30,10 55,4 T95,8" stroke="#8b5cf6" stroke-width="3" stroke-linecap="round" opacity="0.3"/>
             </svg>
           </span>
           Tutor
         </h1>
-        <p class="text-xl text-gray-600 mb-8 font-medium max-w-xl">
+        <p class="text-xl text-center text-gray-600 mb-8 font-medium max-w-xl mx-auto">
           Hundreds of qualified tutors ready to help your learning journey
         </p>
 
-        <div class="max-w-md bg-white rounded-full shadow-lg px-3 py-2">
+        <div class="max-w-md mx-auto bg-white rounded-full shadow-lg px-3 py-2">
           <div class="flex items-center gap-2">
             <div class="flex-1 relative">
               <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
@@ -42,7 +49,7 @@
           </div>
         </div>
 
-        <div class="max-w-4xl mt-6 bg-white rounded-full shadow-md px-2 py-3 overflow-hidden">
+        <div class="max-w-4xl mx-auto mt-6 bg-white rounded-full shadow-md px-2 py-3 overflow-hidden">
           <div class="relative">
             <button
               v-if="canScrollLeft"
@@ -85,15 +92,19 @@
           </div>
         </div>
       </div>
+
+      <div class="absolute bottom-0 left-0 right-0 h-16">
+        <svg preserveAspectRatio="none" viewBox="0 0 1200 120" fill="white" class="w-full h-full">
+          <path d="M0,0 C150,50 350,50 600,25 C850,0 1050,0 1200,25 L1200,120 L0,120 Z"></path>
+        </svg>
+      </div>
     </div>
 
-    <div class="max-w-7xl rounded-t-[2rem] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="mb-8">
         <h2 class="text-3xl font-black text-gray-900 mb-2">Our Top Tutors</h2>
         <p class="text-lg text-gray-600 font-medium">Selected based on ratings and experience</p>
       </div>
-
-      <NeoAlert v-if="error" variant="error" :message="error" class="mb-6" />
 
       <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div v-for="i in 9" :key="i" class="bg-white rounded-[2.5rem] p-6 animate-pulse shadow-lg">
@@ -106,7 +117,7 @@
         </div>
       </div>
 
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         <TutorCard
           v-for="tutor in highlightedTutors"
           :key="tutor.id"
@@ -214,7 +225,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useTutorStore } from '@/stores/tutor.store';
-import { NeoAlert } from '@/components/common/ui';
+import { useToast } from '@/composables/useToast';
 import TutorCard from '@/components/tutor/TutorCard.vue';
 import {
   IconLanguage,
@@ -236,7 +247,6 @@ import {
 export default defineComponent({
   name: 'TutorsPage',
   components: {
-    NeoAlert,
     TutorCard,
     IconLanguage,
     IconMath,
@@ -252,6 +262,10 @@ export default defineComponent({
     IconArticle,
     IconDeviceDesktop,
     IconFriends
+  },
+  setup() {
+    const toast = useToast();
+    return { toast };
   },
   data() {
     return {
@@ -290,7 +304,15 @@ export default defineComponent({
       return this.tutorStore.error;
     },
   },
+  watch: {
+    error(newError: string | null) {
+      if (newError) {
+        this.toast.error('Error', newError);
+      }
+    },
+  },
   mounted() {
+    this.tutorStore.resetFilters();
     this.tutorStore.searchTutors({ limit: 9, sortBy: 'rating', order: 'DESC' });
     this.$nextTick(() => {
       this.updateScrollButtons();
@@ -355,5 +377,53 @@ export default defineComponent({
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+@keyframes blob {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(10px, -10px) scale(1.03);
+  }
+  50% {
+    transform: translate(-10px, 10px) scale(0.97);
+  }
+  75% {
+    transform: translate(-5px, -5px) scale(1.01);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-blob {
+  animation: blob 8s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animation-delay-500 {
+  animation-delay: 0.5s;
+}
+
+.animation-delay-1000 {
+  animation-delay: 1s;
+}
+
+.animation-delay-1500 {
+  animation-delay: 1.5s;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
 }
 </style>
