@@ -6,7 +6,7 @@
       @become-tutor="handleBecomeTutor"
     />
 
-    <section class="py-20 bg-white relative overflow-hidden">
+    <section class="py-20 pb-48 bg-white relative overflow-hidden">
       <div
         class="absolute top-20 left-20 w-3 h-3 bg-blue-300 rounded-full"
       ></div>
@@ -191,7 +191,7 @@
       </div>
     </section>
 
-    <section class="py-20 bg-white">
+    <section class="py-20 bg-white pt-32">
       <div class="max-w-7xl mx-auto px-6 lg:px-12">
         <div
           class="bg-gradient-to-br from-blue-600 via-blue-500 to-blue-600 rounded-[3rem] p-12 lg:p-16 text-white relative overflow-hidden"
