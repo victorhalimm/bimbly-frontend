@@ -85,6 +85,29 @@ const routes : RouteType[] = [
       footer: { show: true, backgroundColor: '#ffffff' },
     },
   },
+  {
+    path: '/book/:tutorId',
+    name: 'BookSession',
+    component: () => import('../views/booking/BookingPage.vue'),
+    meta: { requiresAuth: true, roles: ['student'] },
+  },
+  {
+    path: '/verify-email',
+    name: 'VerifyEmail',
+    component: () => import('../views/auth/EmailVerification.vue'),
+  },
+  {
+    path: '/forgot-password',
+    name: 'ForgotPassword',
+    component: () => import('../views/auth/ForgotPassword.vue'),
+    meta: { requiresGuest: true },
+  },
+  {
+    path: '/reset-password',
+    name: 'ResetPassword',
+    component: () => import('../views/auth/ResetPassword.vue'),
+    meta: { requiresGuest: true },
+  },
 
   // ==================== Student - Profiles ====================
   {
@@ -108,6 +131,34 @@ const routes : RouteType[] = [
       navbar: { show: true, hideOnTop: false },
       footer: { show: true, backgroundColor: '#ffffff' },
     },
+  },
+
+  // ==================== Student - Bookings ====================
+  {
+    path: '/student/bookings',
+    name: 'StudentBookings',
+    component: () => import('../views/student/MyBookingsPage.vue'),
+    meta: { requiresAuth: true, roles: ['student'] },
+  },
+  {
+    path: '/student/bookings/:id',
+    name: 'StudentBookingDetail',
+    component: () => import('../views/student/MyBookingsPage.vue'),
+    meta: { requiresAuth: true, roles: ['student'] },
+  },
+
+  // ==================== Student - Bookings ====================
+  {
+    path: '/student/bookings',
+    name: 'StudentBookings',
+    component: () => import('../views/student/MyBookingsPage.vue'),
+    meta: { requiresAuth: true, roles: ['student'] },
+  },
+  {
+    path: '/student/bookings/:id',
+    name: 'StudentBookingDetail',
+    component: () => import('../views/student/MyBookingsPage.vue'),
+    meta: { requiresAuth: true, roles: ['student'] },
   },
 
   // ==================== Student - Quiz System ====================
@@ -155,6 +206,34 @@ const routes : RouteType[] = [
       navbar: { show: true, hideOnTop: false },
       footer: { show: true, backgroundColor: '#ffffff' },
     },
+  },
+
+  // ==================== Tutor - Bookings ====================
+  {
+    path: '/tutor/bookings',
+    name: 'TutorBookings',
+    component: () => import('../views/tutor/TutorBookingsPage.vue'),
+    meta: { requiresAuth: true, roles: ['tutor'] },
+  },
+  {
+    path: '/tutor/bookings/:id',
+    name: 'TutorBookingDetail',
+    component: () => import('../views/tutor/TutorBookingsPage.vue'),
+    meta: { requiresAuth: true, roles: ['tutor'] },
+  },
+
+  // ==================== Tutor - Bookings ====================
+  {
+    path: '/tutor/bookings',
+    name: 'TutorBookings',
+    component: () => import('../views/tutor/TutorBookingsPage.vue'),
+    meta: { requiresAuth: true, roles: ['tutor'] },
+  },
+  {
+    path: '/tutor/bookings/:id',
+    name: 'TutorBookingDetail',
+    component: () => import('../views/tutor/TutorBookingsPage.vue'),
+    meta: { requiresAuth: true, roles: ['tutor'] },
   },
 
   // ==================== Tutor - Quiz System ====================

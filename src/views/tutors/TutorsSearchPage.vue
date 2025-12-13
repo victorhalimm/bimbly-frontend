@@ -106,12 +106,12 @@
         <div class="relative" ref="locationFilter">
           <button
             class="flex items-center gap-2 px-4 py-2.5 bg-white border-2 rounded-full font-medium transition-all text-sm"
-            :class="openFilter === 'location' || filters.city || filters.province
+            :class="openFilter === 'location' || filters.city || (filters.province && filters.province !== '')
               ? 'border-blue-500 bg-blue-50 text-blue-700'
               : 'border-gray-200 text-gray-700 hover:border-gray-300'"
             @click="toggleFilter('location')"
           >
-            <span>{{ filters.city || filters.province || 'Location' }}</span>
+            <span>{{ filters.city || (filters.province && filters.province !== '' ? filters.province : 'Location') }}</span>
             <svg class="h-4 w-4 transition-transform" :class="{ 'rotate-180': openFilter === 'location' }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
@@ -304,8 +304,6 @@
         </div>
       </div>
 
-      <NeoAlert v-if="error" variant="error" :message="error" class="mb-6" />
-
       <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <div v-for="i in 8" :key="i" class="bg-white rounded-4xl p-6 animate-pulse shadow-lg">
           <div class="flex flex-col items-center">
@@ -391,7 +389,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useTutorStore } from '@/stores/tutor.store';
-import { NeoAlert } from '@/components/common/ui';
+import { useToast } from '@/composables/useToast';
 import TutorCard from '@/components/tutor/TutorCard.vue';
 import Navbar from '@/components/common/layout/Navbar.vue';
 import type { FilterData } from '@/types/filters';
@@ -399,14 +397,17 @@ import type { FilterData } from '@/types/filters';
 export default defineComponent({
   name: 'TutorsSearchPage',
   components: {
-    NeoAlert,
     TutorCard,
     Navbar
+  },
+  setup() {
+    const toast = useToast();
+    return { toast };
   },
   data() {
     return {
       searchQuery: '',
-      filters: {} as FilterData,
+      filters: { province: '' } as FilterData,
       openFilter: null as string | null,
       subjects: [
         'Matematika',
@@ -475,7 +476,7 @@ export default defineComponent({
         this.filters.subject ||
         this.filters.gradeLevel ||
         this.filters.city ||
-        this.filters.province ||
+        (this.filters.province && this.filters.province !== '') ||
         this.filters.minPrice ||
         this.filters.maxPrice ||
         this.filters.teachingMethod ||
@@ -498,6 +499,13 @@ export default defineComponent({
       if (this.filters.teachingMethod === 'online') return 'Online';
       if (this.filters.teachingMethod === 'offline') return 'In-Person';
       return 'Teaching Method';
+    },
+  },
+  watch: {
+    error(newError: string | null) {
+      if (newError) {
+        this.toast.error('Search Error', newError);
+      }
     },
   },
   mounted() {
@@ -593,7 +601,7 @@ export default defineComponent({
     },
     clearAllFilters() {
       this.searchQuery = '';
-      this.filters = {};
+      this.filters = { province: '' };
       this.openFilter = null;
       this.tutorStore.resetFilters();
       this.tutorStore.searchTutors();

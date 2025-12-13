@@ -48,7 +48,7 @@
 
       <div v-if="localQuestion.questionType === 'multiple_choice'" class="space-y-3">
         <label class="block text-sm font-semibold text-gray-700">Choices</label>
-        <div v-for="(choice, i) in localQuestion.choices" :key="i" class="flex gap-2">
+        <div v-for="(_, i) in localQuestion.choices" :key="i" class="flex gap-2">
           <input
             v-model="localQuestion.choices![i]"
             @input="emitUpdate"

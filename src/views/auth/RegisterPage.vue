@@ -31,25 +31,6 @@
 
           <!-- Form Content -->
           <div class="p-8">
-            <!-- Success Message -->
-            <NeoAlert
-              v-if="success"
-              variant="success"
-              :message="success"
-              auto-dismiss
-              class="mb-6"
-            />
-
-            <!-- Error Message -->
-            <NeoAlert
-              v-if="error"
-              variant="error"
-              :message="error"
-              dismissible
-              @dismiss="error = null"
-              class="mb-6"
-            />
-
             <form class="space-y-6" @submit.prevent="handleRegister">
               <!-- Full Name -->
               <NeoInput
@@ -197,7 +178,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useAuthStore } from '../../stores/auth.store';
-import { NeoButton, NeoInput, NeoRadio, NeoAlert } from '../../components/common/ui';
+import { useToast } from '../../composables/useToast';
+import { NeoButton, NeoInput, NeoRadio } from '../../components/common/ui';
 
 export default defineComponent({
   name: 'RegisterPage',
@@ -205,7 +187,10 @@ export default defineComponent({
     NeoButton,
     NeoInput,
     NeoRadio,
-    NeoAlert,
+  },
+  setup() {
+    const toast = useToast();
+    return { toast };
   },
   data() {
     return {
@@ -217,8 +202,6 @@ export default defineComponent({
         phoneNumber: '',
         userType: 'student' as 'student' | 'tutor',
       },
-      error: null as string | null,
-      success: null as string | null,
     };
   },
   computed: {
@@ -235,11 +218,8 @@ export default defineComponent({
   },
   methods: {
     async handleRegister() {
-      this.error = null;
-      this.success = null;
-
       if (this.form.password !== this.form.confirmPassword) {
-        this.error = 'Passwords do not match';
+        this.toast.error('Validation Error', 'Passwords do not match');
         return;
       }
 
@@ -254,13 +234,13 @@ export default defineComponent({
           userType: this.form.userType,
         });
 
-        this.success = 'Registration successful! Please check your email to verify your account.';
+        this.toast.success('Registration Successful', 'Please check your email to verify your account.');
 
         setTimeout(() => {
           this.$router.push('/login');
         }, 2000);
       } catch (error: any) {
-        this.error = error.response?.data?.message || 'Registration failed. Please try again.';
+        this.toast.error('Registration Failed', error.response?.data?.message || 'Please try again.');
       }
     },
   },

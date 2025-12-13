@@ -3,23 +3,6 @@
     class="group relative bg-white rounded-4xl overflow-hidden transition-all duration-300 hover:shadow-xl cursor-pointer shadow-lg"
     @click="handleViewProfile"
   >
-    <div class="absolute top-4 right-4 z-10">
-      <button
-        class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-gray-50 transition-all"
-        @click.stop="toggleFavorite"
-      >
-        <svg
-          class="h-5 w-5 transition-colors"
-          :class="isFavorite ? 'text-red-500 fill-current' : 'text-gray-400'"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-        </svg>
-      </button>
-    </div>
-
     <div class="relative h-72" :class="cardBgClass">
       <img
         :src="tutor.profileImageUrl || defaultAvatar"
@@ -107,7 +90,6 @@ export default defineComponent({
   emits: ['view-profile'],
   data() {
     return {
-      isFavorite: false,
       defaultAvatar:
         'https://ui-avatars.com/api/?name=' +
         encodeURIComponent(this.tutor.fullName) +
@@ -168,9 +150,6 @@ export default defineComponent({
   methods: {
     handleViewProfile() {
       this.$emit('view-profile', this.tutor.id);
-    },
-    toggleFavorite() {
-      this.isFavorite = !this.isFavorite;
     },
     getSubjectStyle(subject: string): string {
       const styles: Record<string, string> = {

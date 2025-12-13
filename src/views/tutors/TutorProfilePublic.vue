@@ -5,7 +5,14 @@
     </div>
 
     <div v-else-if="error" class="max-w-4xl mx-auto px-4 py-12">
-      <NeoAlert variant="error" :message="error" />
+      <div class="bg-red-50 border-2 border-red-200 rounded-2xl p-6 text-center">
+        <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+        </div>
+        <p class="text-red-700 font-semibold">{{ error }}</p>
+      </div>
       <div class="text-center mt-8">
         <button
           class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg"
@@ -45,13 +52,6 @@
                   class="w-full h-full object-cover"
                 />
               </div>
-              <button
-                class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
-              >
-                <svg class="h-5 w-5 text-gray-400 hover:text-red-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-              </button>
             </div>
 
             <div class="lg:w-2/3 p-8 lg:p-10">
@@ -108,7 +108,10 @@
                   <p class="text-sm text-gray-500 mb-1">Hourly Rate</p>
                   <p class="text-3xl font-black text-blue-600 mb-4">{{ formattedPrice }}</p>
                   <div class="space-y-3">
-                    <button class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg">
+                    <button
+                      class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg"
+                      @click="handleBookSession"
+                    >
                       Book Session
                     </button>
                     <button class="w-full bg-white text-gray-700 font-bold py-3 px-6 rounded-full border-2 border-gray-200 hover:border-blue-500 hover:text-blue-600 transition-all">
@@ -374,12 +377,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useTutorStore } from '@/stores/tutor.store';
-import { NeoAlert } from '@/components/common/ui';
+import { useToast } from '@/composables/useToast';
 
 export default defineComponent({
   name: 'TutorProfilePublic',
-  components: {
-    NeoAlert,
+  setup() {
+    const toast = useToast();
+    return { toast };
   },
   data() {
     return {
@@ -453,6 +457,13 @@ export default defineComponent({
       });
     },
   },
+  watch: {
+    error(newError: string | null) {
+      if (newError) {
+        this.toast.error('Error', newError);
+      }
+    },
+  },
   mounted() {
     const tutorId = this.$route.params.id as string;
     this.loadTutorData(tutorId);
@@ -480,6 +491,11 @@ export default defineComponent({
         day: 'numeric',
         timeZone: 'Asia/Jakarta'
       });
+    },
+    handleBookSession() {
+      if (this.tutor) {
+        this.$router.push(`/book/${this.tutor.id}`);
+      }
     },
   },
 });
