@@ -1,4 +1,5 @@
 import axios from 'axios';
+import type { AvailabilitySchedule } from '@/types/availability';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -21,6 +22,7 @@ interface TutorProfileData {
   hourlyRate: number;
   city: string;
   province: string;
+  availabilitySchedule?: AvailabilitySchedule;
 }
 
 export const authService = {
