@@ -186,6 +186,7 @@ import {
   IconMenu2,
   IconX,
 } from '@tabler/icons-vue';
+import { useToast } from '@/composables/useToast';
 
 export interface NavigationItem {
   name: string;
@@ -213,7 +214,12 @@ export default defineComponent({
       default: 0,
     },
   },
-  emits: ['logout', 'open-notifications', 'open-chat'],
+  setup() {
+    const authStore = useAuthStore();
+    const toast = useToast();
+    return { toast, authStore };
+  },
+  emits: ['open-notifications', 'open-chat'],
   data() {
     return {
       showProfileMenu: false,
@@ -308,7 +314,9 @@ export default defineComponent({
     },
     handleLogout(): void {
       this.showProfileMenu = false;
-      this.$emit('logout');
+      this.toast.success("Successfully logged out from account")
+      this.authStore.logout()
+      this.$router.push("/")
     },
   },
 });

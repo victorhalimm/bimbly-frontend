@@ -66,7 +66,7 @@
         <!-- Logo & Header -->
         <div class="text-center mb-8">
           <div class="inline-flex items-center justify-center w-20 h-20 bg-blue-600 rounded-full mb-6 shadow-lg">
-            <span class="text-4xl">🎓</span>
+            <img :src="logo" class="w-8 h-8"/>
           </div>
           <h2 class="text-3xl lg:text-4xl font-black text-gray-900 mb-2">
             Welcome to
@@ -190,6 +190,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useAuthStore } from '../../stores/auth.store';
+import logo from '@assets/images/logo/logo-white.png'
 
 export default defineComponent({
   name: 'LoginPage',
@@ -205,6 +206,7 @@ export default defineComponent({
         password: '',
       },
       showPassword: false,
+      logo
     };
   },
   computed: {
