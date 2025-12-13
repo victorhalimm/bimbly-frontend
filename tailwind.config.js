@@ -87,8 +87,9 @@ export default {
         },
       },
       fontFamily: {
-        primary: 'var(--font-primary)',
-        mono: 'var(--font-mono)',
+        primary: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+        cursive: ['Shadows Into Light Two', 'cursive'],
       },
       fontSize: {
         xs: 'var(--text-xs)',
