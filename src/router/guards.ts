@@ -21,10 +21,8 @@ export const authGuard = async (
   }
 
   if (to.meta.requiresGuest && authStore.isAuthenticated) {
-    if (authStore.isStudent) {
-      next('/student/dashboard');
-    } else if (authStore.isTutor) {
-      next('/tutor/dashboard');
+    if (authStore.isStudent || authStore.isTutor) {
+      next('/tutors');
     } else if (authStore.isAdmin) {
       next('/admin/dashboard');
     } else {
