@@ -58,7 +58,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-interface SubjectData {
+export interface SubjectData {
   id: string;
   name: string;
   subtopicScores: Record<string, number>;

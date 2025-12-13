@@ -1,23 +1,24 @@
 <template>
   <div
-    class="group relative bg-white rounded-4xl overflow-hidden transition-all duration-300 hover:shadow-xl cursor-pointer shadow-lg"
+    class="group relative bg-white overflow-hidden cursor-pointer"
     @click="handleViewProfile"
   >
-    <div class="relative h-72" :class="cardBgClass">
+
+    <div class="relative h-72">
       <img
         :src="tutor.profileImageUrl || defaultAvatar"
         :alt="tutor.fullName"
-        class="w-full h-full object-cover"
+        class="w-full h-full rounded-4xl object-cover"
       />
-      <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
-        <h3 class="text-xl font-black text-white mb-1">{{ tutor.fullName }}</h3>
-        <p class="text-sm text-white/90 font-medium">
+      <div class="absolute rounded-4xl bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
+        <h3 class="text-xl font-black text-white mb-1 break-words">{{ tutor.fullName }}</h3>
+        <p class="text-sm text-white/90 font-medium break-words">
           {{ tutor.city }} ({{ teachingMethodLabel }})
         </p>
       </div>
     </div>
 
-    <div class="p-6">
+    <div class="py-6 px-2">
       <div class="flex items-center justify-between mb-3">
         <div class="flex items-center gap-2">
           <div class="flex items-center gap-1">
@@ -36,7 +37,7 @@
         </div>
       </div>
 
-      <p v-if="tutor.bio" class="text-sm text-gray-600 mb-4 line-clamp-2">
+      <p v-if="tutor.bio" class="text-sm text-gray-600 mb-4 line-clamp-2 break-words">
         {{ tutor.bio }}
       </p>
 
@@ -132,20 +133,7 @@ export default defineComponent({
       if (methods.length === 2) return 'in-person & online';
       if (methods.includes('online')) return 'online';
       return 'in-person';
-    },
-    cardBgClass(): string {
-      const colors = [
-        'bg-blue-100',
-        'bg-purple-100',
-        'bg-pink-100',
-        'bg-green-100',
-        'bg-yellow-100',
-      ];
-      const hash = this.tutor.id.split('').reduce((a, b) => {
-        return a + b.charCodeAt(0);
-      }, 0);
-      return colors[hash % colors.length];
-    },
+    }
   },
   methods: {
     handleViewProfile() {

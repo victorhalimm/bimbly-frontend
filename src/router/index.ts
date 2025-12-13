@@ -82,31 +82,17 @@ const routes : RouteType[] = [
     component: () => import('../views/tutors/TutorProfilePublic.vue'),
     meta: {
       navbar: { show: true, hideOnTop: true },
-      footer: { show: true, backgroundColor: '#ffffff' },
+      footer: { show: true, backgroundColor: '#f9fafb' },
     },
   },
   {
     path: '/book/:tutorId',
     name: 'BookSession',
     component: () => import('../views/booking/BookingPage.vue'),
-    meta: { requiresAuth: true, roles: ['student'] },
-  },
-  {
-    path: '/verify-email',
-    name: 'VerifyEmail',
-    component: () => import('../views/auth/EmailVerification.vue'),
-  },
-  {
-    path: '/forgot-password',
-    name: 'ForgotPassword',
-    component: () => import('../views/auth/ForgotPassword.vue'),
-    meta: { requiresGuest: true },
-  },
-  {
-    path: '/reset-password',
-    name: 'ResetPassword',
-    component: () => import('../views/auth/ResetPassword.vue'),
-    meta: { requiresGuest: true },
+    meta: {
+      requiresAuth: true,
+      roles: ['student']
+    },
   },
 
   // ==================== Student - Profiles ====================
@@ -138,27 +124,34 @@ const routes : RouteType[] = [
     path: '/student/bookings',
     name: 'StudentBookings',
     component: () => import('../views/student/MyBookingsPage.vue'),
-    meta: { requiresAuth: true, roles: ['student'] },
+    meta: {
+      requiresAuth: true,
+      roles: ['student'],
+      navbar: { show: true, hideOnTop: true }
+    }
   },
   {
     path: '/student/bookings/:id',
     name: 'StudentBookingDetail',
     component: () => import('../views/student/MyBookingsPage.vue'),
-    meta: { requiresAuth: true, roles: ['student'] },
+    meta: {
+      requiresAuth: true,
+      roles: ['student'],
+      navbar: { show: true, hideOnTop: true }
+    }
   },
 
-  // ==================== Student - Bookings ====================
+  // ==================== Student - Payment ====================
   {
-    path: '/student/bookings',
-    name: 'StudentBookings',
-    component: () => import('../views/student/MyBookingsPage.vue'),
-    meta: { requiresAuth: true, roles: ['student'] },
-  },
-  {
-    path: '/student/bookings/:id',
-    name: 'StudentBookingDetail',
-    component: () => import('../views/student/MyBookingsPage.vue'),
-    meta: { requiresAuth: true, roles: ['student'] },
+    path: '/student/bookings/:bookingId/payment',
+    name: 'StudentPayment',
+    component: () => import('../views/student/PaymentPage.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: ['student'],
+      navbar: { show: false, hideOnTop: false },
+      footer: { show: false, backgroundColor: '#ffffff' },
+    },
   },
 
   // ==================== Student - Quiz System ====================
@@ -193,6 +186,18 @@ const routes : RouteType[] = [
       roles: ['student'],
       navbar: { show: true, hideOnTop: false },
       footer: { show: true, backgroundColor: '#ffffff' },
+    }
+  },
+  // ==================== Tutor - Profiles ====================
+  {
+    path: '/chat',
+    name: 'Chat',
+    component: () => import('../views/chat/ChatPage.vue'),
+    meta: { 
+      requiresAuth: true, 
+      roles: ['student', 'tutor'],
+      navbar: { show: false, hideOnTop: false },
+      footer: { show: false },
     },
   },
   // ==================== Tutor - Profiles ====================
@@ -206,20 +211,6 @@ const routes : RouteType[] = [
       navbar: { show: true, hideOnTop: false },
       footer: { show: true, backgroundColor: '#ffffff' },
     },
-  },
-
-  // ==================== Tutor - Bookings ====================
-  {
-    path: '/tutor/bookings',
-    name: 'TutorBookings',
-    component: () => import('../views/tutor/TutorBookingsPage.vue'),
-    meta: { requiresAuth: true, roles: ['tutor'] },
-  },
-  {
-    path: '/tutor/bookings/:id',
-    name: 'TutorBookingDetail',
-    component: () => import('../views/tutor/TutorBookingsPage.vue'),
-    meta: { requiresAuth: true, roles: ['tutor'] },
   },
 
   // ==================== Tutor - Bookings ====================
@@ -358,6 +349,15 @@ const routes : RouteType[] = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    }
+    if (to.hash) {
+      return { el: to.hash, behavior: 'smooth' };
+    }
+    return { top: 0 };
+  },
 });
 
 // Apply global auth guard

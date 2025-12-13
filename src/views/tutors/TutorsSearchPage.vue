@@ -1,7 +1,15 @@
 <template>
   <div class="min-h-screen bg-white">
-    <div class="bg-blue-50 py-12 px-4 pt-40 sm:px-6 lg:px-8">
-      <div class="max-w-7xl mx-auto">
+    <div class="bg-gradient-to-br from-blue-50 via-blue-100 to-blue-50 py-20 px-4 pt-44 pb-28 sm:px-6 lg:px-8 relative overflow-hidden">
+      <div class="absolute top-16 right-16 w-40 h-40 bg-blue-200 rounded-full opacity-40 blur-3xl animate-blob"></div>
+      <div class="absolute bottom-20 left-8 w-56 h-56 bg-yellow-200 rounded-full opacity-30 blur-3xl animate-blob animation-delay-2000"></div>
+
+      <div class="absolute top-1/4 left-12 w-3 h-3 bg-blue-400 rounded-full animate-float"></div>
+      <div class="absolute top-1/3 right-1/4 w-2 h-2 bg-blue-300 rounded-full animate-float animation-delay-500"></div>
+      <div class="absolute bottom-1/4 right-20 w-4 h-4 bg-yellow-400 rounded-full animate-float animation-delay-1000"></div>
+      <div class="absolute top-1/2 left-1/5 w-2 h-2 bg-green-400 rounded-full animate-float animation-delay-1500"></div>
+
+      <div class="max-w-7xl mx-auto relative z-10">
         <h1 class="text-4xl md:text-5xl font-black text-gray-900 text-center mb-8">
           Find Your Perfect Tutor
         </h1>
@@ -30,6 +38,12 @@
             </button>
           </div>
         </div>
+      </div>
+
+      <div class="absolute bottom-0 left-0 right-0 h-12">
+        <svg preserveAspectRatio="none" viewBox="0 0 1200 120" fill="white" class="w-full h-full">
+          <path d="M0,0 C150,40 350,40 600,20 C850,0 1050,0 1200,20 L1200,120 L0,120 Z"></path>
+        </svg>
       </div>
     </div>
 
@@ -611,11 +625,59 @@ export default defineComponent({
 </script>
 
 <style scoped>
+@keyframes blob {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(10px, -10px) scale(1.03);
+  }
+  50% {
+    transform: translate(-10px, 10px) scale(0.97);
+  }
+  75% {
+    transform: translate(-5px, -5px) scale(1.01);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-blob {
+  animation: blob 8s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
 .animation-delay-100 {
   animation-delay: 0.1s;
 }
 
 .animation-delay-200 {
   animation-delay: 0.2s;
+}
+
+.animation-delay-500 {
+  animation-delay: 0.5s;
+}
+
+.animation-delay-1000 {
+  animation-delay: 1s;
+}
+
+.animation-delay-1500 {
+  animation-delay: 1.5s;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
 }
 </style>

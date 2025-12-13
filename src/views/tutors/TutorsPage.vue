@@ -1,7 +1,15 @@
 <template>
   <div class="min-h-screen bg-white">
-    <div class="bg-blue-100 py-16 pt-40 px-4 sm:px-6 lg:px-8">
-      <div class="max-w-7xl mx-auto">
+    <div class="bg-gradient-to-br from-blue-50 via-blue-100 to-blue-50 py-24 pt-44 pb-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <div class="absolute top-20 right-20 w-48 h-48 bg-blue-200 rounded-full opacity-40 blur-3xl animate-blob"></div>
+      <div class="absolute bottom-32 left-10 w-64 h-64 bg-yellow-200 rounded-full opacity-30 blur-3xl animate-blob animation-delay-2000"></div>
+
+      <div class="absolute top-1/4 left-16 w-3 h-3 bg-blue-400 rounded-full animate-float"></div>
+      <div class="absolute top-1/3 right-1/4 w-2 h-2 bg-blue-300 rounded-full animate-float animation-delay-500"></div>
+      <div class="absolute bottom-1/3 right-24 w-4 h-4 bg-yellow-400 rounded-full animate-float animation-delay-1000"></div>
+      <div class="absolute top-1/2 left-1/4 w-2 h-2 bg-green-400 rounded-full animate-float animation-delay-1500"></div>
+
+      <div class="max-w-7xl mx-auto relative z-10">
         <h1 class="text-5xl text-center md:text-6xl mx-auto font-black text-gray-900 mb-4">
           Find Your
           <span class="relative inline-block px-1">
@@ -33,7 +41,7 @@
               />
             </div>
             <button
-              class="px-5 py-2 bg-blue-600 text-white font-bold text-sm rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-md"
+              class="px-5 py-2 bg-blue-600 text-white font-bold text-sm rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-md cursor-pointer"
               @click="goToSearch"
             >
               Search
@@ -45,7 +53,7 @@
           <div class="relative">
             <button
               v-if="canScrollLeft"
-              class="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center bg-white/90 rounded-full shadow hover:bg-white transition-all"
+              class="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center bg-white/90 rounded-full shadow hover:bg-white transition-all cursor-pointer"
               @click="scrollSubjects('left')"
             >
               <svg class="h-4 w-4 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -61,7 +69,7 @@
               <button
                 v-for="subject in subjectFilters"
                 :key="subject.name"
-                class="flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full transition-all"
+                class="flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full transition-all cursor-pointer"
                 :class="selectedSubject === subject.name
                   ? 'bg-blue-600 text-white shadow-md'
                   : 'bg-gray-50 text-gray-700 hover:bg-gray-100'"
@@ -74,7 +82,7 @@
 
             <button
               v-if="canScrollRight"
-              class="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center bg-white/90 rounded-full shadow hover:bg-white transition-all"
+              class="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center bg-white/90 rounded-full shadow hover:bg-white transition-all cursor-pointer"
               @click="scrollSubjects('right')"
             >
               <svg class="h-4 w-4 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -84,9 +92,15 @@
           </div>
         </div>
       </div>
+
+      <div class="absolute bottom-0 left-0 right-0 h-16">
+        <svg preserveAspectRatio="none" viewBox="0 0 1200 120" fill="white" class="w-full h-full">
+          <path d="M0,0 C150,50 350,50 600,25 C850,0 1050,0 1200,25 L1200,120 L0,120 Z"></path>
+        </svg>
+      </div>
     </div>
 
-    <div class="max-w-7xl rounded-t-[2rem] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="mb-8">
         <h2 class="text-3xl font-black text-gray-900 mb-2">Our Top Tutors</h2>
         <p class="text-lg text-gray-600 font-medium">Selected based on ratings and experience</p>
@@ -103,7 +117,7 @@
         </div>
       </div>
 
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         <TutorCard
           v-for="tutor in highlightedTutors"
           :key="tutor.id"
@@ -114,7 +128,7 @@
 
       <div class="mt-10 text-center">
         <button
-          class="inline-flex items-center gap-2 px-10 py-4 bg-blue-600 text-white font-bold text-lg rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg"
+          class="inline-flex items-center gap-2 px-10 py-4 bg-blue-600 text-white font-bold text-lg rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg cursor-pointer"
           @click="$router.push('/tutors/search')"
         >
           View All Tutors
@@ -145,7 +159,7 @@
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <button
-                class="group px-10 py-5 bg-blue-600 text-white font-bold text-lg rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg"
+                class="group px-10 py-5 bg-blue-600 text-white font-bold text-lg rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg cursor-pointer"
                 @click="handleBecomeTutor"
               >
                 <span class="flex items-center gap-2">
@@ -157,7 +171,7 @@
               </button>
 
               <button
-                class="px-8 py-4 bg-white text-gray-700 font-bold text-base rounded-full border-2 border-gray-200 hover:border-blue-500 hover:text-blue-600 hover:scale-105 transition-all"
+                class="px-8 py-4 bg-white text-gray-700 font-bold text-base rounded-full border-2 border-gray-200 hover:border-blue-500 hover:text-blue-600 hover:scale-105 transition-all cursor-pointer"
                 @click="$router.push('/about')"
               >
                 Learn More
@@ -218,8 +232,6 @@ import {
   IconMath,
   IconBook,
   IconWorld,
-  IconPiano,
-  IconSwimming,
   IconRocket,
   IconFlask2,
   IconPlant,
@@ -240,8 +252,6 @@ export default defineComponent({
     IconMath,
     IconBook,
     IconWorld,
-    IconPiano,
-    IconSwimming,
     IconRocket,
     IconFlask2,
     IconPlant,
@@ -251,7 +261,7 @@ export default defineComponent({
     IconCoin,
     IconArticle,
     IconDeviceDesktop,
-    IconFriends,
+    IconFriends
   },
   setup() {
     const toast = useToast();
@@ -367,5 +377,53 @@ export default defineComponent({
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+@keyframes blob {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(10px, -10px) scale(1.03);
+  }
+  50% {
+    transform: translate(-10px, 10px) scale(0.97);
+  }
+  75% {
+    transform: translate(-5px, -5px) scale(1.01);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-blob {
+  animation: blob 8s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animation-delay-500 {
+  animation-delay: 0.5s;
+}
+
+.animation-delay-1000 {
+  animation-delay: 1s;
+}
+
+.animation-delay-1500 {
+  animation-delay: 1.5s;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
 }
 </style>

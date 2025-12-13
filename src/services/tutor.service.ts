@@ -87,6 +87,12 @@ export interface AvailabilityResponse {
   availableSlots: TimeSlot[];
 }
 
+export interface AvailableSlotsResponse {
+  date: string;
+  dayOfWeek: string;
+  slots: TimeSlot[];
+}
+
 export interface ReviewItem {
   id: string;
   studentName: string;
@@ -143,6 +149,13 @@ export const tutorService = {
       params.date = date;
     }
     const response = await axios.get(`${API_URL}/tutors/${id}/availability`, { params });
+    return response.data;
+  },
+
+  async getAvailableSlots(tutorId: string, date: string): Promise<AvailableSlotsResponse> {
+    const response = await axios.get(`${API_URL}/tutors/${tutorId}/available-slots`, {
+      params: { date },
+    });
     return response.data;
   },
 

@@ -37,13 +37,14 @@
           <h1 class="text-5xl lg:text-7xl font-black text-gray-900 leading-tight mb-4">
             The best place to
             <span class="block mt-3">
-              <span class="text-blue-600" style="font-family: 'Comic Sans MS', cursive; font-style: italic;">learn</span>
+              <span class="relative inline-block">
+                <span class="highlight-box highlight-box-blue"></span>
+                <span class="relative z-10 text-blue-700">learn</span>
+              </span>
               <span class="mx-3">and</span>
               <span class="relative inline-block">
-                <span class="text-yellow-500" style="font-family: 'Comic Sans MS', cursive; font-style: italic;">find tutors</span>
-                <svg class="absolute -bottom-3 left-0 w-full animate-draw-line" viewBox="0 0 280 12" fill="none">
-                  <path d="M2 10C50 2, 100 2, 150 10C200 2, 250 2, 278 10" stroke="#EAB308" stroke-width="4" stroke-linecap="round"/>
-                </svg>
+                <span class="highlight-box highlight-box-yellow"></span>
+                <span class="relative z-10 text-yellow-600">find tutors</span>
               </span>
             </span>
             <span class="block mt-3">for students</span>
@@ -299,5 +300,25 @@ export default defineComponent({
 
 .animation-delay-2000 {
   animation-delay: 2s;
+}
+
+.highlight-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(100% + 16px);
+  height: 70%;
+  transform: translate(-50%, -50%) rotate(-2deg);
+  border-radius: 8px;
+  z-index: 0;
+}
+
+.highlight-box-blue {
+  background-color: rgba(191, 219, 254, 0.7);
+}
+
+.highlight-box-yellow {
+  background-color: rgba(254, 240, 138, 0.7);
+  transform: translate(-50%, -50%) rotate(1deg);
 }
 </style>

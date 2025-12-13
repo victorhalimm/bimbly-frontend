@@ -229,7 +229,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import type { FilterData } from '@/types/filters';
+import type { FilterData } from '@/types/tutor';
 
 export default defineComponent({
   name: 'TutorFilters',
