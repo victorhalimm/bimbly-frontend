@@ -1,120 +1,129 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 px-4">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-12">
-        <h1 class="text-5xl font-black text-gray-900 mb-4">
-          My <span class="text-blue-600" style="font-family: 'Comic Sans MS', cursive; font-style: italic;">Quizzes</span>
+  <div class="min-h-screen bg-white">
+    <div class="bg-gradient-to-br from-blue-50 via-blue-100 to-blue-50 py-20 pt-36 pb-28 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <div class="absolute top-20 right-20 w-48 h-48 bg-blue-200 rounded-full opacity-40 blur-3xl animate-blob"></div>
+      <div class="absolute bottom-32 left-10 w-64 h-64 bg-yellow-200 rounded-full opacity-30 blur-3xl animate-blob animation-delay-2000"></div>
+
+      <div class="absolute top-1/4 left-16 w-3 h-3 bg-blue-400 rounded-full animate-float"></div>
+      <div class="absolute top-1/3 right-1/4 w-2 h-2 bg-blue-300 rounded-full animate-float animation-delay-500"></div>
+      <div class="absolute bottom-1/3 right-24 w-4 h-4 bg-yellow-400 rounded-full animate-float animation-delay-1000"></div>
+      <div class="absolute top-1/2 left-1/4 w-2 h-2 bg-green-400 rounded-full animate-float animation-delay-1500"></div>
+
+      <div class="max-w-7xl mx-auto relative z-10">
+        <h1 class="text-5xl text-center md:text-6xl font-black text-gray-900 mb-4">
+          My
+          <span class="relative inline-block px-1">
+            <span class="relative z-20 text-blue-600 font-cursive italic">Quizzes</span>
+            <svg class="absolute -bottom-2 left-0 w-full h-4 z-10" viewBox="0 0 100 12" preserveAspectRatio="none" fill="none">
+              <path d="M2,8 Q25,2 50,8 T98,6" stroke="#3b82f6" stroke-width="4" stroke-linecap="round" opacity="0.4"/>
+            </svg>
+          </span>
         </h1>
-        <p class="text-lg font-medium text-gray-600">Create and manage quiz templates for your students</p>
-        <div class="w-32 h-1 bg-blue-500 rounded-full mx-auto mt-4"></div>
+        <p class="text-xl text-center text-gray-600 font-medium max-w-xl mx-auto mb-8">
+          Create and manage quiz templates for your students
+        </p>
+
+        <div class="flex justify-center">
+          <button
+            @click="$router.push('/tutor/quizzes/create')"
+            class="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-full font-bold hover:bg-blue-700 hover:scale-105 transition-all shadow-xl"
+          >
+            <IconPlus size="20" stroke="2" />
+            Create New Quiz
+          </button>
+        </div>
       </div>
 
-      <div class="flex justify-end mb-8">
-        <button
-          @click="$router.push('/tutor/quizzes/create')"
-          class="inline-flex items-center gap-3 bg-blue-600 text-white px-8 py-4 rounded-full font-bold hover:bg-blue-700 hover:scale-105 transition-all shadow-xl"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-          </svg>
-          Create New Quiz
-        </button>
+      <div class="absolute bottom-0 left-0 right-0 h-16">
+        <svg preserveAspectRatio="none" viewBox="0 0 1200 120" fill="white" class="w-full h-full">
+          <path d="M0,0 C150,50 350,50 600,25 C850,0 1050,0 1200,25 L1200,120 L0,120 Z"></path>
+        </svg>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div v-if="loading" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
+        <div v-for="i in 10" :key="i" class="bg-white rounded-2xl overflow-hidden shadow-md animate-pulse">
+          <div class="h-28 bg-gray-200"></div>
+          <div class="p-4">
+            <div class="h-4 bg-gray-200 rounded mb-2"></div>
+            <div class="h-3 bg-gray-100 rounded w-3/4 mb-3"></div>
+            <div class="flex gap-1">
+              <div class="h-5 bg-gray-100 rounded-full w-16"></div>
+              <div class="h-5 bg-gray-100 rounded-full w-12"></div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div v-if="loading" class="text-center py-12">
-        <div class="inline-block w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-        <p class="mt-4 text-lg font-medium text-gray-600">Loading quizzes...</p>
-      </div>
-
-      <div v-else-if="error" class="bg-red-100 text-red-900 px-6 py-4 rounded-2xl">
+      <div v-else-if="error" class="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-2xl text-center">
         <p class="font-medium">{{ error }}</p>
       </div>
 
-      <div v-else-if="templates.length === 0" class="text-center py-12">
-        <div class="w-32 h-32 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
+      <div v-else-if="templates.length === 0" class="text-center py-16">
+        <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <IconFileDescription size="48" stroke="1.5" class="text-blue-500" />
         </div>
-        <p class="text-xl font-bold text-gray-600 mb-2">No quizzes created yet</p>
+        <p class="text-xl font-bold text-gray-700 mb-2">No quizzes created yet</p>
         <p class="text-gray-500 mb-6">Create your first quiz to get started!</p>
         <button
           @click="$router.push('/tutor/quizzes/create')"
           class="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-full font-bold hover:bg-blue-700 hover:scale-105 transition-all shadow-lg"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-          </svg>
+          <IconPlus size="20" stroke="2" />
           Create Quiz
         </button>
       </div>
 
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div
+      <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
+        <QuizCard
           v-for="template in templates"
           :key="template.id"
-          class="bg-white rounded-[2.5rem] p-6 shadow-lg hover:shadow-xl transition-all hover:scale-105 cursor-pointer"
+          :title="template.title"
+          :description="template.description"
+          :subject="template.subject"
+          :question-count="template.questions?.length"
+          :total-points="template.totalPoints"
+          :date="formatDate(template.createdAt)"
+          :show-actions="true"
           @click="viewTemplate(template.id)"
         >
-          <div class="mb-4">
-            <h3 class="text-2xl font-black text-gray-900 mb-2 line-clamp-2">{{ template.title }}</h3>
-            <p v-if="template.description" class="text-gray-600 line-clamp-2">{{ template.description }}</p>
-          </div>
-
-          <div class="flex flex-wrap gap-2 mb-4">
-            <span class="px-4 py-2 bg-blue-100 text-blue-900 rounded-full font-bold text-sm">
-              {{ template.subject }}
-            </span>
-            <span class="px-4 py-2 bg-gray-200 text-gray-900 rounded-full font-bold text-sm">
-              {{ template.questions.length }} Questions
-            </span>
-            <span class="px-4 py-2 bg-green-100 text-green-900 rounded-full font-bold text-sm">
-              {{ template.totalPoints }} Points
-            </span>
-          </div>
-
-          <div class="flex items-center gap-2 text-gray-500 text-sm mb-4">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            <span>Created {{ formatDate(template.createdAt) }}</span>
-          </div>
-
-          <div class="flex gap-2">
+          <template #actions>
             <button
               @click.stop="editTemplate(template.id)"
-              class="flex-1 py-3 bg-blue-100 text-blue-900 rounded-full font-bold hover:bg-blue-200 transition-colors"
+              class="flex-1 py-2 bg-blue-100 text-blue-700 text-xs font-bold rounded-full hover:bg-blue-200 transition-colors"
             >
               Edit
             </button>
             <button
               @click.stop="assignQuiz(template.id)"
-              class="flex-1 py-3 bg-green-600 text-white rounded-full font-bold hover:bg-green-700 transition-colors"
+              class="flex-1 py-2 bg-green-600 text-white text-xs font-bold rounded-full hover:bg-green-700 transition-colors"
             >
               Assign
             </button>
             <button
               @click.stop="confirmDelete(template)"
-              class="py-3 px-4 bg-red-100 text-red-900 rounded-full font-bold hover:bg-red-200 transition-colors"
+              class="p-2 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition-colors"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
+              <IconTrash size="14" stroke="2" />
             </button>
-          </div>
-        </div>
+          </template>
+        </QuizCard>
       </div>
 
-      <div v-if="showDeleteModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
-        <div class="bg-white rounded-[2rem] p-8 max-w-md w-full shadow-2xl">
-          <h3 class="text-2xl font-black text-gray-900 mb-4">Delete Quiz</h3>
-          <p class="text-gray-600 mb-6">
+      <div v-if="showDeleteModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
+          <div class="flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mx-auto mb-4">
+            <IconAlertTriangle size="32" stroke="2" class="text-red-600" />
+          </div>
+          <h3 class="text-2xl font-black text-gray-900 mb-2 text-center">Delete Quiz</h3>
+          <p class="text-gray-600 mb-6 text-center">
             Are you sure you want to delete "<strong>{{ templateToDelete?.title }}</strong>"? This action cannot be undone.
           </p>
-          <div class="flex gap-4">
+          <div class="flex gap-3">
             <button
               @click="showDeleteModal = false"
-              class="flex-1 py-3 bg-gray-200 text-gray-900 rounded-full font-bold hover:bg-gray-300 transition-colors"
+              class="flex-1 py-3 bg-gray-100 text-gray-700 rounded-full font-bold hover:bg-gray-200 transition-colors"
             >
               Cancel
             </button>
@@ -135,6 +144,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useQuizStore } from '../../stores/quiz.store';
+import QuizCard from '../../components/quiz/QuizCard.vue';
+import {
+  IconPlus,
+  IconFileDescription,
+  IconTrash,
+  IconAlertTriangle,
+} from '@tabler/icons-vue';
 import type { QuizTemplate } from '../../services/quiz-templates.service';
 
 interface ComponentData {
@@ -145,6 +161,13 @@ interface ComponentData {
 
 export default defineComponent({
   name: 'TutorQuizList',
+  components: {
+    QuizCard,
+    IconPlus,
+    IconFileDescription,
+    IconTrash,
+    IconAlertTriangle,
+  },
   data(): ComponentData {
     return {
       showDeleteModal: false,
@@ -172,25 +195,24 @@ export default defineComponent({
   methods: {
     formatDate(date: string): string {
       return new Date(date).toLocaleDateString('en-US', {
-        year: 'numeric',
         month: 'short',
         day: 'numeric',
       });
     },
-    viewTemplate(id: string) {
+    viewTemplate(id: string): void {
       this.$router.push(`/tutor/quizzes/${id}`);
     },
-    editTemplate(id: string) {
+    editTemplate(id: string): void {
       this.$router.push(`/tutor/quizzes/${id}/edit`);
     },
-    assignQuiz(id: string) {
+    assignQuiz(id: string): void {
       this.$router.push(`/tutor/quizzes/${id}/assign`);
     },
-    confirmDelete(template: QuizTemplate) {
+    confirmDelete(template: QuizTemplate): void {
       this.templateToDelete = template;
       this.showDeleteModal = true;
     },
-    async deleteTemplate() {
+    async deleteTemplate(): Promise<void> {
       if (!this.templateToDelete) return;
 
       this.deleting = true;
@@ -198,8 +220,9 @@ export default defineComponent({
         await this.store.deleteTemplate(this.templateToDelete.id);
         this.showDeleteModal = false;
         this.templateToDelete = null;
-      } catch (error: any) {
-        alert(error.message || 'Failed to delete quiz');
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'Failed to delete quiz';
+        alert(message);
       } finally {
         this.deleting = false;
       }
@@ -209,10 +232,51 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+@keyframes blob {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(10px, -10px) scale(1.03);
+  }
+  50% {
+    transform: translate(-10px, 10px) scale(0.97);
+  }
+  75% {
+    transform: translate(-5px, -5px) scale(1.01);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-blob {
+  animation: blob 8s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animation-delay-500 {
+  animation-delay: 0.5s;
+}
+
+.animation-delay-1000 {
+  animation-delay: 1s;
+}
+
+.animation-delay-1500 {
+  animation-delay: 1.5s;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
 }
 </style>
