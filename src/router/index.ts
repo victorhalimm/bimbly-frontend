@@ -82,7 +82,16 @@ const routes : RouteType[] = [
     component: () => import('../views/tutors/TutorProfilePublic.vue'),
     meta: {
       navbar: { show: true, hideOnTop: true },
-      footer: { show: true, backgroundColor: '#ffffff' },
+      footer: { show: true, backgroundColor: '#f9fafb' },
+    },
+  },
+  {
+    path: '/book/:tutorId',
+    name: 'BookSession',
+    component: () => import('../views/booking/BookingPage.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: ['student']
     },
   },
 
@@ -107,6 +116,41 @@ const routes : RouteType[] = [
       roles: ['student'],
       navbar: { show: true, hideOnTop: false },
       footer: { show: true, backgroundColor: '#ffffff' },
+    },
+  },
+
+  // ==================== Student - Bookings ====================
+  {
+    path: '/student/bookings',
+    name: 'StudentBookings',
+    component: () => import('../views/student/MyBookingsPage.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: ['student'],
+      navbar: { show: true, hideOnTop: true }
+    }
+  },
+  {
+    path: '/student/bookings/:id',
+    name: 'StudentBookingDetail',
+    component: () => import('../views/student/MyBookingsPage.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: ['student'],
+      navbar: { show: true, hideOnTop: true }
+    }
+  },
+
+  // ==================== Student - Payment ====================
+  {
+    path: '/student/bookings/:bookingId/payment',
+    name: 'StudentPayment',
+    component: () => import('../views/student/PaymentPage.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: ['student'],
+      navbar: { show: false, hideOnTop: false },
+      footer: { show: false, backgroundColor: '#ffffff' },
     },
   },
 
@@ -167,6 +211,20 @@ const routes : RouteType[] = [
       navbar: { show: true, hideOnTop: false },
       footer: { show: true, backgroundColor: '#ffffff' },
     },
+  },
+
+  // ==================== Tutor - Bookings ====================
+  {
+    path: '/tutor/bookings',
+    name: 'TutorBookings',
+    component: () => import('../views/tutor/TutorBookingsPage.vue'),
+    meta: { requiresAuth: true, roles: ['tutor'] },
+  },
+  {
+    path: '/tutor/bookings/:id',
+    name: 'TutorBookingDetail',
+    component: () => import('../views/tutor/TutorBookingsPage.vue'),
+    meta: { requiresAuth: true, roles: ['tutor'] },
   },
 
   // ==================== Tutor - Quiz System ====================

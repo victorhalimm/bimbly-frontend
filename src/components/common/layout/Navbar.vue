@@ -247,11 +247,11 @@ export default defineComponent({
       const roleBasedItems: Record<string, NavigationItem[]> = {
         student: [
           { name: 'Quizzes', href: '/student/quizzes' },
-          { name: 'Meetings', href: '/student/meetings' },
+          { name: 'Bookings', href: '/student/bookings' },
         ],
         tutor: [
           { name: 'Quizzes', href: '/tutor/quizzes' },
-          { name: 'Meetings', href: '/tutor/meetings' },
+          { name: 'Bookings', href: '/tutor/bookings' },
         ],
         admin: [
           { name: 'Users', href: '/admin/users' },

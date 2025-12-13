@@ -1,5 +1,6 @@
 import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 import { useAuthStore } from '../stores/auth.store';
+import { useToast } from '../composables/useToast';
 
 export const authGuard = async (
   to: RouteLocationNormalized,
@@ -7,6 +8,7 @@ export const authGuard = async (
   next: NavigationGuardNext,
 ) => {
   const authStore = useAuthStore();
+  const toast = useToast();
 
   if (!authStore.isAuthenticated) {
     try {
@@ -16,6 +18,7 @@ export const authGuard = async (
   }
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    toast.warning('Login Required', 'Please log in to access this page');
     next('/login');
     return;
   }

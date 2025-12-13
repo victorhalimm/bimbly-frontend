@@ -1,7 +1,15 @@
 <template>
   <div class="min-h-screen bg-white">
-    <div class="bg-blue-50 py-12 px-4 pt-40 sm:px-6 lg:px-8">
-      <div class="max-w-7xl mx-auto">
+    <div class="bg-gradient-to-br from-blue-50 via-blue-100 to-blue-50 py-20 px-4 pt-44 pb-28 sm:px-6 lg:px-8 relative overflow-hidden">
+      <div class="absolute top-16 right-16 w-40 h-40 bg-blue-200 rounded-full opacity-40 blur-3xl animate-blob"></div>
+      <div class="absolute bottom-20 left-8 w-56 h-56 bg-yellow-200 rounded-full opacity-30 blur-3xl animate-blob animation-delay-2000"></div>
+
+      <div class="absolute top-1/4 left-12 w-3 h-3 bg-blue-400 rounded-full animate-float"></div>
+      <div class="absolute top-1/3 right-1/4 w-2 h-2 bg-blue-300 rounded-full animate-float animation-delay-500"></div>
+      <div class="absolute bottom-1/4 right-20 w-4 h-4 bg-yellow-400 rounded-full animate-float animation-delay-1000"></div>
+      <div class="absolute top-1/2 left-1/5 w-2 h-2 bg-green-400 rounded-full animate-float animation-delay-1500"></div>
+
+      <div class="max-w-7xl mx-auto relative z-10">
         <h1 class="text-4xl md:text-5xl font-black text-gray-900 text-center mb-8">
           Find Your Perfect Tutor
         </h1>
@@ -30,6 +38,12 @@
             </button>
           </div>
         </div>
+      </div>
+
+      <div class="absolute bottom-0 left-0 right-0 h-12">
+        <svg preserveAspectRatio="none" viewBox="0 0 1200 120" fill="white" class="w-full h-full">
+          <path d="M0,0 C150,40 350,40 600,20 C850,0 1050,0 1200,20 L1200,120 L0,120 Z"></path>
+        </svg>
       </div>
     </div>
 
@@ -106,12 +120,12 @@
         <div class="relative" ref="locationFilter">
           <button
             class="flex items-center gap-2 px-4 py-2.5 bg-white border-2 rounded-full font-medium transition-all text-sm"
-            :class="openFilter === 'location' || filters.city || filters.province
+            :class="openFilter === 'location' || filters.city || (filters.province && filters.province !== '')
               ? 'border-blue-500 bg-blue-50 text-blue-700'
               : 'border-gray-200 text-gray-700 hover:border-gray-300'"
             @click="toggleFilter('location')"
           >
-            <span>{{ filters.city || filters.province || 'Location' }}</span>
+            <span>{{ filters.city || (filters.province && filters.province !== '' ? filters.province : 'Location') }}</span>
             <svg class="h-4 w-4 transition-transform" :class="{ 'rotate-180': openFilter === 'location' }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
@@ -304,8 +318,6 @@
         </div>
       </div>
 
-      <NeoAlert v-if="error" variant="error" :message="error" class="mb-6" />
-
       <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <div v-for="i in 8" :key="i" class="bg-white rounded-4xl p-6 animate-pulse shadow-lg">
           <div class="flex flex-col items-center">
@@ -391,7 +403,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useTutorStore } from '@/stores/tutor.store';
-import { NeoAlert } from '@/components/common/ui';
+import { useToast } from '@/composables/useToast';
 import TutorCard from '@/components/tutor/TutorCard.vue';
 import Navbar from '@/components/common/layout/Navbar.vue';
 import type { FilterData } from '@/types/filters';
@@ -399,14 +411,17 @@ import type { FilterData } from '@/types/filters';
 export default defineComponent({
   name: 'TutorsSearchPage',
   components: {
-    NeoAlert,
     TutorCard,
     Navbar
+  },
+  setup() {
+    const toast = useToast();
+    return { toast };
   },
   data() {
     return {
       searchQuery: '',
-      filters: {} as FilterData,
+      filters: { province: '' } as FilterData,
       openFilter: null as string | null,
       subjects: [
         'Matematika',
@@ -475,7 +490,7 @@ export default defineComponent({
         this.filters.subject ||
         this.filters.gradeLevel ||
         this.filters.city ||
-        this.filters.province ||
+        (this.filters.province && this.filters.province !== '') ||
         this.filters.minPrice ||
         this.filters.maxPrice ||
         this.filters.teachingMethod ||
@@ -498,6 +513,13 @@ export default defineComponent({
       if (this.filters.teachingMethod === 'online') return 'Online';
       if (this.filters.teachingMethod === 'offline') return 'In-Person';
       return 'Teaching Method';
+    },
+  },
+  watch: {
+    error(newError: string | null) {
+      if (newError) {
+        this.toast.error('Search Error', newError);
+      }
     },
   },
   mounted() {
@@ -593,7 +615,7 @@ export default defineComponent({
     },
     clearAllFilters() {
       this.searchQuery = '';
-      this.filters = {};
+      this.filters = { province: '' };
       this.openFilter = null;
       this.tutorStore.resetFilters();
       this.tutorStore.searchTutors();
@@ -603,11 +625,59 @@ export default defineComponent({
 </script>
 
 <style scoped>
+@keyframes blob {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(10px, -10px) scale(1.03);
+  }
+  50% {
+    transform: translate(-10px, 10px) scale(0.97);
+  }
+  75% {
+    transform: translate(-5px, -5px) scale(1.01);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-blob {
+  animation: blob 8s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
 .animation-delay-100 {
   animation-delay: 0.1s;
 }
 
 .animation-delay-200 {
   animation-delay: 0.2s;
+}
+
+.animation-delay-500 {
+  animation-delay: 0.5s;
+}
+
+.animation-delay-1000 {
+  animation-delay: 1s;
+}
+
+.animation-delay-1500 {
+  animation-delay: 1.5s;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
 }
 </style>
