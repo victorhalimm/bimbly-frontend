@@ -1,12 +1,13 @@
 <template>
-  <nav class="fixed top-0 left-0 right-0 z-50 px-4 py-3">
+  <nav
+    class="fixed left-0 right-0 z-50 px-4 py-3 transition-all duration-300"
+    :class="navbarClass"
+  >
     <div class="max-w-7xl mx-auto px-12">
       <div class="bg-white rounded-full shadow-lg px-4 py-2 flex items-center justify-between">
         <div class="flex items-center gap-8">
           <router-link to="/" class="flex items-center gap-2 pl-2">
-            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
-              <span class="text-white font-black text-lg">B</span>
-            </div>
+            <img :src="logoBox" alt="Bimbly Logo" class="w-8 h-8" />
             <span class="text-xl font-black text-gray-900 hidden sm:block">Bimbly</span>
           </router-link>
 
@@ -42,7 +43,7 @@
             </span>
           </button>
 
-          <router-link
+         <router-link
             to="/chat"
             class="w-10 h-10 rounded-full flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-all relative"
           >
@@ -174,6 +175,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useRoute } from 'vue-router';
+import logoBox from '@assets/images/logo/logo-box-2.png'
 import { useAuthStore } from '../../../stores/auth.store';
 import {
   IconBell,
@@ -211,12 +213,21 @@ export default defineComponent({
       default: 0,
     },
   },
-  emits: ['logout', 'open-notifications'],
+  emits: ['logout', 'open-notifications', 'open-chat'],
   data() {
     return {
       showProfileMenu: false,
       showMobileMenu: false,
+      logoBox,
+      scrollY: 0
     };
+  },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll);
+    this.handleScroll();
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
   },
   computed: {
     authStore() {
@@ -266,8 +277,23 @@ export default defineComponent({
       };
       return routes[this.userType] || '/';
     },
+    navbarMeta(): { show: boolean; hideOnTop: boolean } {
+      const meta = this.$route.meta as { navbar?: { show?: boolean; hideOnTop?: boolean } };
+      return {
+        show: meta?.navbar?.show ?? true,
+        hideOnTop: meta?.navbar?.hideOnTop ?? false,
+      };
+    },
+    navbarClass(): string {
+      if (!this.navbarMeta.show) return '-top-full';
+      if (this.navbarMeta.hideOnTop && this.scrollY === 0) return '-top-full';
+      return 'top-0';
+    }
   },
   methods: {
+    handleScroll(): void {
+      this.scrollY = window.scrollY;
+    },
     isActiveRoute(href: string): boolean {
       const route = useRoute();
       return route.path === href || route.path.startsWith(href + '/');
@@ -280,10 +306,9 @@ export default defineComponent({
         .join('')
         .substring(0, 2);
     },
-    async handleLogout(): Promise<void> {
+    handleLogout(): void {
       this.showProfileMenu = false;
-      await this.authStore.logout();
-      this.$router.push('/login');
+      this.$emit('logout');
     },
   },
 });

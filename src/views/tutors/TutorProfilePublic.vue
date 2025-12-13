@@ -56,8 +56,8 @@
 
             <div class="lg:w-2/3 p-8 lg:p-10">
               <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
-                <div class="flex-1 min-w-0">
-                  <h1 class="text-3xl lg:text-4xl font-black text-gray-900 mb-2 break-words">{{ tutor.user?.fullName }}</h1>
+                <div class="flex-1">
+                  <h1 class="text-3xl lg:text-4xl font-black text-gray-900 mb-2">{{ tutor.user?.fullName }}</h1>
 
                   <div class="flex items-center gap-3 mb-4">
                     <div class="flex items-center gap-1 bg-yellow-50 px-3 py-1.5 rounded-full">
@@ -76,7 +76,7 @@
                     </span>
                   </div>
 
-                  <p class="text-gray-600 leading-relaxed mb-6 line-clamp-3 break-words">{{ tutor.bio }}</p>
+                  <p class="text-gray-600 leading-relaxed mb-6 line-clamp-3">{{ tutor.bio }}</p>
 
                   <div class="flex flex-wrap gap-2 mb-6">
                     <span
@@ -136,7 +136,7 @@
                 </span>
                 About Me
               </h2>
-              <p class="text-gray-600 leading-relaxed whitespace-pre-line break-words">{{ tutor.bio }}</p>
+              <p class="text-gray-600 leading-relaxed whitespace-pre-line">{{ tutor.bio }}</p>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 pt-6 border-t border-gray-100">
                 <div>
@@ -192,6 +192,24 @@
                   <p class="text-gray-900 font-semibold text-lg break-words">{{ formattedGradeLevels }}</p>
                 </div>
 
+                <div>
+                  <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Teaching Methods</h3>
+                  <div class="flex gap-3">
+                    <span
+                      v-for="method in tutor.teachingMethods"
+                      :key="method"
+                      class="flex items-center gap-2 px-4 py-2 rounded-xl font-semibold"
+                      :class="method === 'online' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'"
+                    >
+                      <svg v-if="method === 'online'" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                      <svg v-else class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      </svg>
+                      {{ method === 'online' ? 'Online' : 'In-Person' }}
+                    </span>
+                  </div>
                 <div>
                   <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Teaching Methods</h3>
                   <div class="flex gap-3">

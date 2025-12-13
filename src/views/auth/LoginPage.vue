@@ -230,13 +230,11 @@ export default defineComponent({
 
       try {
         await authStore.login(this.form);
-
-        if (authStore.isStudent) {
-          this.$router.push('/student/dashboard');
-        } else if (authStore.isTutor) {
-          this.$router.push('/tutor/dashboard');
-        } else if (authStore.isAdmin) {
+        
+        if (authStore.isAdmin) {
           this.$router.push('/admin/dashboard');
+        } else {
+          this.$router.push('/tutors');
         }
       } catch (error: any) {
         this.error = error.response?.data?.message || 'Login failed. Please check your credentials.';
