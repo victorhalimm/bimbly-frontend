@@ -142,6 +142,18 @@ const routes : RouteType[] = [
       roles: ['student'],
       navbar: { show: true, hideOnTop: false },
       footer: { show: true, backgroundColor: '#ffffff' },
+    }
+  },
+  // ==================== Tutor - Profiles ====================
+  {
+    path: '/chat',
+    name: 'Chat',
+    component: () => import('../views/chat/ChatPage.vue'),
+    meta: { 
+      requiresAuth: true, 
+      roles: ['student', 'tutor'],
+      navbar: { show: false, hideOnTop: false },
+      footer: { show: false },
     },
   },
   // ==================== Tutor - Profiles ====================
@@ -279,6 +291,15 @@ const routes : RouteType[] = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    }
+    if (to.hash) {
+      return { el: to.hash, behavior: 'smooth' };
+    }
+    return { top: 0 };
+  },
 });
 
 // Apply global auth guard

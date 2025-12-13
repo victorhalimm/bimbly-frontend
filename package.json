@@ -17,6 +17,7 @@
     "framer-motion": "^12.23.24",
     "pinia": "^3.0.2",
     "primevue": "^4.3.4",
+    "socket.io-client": "^4.8.1",
     "tailwindcss": "^4.1.7",
     "vee-validate": "^4.15.0",
     "vue": "^3.5.13",

@@ -1,7 +1,6 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
-    <BHeader :user="headerUser" @logout="handleLogout" />
-    <div class="py-12 px-6 lg:px-12">
+    <div class="pt-24 pb-12 px-6 lg:px-12">
     <div class="absolute top-20 right-20 w-64 h-64 bg-blue-200 rounded-full opacity-20 blur-3xl"></div>
     <div class="absolute bottom-20 left-20 w-96 h-96 bg-yellow-100 rounded-full opacity-15 blur-3xl"></div>
 
@@ -237,31 +236,14 @@ import { studentService } from '@/services/student.service';
 import { userService } from '@/services/user.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { useToast } from '@/composables/useToast';
-import BHeader from '@/components/common/layout/Header.vue';
 
 export default {
   name: 'StudentProfilePage',
-  components: {
-    BHeader,
-  },
   setup() {
     const authStore = useAuthStore();
     const toast = useToast();
-    const router = useRouter();
 
-    const headerUser = computed(() => ({
-      name: authStore.user?.fullName || 'Student',
-      email: authStore.user?.email,
-      avatar: authStore.user?.profileImageUrl,
-      role: 'student',
-    }));
-
-    const handleLogout = async () => {
-      await authStore.logout();
-      router.push('/login');
-    };
-
-    return { authStore, toast, headerUser, handleLogout };
+    return { authStore, toast };
   },
   data() {
     return {

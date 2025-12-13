@@ -99,23 +99,7 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
 import { useRoute } from 'vue-router';
-
-interface NavigationItem {
-  name: string;
-  href: string;
-  icon: string;
-  current?: boolean;
-  badge?: {
-    text: string;
-    type: 'success' | 'warning' | 'error' | 'info';
-  };
-}
-
-interface User {
-  name: string;
-  role: 'student' | 'tutor' | 'admin';
-  avatar?: string;
-}
+import type { NavigationItem, SidebarUser } from '@/types/common';
 
 const HomeIcon = {
   template: `
@@ -178,7 +162,7 @@ export default defineComponent({
   },
   props: {
     user: {
-      type: Object as () => User,
+      type: Object as () => SidebarUser,
       required: true,
     },
     showProfile: {
@@ -259,7 +243,7 @@ export default defineComponent({
       return labels[props.user.role] || 'User';
     };
 
-    const getIconComponent = (iconName: string) => {
+    const getIconComponent = (iconName: string | undefined) => {
       const icons: Record<string, any> = {
         HomeIcon,
         UserIcon,
@@ -268,7 +252,7 @@ export default defineComponent({
         ChartBarIcon,
         CogIcon,
       };
-      return icons[iconName] || HomeIcon;
+      return iconName ? icons[iconName] || HomeIcon : HomeIcon;
     };
 
     const getBadgeClasses = (type: string): string => {

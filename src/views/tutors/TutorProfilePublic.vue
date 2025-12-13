@@ -4,11 +4,11 @@
       <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
     </div>
 
-    <div v-else-if="error" class="max-w-4xl mx-auto px-4 py-12">
+    <div v-else-if="error" class="max-w-4xl mx-auto px-4 pt-28 pb-12">
       <NeoAlert variant="error" :message="error" />
       <div class="text-center mt-8">
         <button
-          class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg"
+          class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg cursor-pointer"
           @click="$router.push('/tutors')"
         >
           Back to Search
@@ -17,13 +17,13 @@
     </div>
 
     <div v-else-if="tutor">
-      <div class="bg-blue-100 pt-8 pb-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <div class="bg-blue-100 pt-28 pb-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <div class="absolute top-10 right-10 w-32 h-32 bg-blue-200 rounded-full opacity-50 blur-2xl"></div>
         <div class="absolute bottom-20 left-20 w-24 h-24 bg-purple-200 rounded-full opacity-40 blur-xl"></div>
 
         <div class="max-w-6xl mx-auto">
           <button
-            class="flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium mb-6 transition-colors"
+            class="flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium mb-6 transition-colors cursor-pointer"
             @click="$router.back()"
           >
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -57,7 +57,7 @@
             <div class="lg:w-2/3 p-8 lg:p-10">
               <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
                 <div class="flex-1">
-                  <h1 class="text-3xl lg:text-4xl font-black text-gray-900 mb-2">{{ tutor.user?.fullName }}</h1>
+                  <h1 class="text-3xl lg:text-4xl font-black text-gray-900 mb-2 break-words">{{ tutor.user?.fullName }}</h1>
 
                   <div class="flex items-center gap-3 mb-4">
                     <div class="flex items-center gap-1 bg-yellow-50 px-3 py-1.5 rounded-full">
@@ -68,15 +68,15 @@
                       <span class="text-gray-500 text-sm">({{ tutor.totalReviews }})</span>
                     </div>
                     <span class="text-gray-400">|</span>
-                    <span class="text-gray-600 flex items-center gap-1">
-                      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <span class="text-gray-600 flex items-center gap-1 break-words">
+                      <svg class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       </svg>
                       {{ tutor.city }}
                     </span>
                   </div>
 
-                  <p class="text-gray-600 leading-relaxed mb-6 line-clamp-3">{{ tutor.bio }}</p>
+                  <p class="text-gray-600 leading-relaxed mb-6 line-clamp-3 break-all overflow-hidden">{{ tutor.bio }}</p>
 
                   <div class="flex flex-wrap gap-2 mb-6">
                     <span
@@ -108,11 +108,15 @@
                   <p class="text-sm text-gray-500 mb-1">Hourly Rate</p>
                   <p class="text-3xl font-black text-blue-600 mb-4">{{ formattedPrice }}</p>
                   <div class="space-y-3">
-                    <button class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg">
+                    <button class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg cursor-pointer">
                       Book Session
                     </button>
-                    <button class="w-full bg-white text-gray-700 font-bold py-3 px-6 rounded-full border-2 border-gray-200 hover:border-blue-500 hover:text-blue-600 transition-all">
-                      Send Message
+                    <button
+                      class="w-full bg-white text-gray-700 font-bold py-3 px-6 rounded-full border-2 border-gray-200 hover:border-blue-500 hover:text-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                      :disabled="sendingMessage"
+                      @click="handleSendMessage"
+                    >
+                      {{ sendingMessage ? 'Opening chat...' : 'Send Message' }}
                     </button>
                   </div>
                 </div>
@@ -132,12 +136,12 @@
                 </span>
                 About Me
               </h2>
-              <p class="text-gray-600 leading-relaxed whitespace-pre-line">{{ tutor.bio }}</p>
+              <p class="text-gray-600 leading-relaxed whitespace-pre-line break-all overflow-hidden">{{ tutor.bio }}</p>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 pt-6 border-t border-gray-100">
                 <div>
                   <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-2">Education</h3>
-                  <p class="text-gray-900 font-medium">{{ tutor.educationBackground }}</p>
+                  <p class="text-gray-900 font-medium break-words">{{ tutor.educationBackground }}</p>
                 </div>
                 <div>
                   <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-2">Experience</h3>
@@ -185,7 +189,7 @@
 
                 <div>
                   <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Grade Levels</h3>
-                  <p class="text-gray-900 font-semibold text-lg">{{ formattedGradeLevels }}</p>
+                  <p class="text-gray-900 font-semibold text-lg break-words">{{ formattedGradeLevels }}</p>
                 </div>
 
                 <div>
@@ -223,20 +227,20 @@
                 <div
                   v-for="cert in tutor.certifications"
                   :key="cert.name"
-                  class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                  class="flex items-center justify-between gap-3 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
                 >
-                  <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <div class="flex items-center gap-3 min-w-0 flex-1">
+                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
                       <svg class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
                     </div>
-                    <span class="font-semibold text-gray-900">{{ cert.name }}</span>
+                    <span class="font-semibold text-gray-900 break-words">{{ cert.name }}</span>
                   </div>
                   <a
                     :href="cert.fileUrl"
                     target="_blank"
-                    class="text-blue-600 font-bold text-sm hover:underline"
+                    class="text-blue-600 font-bold text-sm hover:underline flex-shrink-0"
                   >
                     View
                   </a>
@@ -276,7 +280,7 @@
                         {{ review.studentName?.charAt(0) || 'S' }}
                       </div>
                       <div>
-                        <p class="font-bold text-gray-900">{{ review.studentName }}</p>
+                        <p class="font-bold text-gray-900 break-words">{{ review.studentName }}</p>
                         <p class="text-sm text-gray-500">{{ formatDate(review.createdAt) }}</p>
                       </div>
                     </div>
@@ -286,10 +290,10 @@
                       </svg>
                     </div>
                   </div>
-                  <p class="text-gray-600">{{ review.reviewText }}</p>
+                  <p class="text-gray-600 break-words">{{ review.reviewText }}</p>
                   <div v-if="review.tutorResponse" class="mt-4 bg-blue-50 p-4 rounded-xl">
                     <p class="text-sm font-bold text-blue-900 mb-1">Tutor Response</p>
-                    <p class="text-blue-800 text-sm">{{ review.tutorResponse }}</p>
+                    <p class="text-blue-800 text-sm break-words">{{ review.tutorResponse }}</p>
                   </div>
                 </div>
               </div>
@@ -374,6 +378,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useTutorStore } from '@/stores/tutor.store';
+import { useChatStore } from '@/stores/chat.store';
+import { useAuthStore } from '@/stores/auth.store';
 import { NeoAlert } from '@/components/common/ui';
 
 export default defineComponent({
@@ -384,6 +390,7 @@ export default defineComponent({
   data() {
     return {
       selectedDate: new Date().toISOString().split('T')[0],
+      sendingMessage: false,
     };
   },
   computed: {
@@ -480,6 +487,27 @@ export default defineComponent({
         day: 'numeric',
         timeZone: 'Asia/Jakarta'
       });
+    },
+    async handleSendMessage() {
+      const authStore = useAuthStore();
+      if (!authStore.isAuthenticated) {
+        this.$router.push('/login');
+        return;
+      }
+
+      if (!this.tutor?.userId) return;
+
+      this.sendingMessage = true;
+      try {
+        const chatStore = useChatStore();
+        const conversation = await chatStore.createConversation(this.tutor.userId);
+        this.$router.push(`/chat?conversation=${conversation.id}`);
+      } catch (error) {
+        console.error('Failed to create conversation:', error);
+        alert('Failed to start conversation. Please try again.');
+      } finally {
+        this.sendingMessage = false;
+      }
     },
   },
 });

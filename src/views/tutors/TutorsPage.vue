@@ -34,7 +34,7 @@
               />
             </div>
             <button
-              class="px-5 py-2 bg-blue-600 text-white font-bold text-sm rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-md"
+              class="px-5 py-2 bg-blue-600 text-white font-bold text-sm rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-md cursor-pointer"
               @click="goToSearch"
             >
               Search
@@ -46,7 +46,7 @@
           <div class="relative">
             <button
               v-if="canScrollLeft"
-              class="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center bg-white/90 rounded-full shadow hover:bg-white transition-all"
+              class="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center bg-white/90 rounded-full shadow hover:bg-white transition-all cursor-pointer"
               @click="scrollSubjects('left')"
             >
               <svg class="h-4 w-4 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -62,7 +62,7 @@
               <button
                 v-for="subject in subjectFilters"
                 :key="subject.name"
-                class="flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full transition-all"
+                class="flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full transition-all cursor-pointer"
                 :class="selectedSubject === subject.name
                   ? 'bg-blue-600 text-white shadow-md'
                   : 'bg-gray-50 text-gray-700 hover:bg-gray-100'"
@@ -75,7 +75,7 @@
 
             <button
               v-if="canScrollRight"
-              class="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center bg-white/90 rounded-full shadow hover:bg-white transition-all"
+              class="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center bg-white/90 rounded-full shadow hover:bg-white transition-all cursor-pointer"
               @click="scrollSubjects('right')"
             >
               <svg class="h-4 w-4 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -117,7 +117,7 @@
 
       <div class="mt-10 text-center">
         <button
-          class="inline-flex items-center gap-2 px-10 py-4 bg-blue-600 text-white font-bold text-lg rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg"
+          class="inline-flex items-center gap-2 px-10 py-4 bg-blue-600 text-white font-bold text-lg rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg cursor-pointer"
           @click="$router.push('/tutors/search')"
         >
           View All Tutors
@@ -148,7 +148,7 @@
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <button
-                class="group px-10 py-5 bg-blue-600 text-white font-bold text-lg rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg"
+                class="group px-10 py-5 bg-blue-600 text-white font-bold text-lg rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg cursor-pointer"
                 @click="handleBecomeTutor"
               >
                 <span class="flex items-center gap-2">
@@ -160,7 +160,7 @@
               </button>
 
               <button
-                class="px-8 py-4 bg-white text-gray-700 font-bold text-base rounded-full border-2 border-gray-200 hover:border-blue-500 hover:text-blue-600 hover:scale-105 transition-all"
+                class="px-8 py-4 bg-white text-gray-700 font-bold text-base rounded-full border-2 border-gray-200 hover:border-blue-500 hover:text-blue-600 hover:scale-105 transition-all cursor-pointer"
                 @click="$router.push('/about')"
               >
                 Learn More
@@ -221,8 +221,6 @@ import {
   IconMath,
   IconBook,
   IconWorld,
-  IconPiano,
-  IconSwimming,
   IconRocket,
   IconFlask2,
   IconPlant,
@@ -244,8 +242,6 @@ export default defineComponent({
     IconMath,
     IconBook,
     IconWorld,
-    IconPiano,
-    IconSwimming,
     IconRocket,
     IconFlask2,
     IconPlant,
@@ -255,7 +251,7 @@ export default defineComponent({
     IconCoin,
     IconArticle,
     IconDeviceDesktop,
-    IconFriends,
+    IconFriends
   },
   data() {
     return {

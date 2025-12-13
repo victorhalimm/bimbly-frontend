@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { authService } from '../services/auth.service';
 
-interface User {
+export interface AuthUser {
   id: string;
   email: string;
   fullName: string;
@@ -14,7 +14,7 @@ interface User {
 }
 
 export interface AuthState {
-  user: User | null;
+  user: AuthUser | null;
   isAuthenticated: boolean;
   loading: boolean;
   error: string | null;
