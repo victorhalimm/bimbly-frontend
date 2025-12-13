@@ -1,67 +1,94 @@
 <template>
-  <div class="bg-white rounded-[2.5rem] p-8 shadow-lg hover:shadow-xl transition-shadow">
+  <div class="bg-white rounded-2xl p-6 shadow-md transition-shadow">
     <div class="flex items-start justify-between mb-4">
-      <div class="flex items-center gap-4">
-        <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-black">
-          {{ getInitials(review.student?.fullName || 'Anonymous') }}
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+          <img :src="review.student.profileImageUrl || defaultAvatar" :alt="review.student.fullName"
+            class="w-full h-full object-cover" />
         </div>
+
         <div>
-          <h3 class="text-xl font-black text-gray-900">
-            {{ review.student?.fullName || 'Anonymous' }}
-          </h3>
-          <p class="text-sm text-gray-500">{{ formatDate(review.createdAt) }}</p>
+          <h4 class="text-base font-bold text-gray-900">
+            {{ review.student.fullName }}
+          </h4>
+          <p class="text-sm text-gray-500">{{ getRelativeTime(review.createdAt) }}</p>
         </div>
       </div>
-      <RatingStars :rating="review.rating" size="md" />
+
+      <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-bold" :class="ratingBadgeClass">
+        {{ review.rating.toFixed(1) }}
+        <IconStarFilled size="14" />
+      </span>
     </div>
 
-    <div v-if="review.reviewText" class="mb-6">
-      <p class="text-gray-700 font-medium leading-relaxed">{{ review.reviewText }}</p>
-    </div>
+    <h3 class="text-lg font-bold text-gray-900 mb-2">
+      {{ review.reviewTitle }}
+    </h3>
 
-    <div v-if="review.tutorResponse" class="bg-blue-50 rounded-2xl p-6 mt-4">
-      <div class="flex items-center gap-2 mb-3">
-        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
-        </svg>
-        <span class="text-sm font-bold text-blue-900">Tutor Response</span>
-        <span class="text-xs text-gray-500">{{ formatDate(review.tutorRespondedAt!) }}</span>
-      </div>
-      <p class="text-gray-700 font-medium leading-relaxed">{{ review.tutorResponse }}</p>
-    </div>
-
-    <div v-else-if="canRespond" class="mt-4">
-      <button
-        @click="$emit('respond')"
-        class="w-full py-3 bg-blue-100 text-blue-600 rounded-xl font-semibold hover:bg-blue-200 transition-colors"
-      >
-        Respond to Review
-      </button>
+    <div v-if="review.reviewText" class="text-gray-600 leading-relaxed">
+      <p v-if="!isExpanded && shouldTruncate">
+        {{ truncatedText }}
+        <button @click="isExpanded = true"
+          class="text-blue-600 font-medium hover:text-blue-700 ml-1 hover:cursor-pointer">
+          See more
+        </button>
+      </p>
+      <p v-else>
+        {{ review.reviewText }}
+        <button v-if="shouldTruncate" @click="isExpanded = false"
+          class="text-blue-600 font-medium hover:text-blue-700 ml-1 hover:cursor-pointer">
+          Show less
+        </button>
+      </p>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import RatingStars from './RatingStars.vue';
+import { IconStarFilled } from '@tabler/icons-vue';
 import type { Review } from '../../services/reviews.service';
+
+const MAX_LENGTH = 200;
 
 export default defineComponent({
   name: 'ReviewCard',
   components: {
-    RatingStars,
+    IconStarFilled,
   },
   props: {
     review: {
       type: Object as () => Review,
       required: true,
     },
-    canRespond: {
-      type: Boolean,
-      default: false,
+  },
+  data() {
+    return {
+      isExpanded: false,
+    };
+  },
+  computed: {
+    defaultAvatar(): string {
+      return (
+        'https://ui-avatars.com/api/?name=' +
+        encodeURIComponent(this.review.student.fullName) +
+        '&background=93c5fd&color=fff'
+      );
+    },
+    shouldTruncate(): boolean {
+      return (this.review.reviewText?.length || 0) > MAX_LENGTH;
+    },
+    truncatedText(): string {
+      if (!this.review.reviewText) return '';
+      return this.review.reviewText.slice(0, MAX_LENGTH) + '...';
+    },
+    ratingBadgeClass(): string {
+      const rating = this.review.rating;
+      if (rating >= 4) return 'bg-green-100 text-green-700';
+      if (rating >= 3) return 'bg-yellow-100 text-yellow-700';
+      return 'bg-red-100 text-red-700';
     },
   },
-  emits: ['respond'],
   methods: {
     getInitials(name: string): string {
       return name
@@ -71,16 +98,25 @@ export default defineComponent({
         .toUpperCase()
         .slice(0, 2);
     },
-    formatDate(date: string): string {
-      return new Date(date).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      });
+    getRelativeTime(dateString: string): string {
+      const seconds = Math.floor((Date.now() - new Date(dateString).getTime()) / 1000);
+      const units: [number, string][] = [
+        [31536000, 'year'],
+        [2592000, 'month'],
+        [604800, 'week'],
+        [86400, 'day'],
+        [3600, 'hour'],
+        [60, 'minute'],
+      ];
+
+      for (const [secondsInUnit, unit] of units) {
+        const count = Math.floor(seconds / secondsInUnit);
+        if (count > 0) return `${count} ${unit}${count > 1 ? 's' : ''} ago`;
+      }
+      return 'Just now';
     },
   },
 });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

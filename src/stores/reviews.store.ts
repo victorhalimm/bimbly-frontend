@@ -3,14 +3,15 @@ import {
   reviewsService,
   type Review,
   type CreateReviewDto,
-  type RespondReviewDto,
   type ReviewsResponse,
+  type ReviewsMeta,
+  type RatingDistribution,
+  type SortBy,
 } from '../services/reviews.service';
 
-interface ReviewsState {
+export interface ReviewsState {
   reviews: Review[];
-  averageRating: number;
-  totalReviews: number;
+  meta: ReviewsMeta | null;
   loading: boolean;
   error: string | null;
 }
@@ -18,16 +19,19 @@ interface ReviewsState {
 export const useReviewsStore = defineStore('reviews', {
   state: (): ReviewsState => ({
     reviews: [],
-    averageRating: 0,
-    totalReviews: 0,
+    meta: null,
     loading: false,
     error: null,
   }),
 
   getters: {
-    reviewByBooking: (state) => (bookingId: string) => {
-      return state.reviews.find((r) => r.bookingId === bookingId);
-    },
+    averageRating: (state): number => state.meta?.averageRating || 0,
+    totalReviews: (state): number => state.meta?.totalReviews || 0,
+    ratingDistribution: (state): RatingDistribution[] => state.meta?.ratingDistribution || [],
+    hasNextPage: (state): boolean => state.meta?.hasNextPage || false,
+    hasPrevPage: (state): boolean => state.meta?.hasPrevPage || false,
+    currentPage: (state): number => state.meta?.currentPage || 1,
+    totalPages: (state): number => state.meta?.totalPages || 1,
   },
 
   actions: {
@@ -46,7 +50,13 @@ export const useReviewsStore = defineStore('reviews', {
       }
     },
 
-    async fetchByTutor(tutorId: string, page: number = 1, limit: number = 10) {
+    async fetchByTutor(
+      tutorId: string,
+      page: number = 1,
+      limit: number = 10,
+      sortBy: SortBy = 'newest',
+      rating?: number | null,
+    ) {
       this.loading = true;
       this.error = null;
       try {
@@ -54,56 +64,14 @@ export const useReviewsStore = defineStore('reviews', {
           tutorId,
           page,
           limit,
+          sortBy,
+          rating,
         );
-        if (page === 1) {
-          this.reviews = response.data;
-        } else {
-          this.reviews.push(...response.data);
-        }
-        this.averageRating = response.meta.averageRating;
-        this.totalReviews = response.meta.totalReviews;
+        this.reviews = response.data;
+        this.meta = response.meta;
         return response;
       } catch (error: any) {
         this.error = error.response?.data?.message || 'Failed to fetch reviews';
-        throw error;
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async fetchByBooking(bookingId: string) {
-      this.loading = true;
-      this.error = null;
-      try {
-        const review = await reviewsService.getByBooking(bookingId);
-        const index = this.reviews.findIndex((r) => r.id === review.id);
-        if (index === -1) {
-          this.reviews.push(review);
-        } else {
-          this.reviews[index] = review;
-        }
-        return review;
-      } catch (error: any) {
-        this.error = error.response?.data?.message || 'Failed to fetch review';
-        throw error;
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async respondToReview(id: string, data: RespondReviewDto) {
-      this.loading = true;
-      this.error = null;
-      try {
-        const updated = await reviewsService.respond(id, data);
-        const index = this.reviews.findIndex((r) => r.id === id);
-        if (index !== -1) {
-          this.reviews[index] = updated;
-        }
-        return updated;
-      } catch (error: any) {
-        this.error =
-          error.response?.data?.message || 'Failed to respond to review';
         throw error;
       } finally {
         this.loading = false;
@@ -115,13 +83,19 @@ export const useReviewsStore = defineStore('reviews', {
       this.error = null;
       try {
         await reviewsService.delete(id);
-        this.reviews = this.reviews.filter((r) => r.id !== id);
+        this.reviews = this.reviews.filter((r) => r.reviewTitle !== id);
       } catch (error: any) {
         this.error = error.response?.data?.message || 'Failed to delete review';
         throw error;
       } finally {
         this.loading = false;
       }
+    },
+
+    clearReviews() {
+      this.reviews = [];
+      this.meta = null;
+      this.error = null;
     },
   },
 });
