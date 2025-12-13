@@ -4,11 +4,11 @@
       <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
     </div>
 
-    <div v-else-if="error" class="max-w-4xl mx-auto px-4 py-12">
+    <div v-else-if="error" class="max-w-4xl mx-auto px-4 pt-28 pb-12">
       <NeoAlert variant="error" :message="error" />
       <div class="text-center mt-8">
         <button
-          class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg"
+          class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg cursor-pointer"
           @click="$router.push('/tutors')"
         >
           Back to Search
@@ -17,13 +17,13 @@
     </div>
 
     <div v-else-if="tutor">
-      <div class="bg-blue-100 pt-8 pb-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <div class="bg-blue-100 pt-28 pb-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <div class="absolute top-10 right-10 w-32 h-32 bg-blue-200 rounded-full opacity-50 blur-2xl"></div>
         <div class="absolute bottom-20 left-20 w-24 h-24 bg-purple-200 rounded-full opacity-40 blur-xl"></div>
 
         <div class="max-w-6xl mx-auto">
           <button
-            class="flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium mb-6 transition-colors"
+            class="flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium mb-6 transition-colors cursor-pointer"
             @click="$router.back()"
           >
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -57,7 +57,7 @@
             <div class="lg:w-2/3 p-8 lg:p-10">
               <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
                 <div class="flex-1">
-                  <h1 class="text-3xl lg:text-4xl font-black text-gray-900 mb-2">{{ tutor.user?.fullName }}</h1>
+                  <h1 class="text-3xl lg:text-4xl font-black text-gray-900 mb-2 break-words">{{ tutor.user?.fullName }}</h1>
 
                   <div class="flex items-center gap-3 mb-4">
                     <div class="flex items-center gap-1 bg-yellow-50 px-3 py-1.5 rounded-full">
@@ -68,15 +68,15 @@
                       <span class="text-gray-500 text-sm">({{ tutor.totalReviews }})</span>
                     </div>
                     <span class="text-gray-400">|</span>
-                    <span class="text-gray-600 flex items-center gap-1">
-                      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <span class="text-gray-600 flex items-center gap-1 break-words">
+                      <svg class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       </svg>
                       {{ tutor.city }}
                     </span>
                   </div>
 
-                  <p class="text-gray-600 leading-relaxed mb-6 line-clamp-3">{{ tutor.bio }}</p>
+                  <p class="text-gray-600 leading-relaxed mb-6 line-clamp-3 break-all overflow-hidden">{{ tutor.bio }}</p>
 
                   <div class="flex flex-wrap gap-2 mb-6">
                     <span
@@ -108,11 +108,11 @@
                   <p class="text-sm text-gray-500 mb-1">Hourly Rate</p>
                   <p class="text-3xl font-black text-blue-600 mb-4">{{ formattedPrice }}</p>
                   <div class="space-y-3">
-                    <button class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg">
+                    <button class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg cursor-pointer">
                       Book Session
                     </button>
                     <button
-                      class="w-full bg-white text-gray-700 font-bold py-3 px-6 rounded-full border-2 border-gray-200 hover:border-blue-500 hover:text-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      class="w-full bg-white text-gray-700 font-bold py-3 px-6 rounded-full border-2 border-gray-200 hover:border-blue-500 hover:text-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                       :disabled="sendingMessage"
                       @click="handleSendMessage"
                     >
@@ -136,7 +136,7 @@
                 </span>
                 About Me
               </h2>
-              <p class="text-gray-600 leading-relaxed whitespace-pre-line">{{ tutor.bio }}</p>
+              <p class="text-gray-600 leading-relaxed whitespace-pre-line break-all overflow-hidden">{{ tutor.bio }}</p>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 pt-6 border-t border-gray-100">
                 <div>
@@ -192,24 +192,6 @@
                   <p class="text-gray-900 font-semibold text-lg break-words">{{ formattedGradeLevels }}</p>
                 </div>
 
-                <div>
-                  <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Teaching Methods</h3>
-                  <div class="flex gap-3">
-                    <span
-                      v-for="method in tutor.teachingMethods"
-                      :key="method"
-                      class="flex items-center gap-2 px-4 py-2 rounded-xl font-semibold"
-                      :class="method === 'online' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'"
-                    >
-                      <svg v-if="method === 'online'" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                      </svg>
-                      <svg v-else class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      </svg>
-                      {{ method === 'online' ? 'Online' : 'In-Person' }}
-                    </span>
-                  </div>
                 <div>
                   <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Teaching Methods</h3>
                   <div class="flex gap-3">

@@ -27,8 +27,8 @@
         class="w-full h-full object-cover"
       />
       <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
-        <h3 class="text-xl font-black text-white mb-1">{{ tutor.fullName }}</h3>
-        <p class="text-sm text-white/90 font-medium">
+        <h3 class="text-xl font-black text-white mb-1 break-words">{{ tutor.fullName }}</h3>
+        <p class="text-sm text-white/90 font-medium break-words">
           {{ tutor.city }} ({{ teachingMethodLabel }})
         </p>
       </div>
@@ -53,7 +53,7 @@
         </div>
       </div>
 
-      <p v-if="tutor.bio" class="text-sm text-gray-600 mb-4 line-clamp-2">
+      <p v-if="tutor.bio" class="text-sm text-gray-600 mb-4 line-clamp-2 break-words">
         {{ tutor.bio }}
       </p>
 

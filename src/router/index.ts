@@ -149,13 +149,12 @@ const routes : RouteType[] = [
     path: '/chat',
     name: 'Chat',
     component: () => import('../views/chat/ChatPage.vue'),
-    meta: { requiresAuth: true, roles: ['student', 'tutor'], hideNavbar: true },
-  },
-  {
-    path: '/tutor/dashboard',
-    name: 'TutorDashboard',
-    component: () => import('../views/tutor/Dashboard.vue'),
-    meta: { requiresAuth: true, roles: ['tutor'] },
+    meta: { 
+      requiresAuth: true, 
+      roles: ['student', 'tutor'],
+      navbar: { show: false, hideOnTop: false },
+      footer: { show: false },
+    },
   },
   // ==================== Tutor - Profiles ====================
   {
@@ -292,6 +291,15 @@ const routes : RouteType[] = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    }
+    if (to.hash) {
+      return { el: to.hash, behavior: 'smooth' };
+    }
+    return { top: 0 };
+  },
 });
 
 // Apply global auth guard
