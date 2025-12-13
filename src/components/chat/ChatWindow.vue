@@ -15,16 +15,16 @@
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
         </svg>
       </div>
-      <p class="text-gray-500 font-medium text-lg">Pilih percakapan</p>
+      <p class="text-gray-500 font-medium text-lg">Select a conversation</p>
       <p class="text-gray-400 text-sm mt-1">
-        Pilih percakapan dari daftar untuk mulai chatting
+        Select a conversation from the list to start chatting
       </p>
     </div>
 
     <template v-else>
-      <div class="flex items-center gap-3 p-4 bg-white border-b border-gray-200 shadow-sm">
+      <div class="h-[73px] flex items-center gap-3 px-4 bg-white border-b border-gray-200 shadow-sm">
         <button
-          class="lg:hidden p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors"
+          class="p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors cursor-pointer lg:hidden"
           @click="$emit('back')"
         >
           <svg
@@ -83,8 +83,8 @@
         </div>
 
         <div v-if="messages.length === 0 && !loadingMessages" class="flex flex-col items-center justify-center h-full text-center">
-          <p class="text-gray-400">Belum ada pesan</p>
-          <p class="text-gray-400 text-sm mt-1">Kirim pesan untuk memulai percakapan</p>
+          <p class="text-gray-400">No messages yet</p>
+          <p class="text-gray-400 text-sm mt-1">Send a message to start the conversation</p>
         </div>
 
         <div v-for="(message, index) in messages" :key="message.id">
@@ -104,6 +104,24 @@
           />
         </div>
 
+        <button
+          v-if="showScrollButton"
+          @click="scrollToBottom"
+          class="sticky bottom-4 left-1/2 -translate-x-1/2 w-10 h-10 bg-white border border-gray-200 rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors cursor-pointer"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-5 h-5 text-gray-600"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
       </div>
 
       <MessageInput
@@ -149,14 +167,40 @@ export default defineComponent({
     },
   },
   emits: ['send', 'loadMore', 'back'],
+  data() {
+    return {
+      isLoadingOlder: false,
+      previousScrollHeight: 0,
+      showScrollButton: false,
+    };
+  },
   watch: {
     messages: {
       handler() {
         this.$nextTick(() => {
-          this.scrollToBottom();
+          if (this.isLoadingOlder) {
+            const container = this.$refs.messagesContainer as HTMLElement;
+            if (container) {
+              container.scrollTop = container.scrollHeight - this.previousScrollHeight;
+            }
+            this.isLoadingOlder = false;
+          } else if (!this.showScrollButton) {
+            this.scrollToBottom();
+          }
         });
       },
       deep: true,
+    },
+    loadingMessages: {
+      handler(newVal: boolean, oldVal: boolean) {
+        if (newVal && !oldVal) {
+          const container = this.$refs.messagesContainer as HTMLElement;
+          if (container && container.scrollTop === 0) {
+            this.isLoadingOlder = true;
+            this.previousScrollHeight = container.scrollHeight;
+          }
+        }
+      },
     },
   },
   methods: {
@@ -176,6 +220,8 @@ export default defineComponent({
       if (target.scrollTop === 0 && !this.loadingMessages) {
         this.$emit('loadMore');
       }
+      const isNearBottom = target.scrollHeight - target.scrollTop - target.clientHeight < 100;
+      this.showScrollButton = !isNearBottom;
     },
     scrollToBottom() {
       const container = this.$refs.messagesContainer as HTMLElement;
@@ -196,11 +242,11 @@ export default defineComponent({
       yesterday.setDate(yesterday.getDate() - 1);
 
       if (date.toDateString() === today.toDateString()) {
-        return 'Hari Ini';
+        return 'Today';
       } else if (date.toDateString() === yesterday.toDateString()) {
-        return 'Kemarin';
+        return 'Yesterday';
       } else {
-        return date.toLocaleDateString('id-ID', {
+        return date.toLocaleDateString('en-US', {
           day: 'numeric',
           month: 'long',
           year: 'numeric',

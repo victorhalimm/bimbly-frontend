@@ -1,13 +1,24 @@
 <template>
   <div class="h-full flex flex-col bg-white">
-    <div class="p-4 border-b border-gray-200 flex justify-between items-center">
-      <h2 class="text-xl font-black text-gray-900">Messages</h2>
+    <div class="h-[73px] px-4 border-b border-gray-200 flex items-center gap-3">
       <button
-        class="px-3 py-1 bg-blue-600 text-white text-sm font-bold rounded-lg hover:bg-blue-700"
-        @click="$emit('new-chat')"
+        class="p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+        @click="$emit('back')"
       >
-        + New
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-5 h-5 text-gray-600"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
       </button>
+      <h2 class="text-xl font-black text-gray-900">Messages</h2>
     </div>
 
     <div v-if="loading" class="flex-1 flex items-center justify-center">
@@ -29,8 +40,8 @@
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
         </svg>
       </div>
-      <p class="text-gray-500 font-medium">Belum ada percakapan</p>
-      <p class="text-gray-400 text-sm mt-1">Mulai chat dengan tutor atau siswa</p>
+      <p class="text-gray-500 font-medium">No conversations yet</p>
+      <p class="text-gray-400 text-sm mt-1">Start chatting with a tutor or student</p>
     </div>
 
     <div v-else class="flex-1 overflow-y-auto">
@@ -64,28 +75,29 @@
 
         <div class="flex-1 min-w-0">
           <div class="flex justify-between items-start">
-            <p class="font-bold text-gray-900 truncate">
+            <p class="font-bold text-gray-900 truncate pr-2">
               {{ conversation.participant.name }}
             </p>
             <span
               v-if="conversation.lastMessageAt"
-              class="text-xs text-gray-500 flex-shrink-0 ml-2"
+              class="text-xs text-gray-500 flex-shrink-0"
             >
               {{ formatTime(conversation.lastMessageAt) }}
             </span>
           </div>
-          <p class="text-sm text-gray-500 truncate mt-0.5">
-            {{ conversation.lastMessage?.text || 'Belum ada pesan' }}
-          </p>
-        </div>
-
-        <div
-          v-if="conversation.unreadCount > 0"
-          class="flex-shrink-0 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center"
-        >
-          <span class="text-xs text-white font-bold">
-            {{ conversation.unreadCount > 9 ? '9+' : conversation.unreadCount }}
-          </span>
+          <div class="flex justify-between items-center mt-0.5">
+            <p class="text-sm text-gray-500 truncate pr-2">
+              {{ conversation.lastMessage?.text || 'No messages yet' }}
+            </p>
+            <div
+              v-if="conversation.unreadCount > 0"
+              class="flex-shrink-0 min-w-5 h-5 px-1.5 bg-blue-600 rounded-full flex items-center justify-center"
+            >
+              <span class="text-xs text-white font-bold">
+                {{ conversation.unreadCount > 9 ? '9+' : conversation.unreadCount }}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -112,7 +124,7 @@ export default defineComponent({
       default: false,
     },
   },
-  emits: ['select', 'new-chat'],
+  emits: ['select', 'back'],
   methods: {
     getInitials(name: string): string {
       return name
@@ -129,16 +141,16 @@ export default defineComponent({
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
       if (days === 0) {
-        return date.toLocaleTimeString('id-ID', {
+        return date.toLocaleTimeString('en-US', {
           hour: '2-digit',
           minute: '2-digit',
         });
       } else if (days === 1) {
-        return 'Kemarin';
+        return 'Yesterday';
       } else if (days < 7) {
-        return date.toLocaleDateString('id-ID', { weekday: 'short' });
+        return date.toLocaleDateString('en-US', { weekday: 'short' });
       } else {
-        return date.toLocaleDateString('id-ID', {
+        return date.toLocaleDateString('en-US', {
           day: '2-digit',
           month: 'short',
         });

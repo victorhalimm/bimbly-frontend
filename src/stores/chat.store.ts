@@ -73,10 +73,25 @@ export const useChatStore = defineStore('chat', {
         socket.on('disconnect', () => {
           this.connected = false;
         });
+        socket.on('unread_update', (data: { conversationId: string; unreadCount: number }) => {
+          this.handleUnreadUpdate(data.conversationId, data.unreadCount);
+        });
+        socket.on('conversation_update', (data: {
+          conversationId: string;
+          lastMessage: { text: string; senderId: string; createdAt: string };
+          lastMessageAt: string;
+        }) => {
+          this.handleConversationUpdate(data);
+        });
       }
     },
 
     disconnect() {
+      const socket = socketService.getSocket();
+      if (socket) {
+        socket.off('unread_update');
+        socket.off('conversation_update');
+      }
       socketService.offMessageReceived();
       socketService.disconnect();
       this.connected = false;
@@ -139,6 +154,11 @@ export const useChatStore = defineStore('chat', {
       }
       this.activeConversationId = conversationId;
       socketService.joinConversation(conversationId);
+
+      const convIndex = this.conversations.findIndex((c) => c.id === conversationId);
+      if (convIndex !== -1) {
+        this.conversations[convIndex].unreadCount = 0;
+      }
     },
 
     leaveConversation() {
@@ -207,6 +227,31 @@ export const useChatStore = defineStore('chat', {
 
     clearError() {
       this.error = null;
+    },
+
+    handleUnreadUpdate(conversationId: string, unreadCount: number) {
+      const convIndex = this.conversations.findIndex((c) => c.id === conversationId);
+      if (convIndex !== -1) {
+        this.conversations[convIndex] = {
+          ...this.conversations[convIndex],
+          unreadCount,
+        };
+      }
+    },
+
+    handleConversationUpdate(data: {
+      conversationId: string;
+      lastMessage: { text: string; senderId: string; createdAt: string };
+      lastMessageAt: string;
+    }) {
+      const convIndex = this.conversations.findIndex((c) => c.id === data.conversationId);
+      if (convIndex !== -1) {
+        this.conversations[convIndex] = {
+          ...this.conversations[convIndex],
+          lastMessage: data.lastMessage,
+          lastMessageAt: data.lastMessageAt,
+        };
+      }
     },
   },
 });

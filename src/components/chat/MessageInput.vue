@@ -9,14 +9,14 @@
           class="w-full px-5 py-3 border-2 border-gray-200 rounded-[1.5rem] resize-none overflow-hidden focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
           :class="{ 'opacity-50': disabled }"
           rows="1"
-          placeholder="Ketik pesan..."
+          placeholder="Type a message..."
           @input="handleInput"
           @keydown="handleKeydown"
         ></textarea>
       </div>
       <button
         :disabled="disabled || !message.trim()"
-        class="flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+        class="flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
         @click="handleSend"
       >
         <svg

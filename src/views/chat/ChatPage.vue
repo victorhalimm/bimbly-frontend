@@ -1,32 +1,25 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-    <Header v-if="headerUser" :user="headerUser" @logout="handleLogout" />
-    <main class="max-w-7xl mx-auto px-4 py-6">
-      <div
-        class="bg-white rounded-[2.5rem] shadow-xl overflow-hidden"
-        style="height: calc(100vh - 160px)"
-      >
-        <div class="flex h-full">
+  <div class="h-screen bg-white">
+    <div class="h-full flex">
           <div
             :class="[
               'border-r border-gray-200 flex-shrink-0 transition-all',
-              showMobileChat ? 'hidden lg:block' : 'w-full lg:w-80',
+              showMobileChat ? 'hidden lg:block lg:w-1/4' : 'w-full lg:w-1/4',
             ]"
-            class="lg:w-80"
           >
             <ConversationList
               :conversations="sortedConversations"
               :active-conversation-id="activeConversationId"
               :loading="loading"
               @select="handleSelectConversation"
-              @new-chat="handleNewChat"
+              @back="handleGoBack"
             />
           </div>
 
           <div
             :class="[
-              'flex-1 min-w-0',
-              showMobileChat ? 'block' : 'hidden lg:block',
+              'lg:w-3/4 min-w-0',
+              showMobileChat ? 'block w-full' : 'hidden lg:block',
             ]"
           >
             <ChatWindow
@@ -40,9 +33,7 @@
               @back="handleBack"
             />
           </div>
-        </div>
-      </div>
-    </main>
+    </div>
   </div>
 </template>
 
@@ -51,14 +42,12 @@ import { defineComponent } from 'vue';
 import { mapState, mapGetters, mapActions } from 'pinia';
 import { useChatStore } from '../../stores/chat.store';
 import { useAuthStore } from '../../stores/auth.store';
-import Header from '../../components/common/layout/Header.vue';
 import ConversationList from '../../components/chat/ConversationList.vue';
 import ChatWindow from '../../components/chat/ChatWindow.vue';
 
 export default defineComponent({
   name: 'ChatPage',
   components: {
-    Header,
     ConversationList,
     ChatWindow,
   },
@@ -83,16 +72,6 @@ export default defineComponent({
     currentUserId(): string {
       const authStore = useAuthStore();
       return authStore.user?.id || '';
-    },
-    headerUser() {
-      const authStore = useAuthStore();
-      if (!authStore.user) return null;
-      return {
-        name: authStore.user.fullName,
-        email: authStore.user.email,
-        avatar: authStore.user.profileImageUrl,
-        role: authStore.user.userType as 'student' | 'tutor' | 'admin',
-      };
     },
   },
   async mounted() {
@@ -147,21 +126,8 @@ export default defineComponent({
       this.showMobileChat = false;
       this.leaveConversation();
     },
-    async handleLogout() {
-      const authStore = useAuthStore();
-      await authStore.logout();
-      this.$router.push('/login');
-    },
-    async handleNewChat() {
-      const participantId = prompt('Enter user ID to chat with:');
-      if (!participantId) return;
-
-      try {
-        const conversation = await this.createConversation(participantId);
-        this.handleSelectConversation(conversation.id);
-      } catch (error) {
-        alert('Failed to create conversation. Check the user ID.');
-      }
+    handleGoBack() {
+      this.$router.back();
     },
   },
 });

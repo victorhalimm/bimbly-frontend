@@ -1,7 +1,5 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <BHeader :user="headerUser" @logout="handleLogout" />
-
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <div class="px-4 py-6 sm:px-0">
         <h2 class="text-2xl font-semibold mb-4">Tutor Dashboard</h2>
@@ -14,36 +12,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '../../stores/auth.store';
-import BHeader from '../../components/common/layout/Header.vue';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'TutorDashboard',
-  components: {
-    BHeader,
-  },
-  setup() {
-    const authStore = useAuthStore();
-    const router = useRouter();
-
-    const headerUser = computed(() => ({
-      name: authStore.user?.fullName || 'Tutor',
-      email: authStore.user?.email,
-      avatar: authStore.user?.profileImageUrl,
-      role: 'tutor' as const,
-    }));
-
-    const handleLogout = async () => {
-      await authStore.logout();
-      router.push('/login');
-    };
-
-    return {
-      headerUser,
-      handleLogout,
-    };
-  },
 });
 </script>

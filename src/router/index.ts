@@ -106,7 +106,7 @@ const routes = [
     path: '/chat',
     name: 'Chat',
     component: () => import('../views/chat/ChatPage.vue'),
-    meta: { requiresAuth: true, roles: ['student', 'tutor'] },
+    meta: { requiresAuth: true, roles: ['student', 'tutor'], hideNavbar: true },
   },
   {
     path: '/tutor/dashboard',

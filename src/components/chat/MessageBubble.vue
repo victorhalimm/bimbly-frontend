@@ -45,7 +45,7 @@ export default defineComponent({
   computed: {
     formattedTime(): string {
       const date = new Date(this.message.createdAt);
-      return date.toLocaleTimeString('id-ID', {
+      return date.toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',
       });

@@ -42,9 +42,9 @@
             </span>
           </button>
 
-          <button
+          <router-link
+            to="/chat"
             class="w-10 h-10 rounded-full flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-all relative"
-            @click="$emit('open-chat')"
           >
             <IconMessage size="22" stroke="1.5" />
             <span
@@ -53,7 +53,7 @@
             >
               {{ unreadMessages > 9 ? '9+' : unreadMessages }}
             </span>
-          </button>
+          </router-link>
 
           <div class="h-6 w-px bg-gray-200 mx-1"></div>
 
@@ -211,7 +211,7 @@ export default defineComponent({
       default: 0,
     },
   },
-  emits: ['logout', 'open-notifications', 'open-chat'],
+  emits: ['logout', 'open-notifications'],
   data() {
     return {
       showProfileMenu: false,
@@ -280,9 +280,10 @@ export default defineComponent({
         .join('')
         .substring(0, 2);
     },
-    handleLogout(): void {
+    async handleLogout(): Promise<void> {
       this.showProfileMenu = false;
-      this.$emit('logout');
+      await this.authStore.logout();
+      this.$router.push('/login');
     },
   },
 });
