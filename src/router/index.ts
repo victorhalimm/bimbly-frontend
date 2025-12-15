@@ -94,6 +94,15 @@ const routes : RouteType[] = [
       roles: ['student']
     },
   },
+  {
+    path: '/tutors/:id/reviews',
+    name: 'TutorReviews',
+    component: () => import('../views/tutors/TutorReviews.vue'),
+    meta: {
+      navbar: { show: true, hideOnTop: false },
+      footer: { show: true, backgroundColor: '#f9fafb' },
+    },
+  },
 
   // ==================== Student - Profiles ====================
   {

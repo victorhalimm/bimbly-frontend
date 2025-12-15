@@ -79,6 +79,7 @@ export const useTutorStore = defineStore('tutor', {
     async getTutorById(id: string) {
       this.loading = true;
       this.error = null;
+      this.selectedTutor = null;
 
       try {
         this.selectedTutor = await tutorService.getTutorById(id);
