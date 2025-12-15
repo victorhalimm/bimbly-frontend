@@ -1,7 +1,16 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <div class="relative bg-blue-100 pt-28 pb-16 px-4">
-      <div class="max-w-6xl mx-auto">
+    <div class="relative bg-gradient-to-br from-blue-50 via-blue-100 to-blue-50 pt-28 pb-16 px-4 overflow-hidden">
+      <div class="absolute top-12 right-16 w-36 h-36 bg-blue-200 rounded-full opacity-40 blur-3xl animate-blob"></div>
+      <div class="absolute bottom-24 left-12 w-44 h-44 bg-purple-200 rounded-full opacity-30 blur-3xl animate-blob animation-delay-2000"></div>
+
+      <div class="absolute top-1/3 left-20 w-3 h-3 bg-blue-400 rounded-full animate-float"></div>
+      <div class="absolute top-1/4 right-1/3 w-2 h-2 bg-purple-300 rounded-full animate-float animation-delay-500"></div>
+      <div class="absolute bottom-1/3 right-16 w-4 h-4 bg-yellow-400 rounded-full animate-float animation-delay-1000"></div>
+      <div class="absolute top-2/3 left-1/4 w-2 h-2 bg-pink-400 rounded-full animate-float animation-delay-1500"></div>
+      <div class="absolute top-1/2 right-1/4 w-3 h-3 bg-green-400 rounded-full animate-float animation-delay-700"></div>
+
+      <div class="max-w-6xl mx-auto relative z-10">
         <button @click="goBack"
           class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors hover:cursor-pointer">
           <IconArrowLeft size="20" stroke="2" />
@@ -21,11 +30,18 @@
         </h1>
 
         <div class="flex items-baseline gap-3 mt-6">
-          <span class="text-6xl font-black text-gray-900">{{ formattedRating }}</span>
-          <IconStarFilled size="32" class="text-yellow-400" />
-          <span class="text-gray-500 text-lg ml-2">
-            ({{ totalReviews }} {{ totalReviews === 1 ? 'review' : 'reviews' }})
-          </span>
+          <template v-if="loading && !reviews.length">
+            <div class="h-14 w-24 bg-blue-200/50 rounded-lg animate-pulse"></div>
+            <div class="h-8 w-8 bg-blue-200/50 rounded animate-pulse"></div>
+            <div class="h-6 w-32 bg-blue-200/50 rounded animate-pulse ml-2"></div>
+          </template>
+          <template v-else>
+            <span class="text-6xl font-black text-gray-900">{{ formattedRating }}</span>
+            <IconStarFilled size="32" class="text-yellow-400" />
+            <span class="text-gray-500 text-lg ml-2">
+              ({{ totalReviews }} {{ totalReviews === 1 ? 'review' : 'reviews' }})
+            </span>
+          </template>
         </div>
 
       </div>
@@ -36,8 +52,45 @@
     </div>
 
     <div class="max-w-6xl mx-auto px-4 py-8">
-      <div v-if="loading && !reviews.length" class="flex justify-center py-16">
-        <div class="w-10 h-10 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+      <div v-if="loading && !reviews.length" class="flex flex-col lg:flex-row gap-8">
+        <div class="lg:w-64 flex-shrink-0">
+          <div class="h-4 bg-gray-200 rounded w-32 mb-4 animate-pulse"></div>
+          <div class="space-y-3">
+            <div v-for="i in 5" :key="i" class="flex items-center gap-2">
+              <div class="w-8 h-4 bg-gray-200 rounded animate-pulse"></div>
+              <div class="flex-1 h-2.5 bg-gray-200 rounded-full animate-pulse"></div>
+              <div class="w-10 h-3 bg-gray-200 rounded animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-1">
+          <div class="flex items-center justify-between mb-6">
+            <div class="h-6 bg-gray-200 rounded w-48 animate-pulse"></div>
+            <div class="h-10 bg-gray-200 rounded-full w-32 animate-pulse"></div>
+          </div>
+
+          <div class="space-y-4">
+            <div v-for="i in 3" :key="i" class="bg-white rounded-2xl p-6 shadow-md animate-pulse">
+              <div class="flex items-start justify-between mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 bg-gray-200 rounded-full"></div>
+                  <div>
+                    <div class="h-4 bg-gray-200 rounded w-32 mb-2"></div>
+                    <div class="h-3 bg-gray-200 rounded w-24"></div>
+                  </div>
+                </div>
+                <div class="h-7 bg-gray-200 rounded-full w-16"></div>
+              </div>
+              <div class="h-5 bg-gray-200 rounded w-3/4 mb-3"></div>
+              <div class="space-y-2">
+                <div class="h-4 bg-gray-200 rounded w-full"></div>
+                <div class="h-4 bg-gray-200 rounded w-5/6"></div>
+                <div class="h-4 bg-gray-200 rounded w-4/6"></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <template v-else>
@@ -97,7 +150,7 @@
 
               <div v-if="totalPages > 1" class="mt-8 flex items-center justify-center gap-1">
                 <button :disabled="currentPage === 1"
-                  class="p-2.5 rounded-xl text-gray-500 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  class="p-2.5 rounded-xl text-gray-500 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors hover:cursor-pointer"
                   @click="goToPage(currentPage - 1)">
                   <IconChevronLeft size="20" stroke="2" />
                 </button>
@@ -112,7 +165,7 @@
                 </div>
 
                 <button :disabled="currentPage === totalPages"
-                  class="p-2.5 rounded-xl text-gray-500 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  class="p-2.5 rounded-xl text-gray-500 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors hover:cursor-pointer"
                   @click="goToPage(currentPage + 1)">
                   <IconChevronRight size="20" stroke="2" />
                 </button>
@@ -264,7 +317,8 @@ export default defineComponent({
       return count.toString();
     },
     goBack() {
-      this.$router.push({ name: 'TutorProfilePublic', params: { id: this.tutorId } });
+      // this.$router.push({ name: 'TutorProfilePublic', params: { id: this.tutorId } });
+      this.$router.back();
     },
   },
   mounted() {
@@ -279,4 +333,56 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+@keyframes blob {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(10px, -10px) scale(1.03);
+  }
+  50% {
+    transform: translate(-10px, 10px) scale(0.97);
+  }
+  75% {
+    transform: translate(-5px, -5px) scale(1.01);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-blob {
+  animation: blob 8s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animation-delay-500 {
+  animation-delay: 0.5s;
+}
+
+.animation-delay-700 {
+  animation-delay: 0.7s;
+}
+
+.animation-delay-1000 {
+  animation-delay: 1s;
+}
+
+.animation-delay-1500 {
+  animation-delay: 1.5s;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+</style>

@@ -1,7 +1,87 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <div v-if="loading" class="flex justify-center items-center min-h-screen">
-      <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+    <div v-if="loading">
+      <div class="bg-blue-100 pt-28 pb-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div class="absolute top-10 right-10 w-32 h-32 bg-blue-200 rounded-full opacity-50 blur-2xl"></div>
+        <div class="absolute bottom-20 left-20 w-24 h-24 bg-purple-200 rounded-full opacity-40 blur-xl"></div>
+        <div class="max-w-6xl mx-auto">
+          <div class="h-6 w-16 bg-blue-200 rounded animate-pulse"></div>
+        </div>
+      </div>
+
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 relative z-10">
+        <div class="bg-white rounded-[2rem] shadow-xl overflow-hidden">
+          <div class="flex flex-col lg:flex-row">
+            <div class="lg:w-1/3">
+              <div class="aspect-square lg:aspect-auto lg:h-full bg-gray-200 animate-pulse"></div>
+            </div>
+
+            <div class="lg:w-2/3 p-8 lg:p-10">
+              <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+                <div class="flex-1">
+                  <div class="h-10 w-64 bg-gray-200 rounded-lg animate-pulse mb-4"></div>
+
+                  <div class="flex items-center gap-3 mb-4">
+                    <div class="h-8 w-24 bg-gray-200 rounded-full animate-pulse"></div>
+                    <span class="text-gray-300">|</span>
+                    <div class="h-5 w-32 bg-gray-200 rounded animate-pulse"></div>
+                  </div>
+
+                  <div class="space-y-2 mb-6">
+                    <div class="h-4 w-full bg-gray-200 rounded animate-pulse"></div>
+                    <div class="h-4 w-3/4 bg-gray-200 rounded animate-pulse"></div>
+                  </div>
+
+                  <div class="flex gap-2 mb-6">
+                    <div class="h-8 w-20 bg-gray-200 rounded-full animate-pulse"></div>
+                    <div class="h-8 w-24 bg-gray-200 rounded-full animate-pulse"></div>
+                    <div class="h-8 w-16 bg-gray-200 rounded-full animate-pulse"></div>
+                  </div>
+
+                  <div class="flex gap-4">
+                    <div class="h-5 w-24 bg-gray-200 rounded animate-pulse"></div>
+                    <div class="h-5 w-20 bg-gray-200 rounded animate-pulse"></div>
+                  </div>
+                </div>
+
+                <div class="lg:text-right lg:min-w-[200px]">
+                  <div class="h-4 w-20 bg-gray-200 rounded animate-pulse mb-2 lg:ml-auto"></div>
+                  <div class="h-9 w-32 bg-gray-200 rounded animate-pulse mb-4 lg:ml-auto"></div>
+                  <div class="space-y-3">
+                    <div class="h-12 w-full bg-gray-200 rounded-full animate-pulse"></div>
+                    <div class="h-12 w-full bg-gray-200 rounded-full animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+          <div class="lg:col-span-2 space-y-6">
+            <div class="bg-white rounded-[1.5rem] shadow-lg p-8">
+              <div class="h-7 w-32 bg-gray-200 rounded animate-pulse mb-4"></div>
+              <div class="space-y-2">
+                <div class="h-4 w-full bg-gray-200 rounded animate-pulse"></div>
+                <div class="h-4 w-full bg-gray-200 rounded animate-pulse"></div>
+                <div class="h-4 w-2/3 bg-gray-200 rounded animate-pulse"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-6">
+            <div class="bg-white rounded-[1.5rem] shadow-lg p-6">
+              <div class="h-6 w-28 bg-gray-200 rounded animate-pulse mb-4"></div>
+              <div class="space-y-3">
+                <div class="h-16 w-full bg-gray-200 rounded-xl animate-pulse"></div>
+                <div class="h-10 w-full bg-gray-200 rounded-xl animate-pulse"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="h-16"></div>
     </div>
 
     <div v-else-if="error" class="max-w-4xl mx-auto px-4 pt-28 pb-12">
@@ -247,56 +327,6 @@
               </div>
             </div>
 
-            <div class="bg-white rounded-[1.5rem] shadow-lg p-8">
-              <h2 class="text-xl font-black text-gray-900 mb-6 flex items-center gap-2">
-                <span class="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center">
-                  <svg class="w-4 h-4 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                  </svg>
-                </span>
-                Reviews
-                <span class="ml-auto text-sm font-medium text-gray-500">{{ tutor.totalReviews }} reviews</span>
-              </h2>
-
-              <div v-if="!reviews || reviews.data.length === 0" class="text-center py-12">
-                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg class="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                  </svg>
-                </div>
-                <p class="text-gray-500">No reviews yet</p>
-              </div>
-
-              <div v-else class="space-y-6">
-                <div
-                  v-for="review in reviews.data"
-                  :key="review.id"
-                  class="pb-6 border-b border-gray-100 last:border-0 last:pb-0"
-                >
-                  <div class="flex items-start justify-between mb-3">
-                    <div class="flex items-center gap-3">
-                      <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
-                        {{ review.studentName?.charAt(0) || 'S' }}
-                      </div>
-                      <div>
-                        <p class="font-bold text-gray-900 break-words">{{ review.studentName }}</p>
-                        <p class="text-sm text-gray-500">{{ formatDate(review.createdAt) }}</p>
-                      </div>
-                    </div>
-                    <div class="flex items-center gap-1">
-                      <svg v-for="star in 5" :key="star" class="h-4 w-4" :class="star <= review.rating ? 'text-yellow-400' : 'text-gray-200'" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                      </svg>
-                    </div>
-                  </div>
-                  <p class="text-gray-600 break-words">{{ review.reviewText }}</p>
-                  <div v-if="review.tutorResponse" class="mt-4 bg-blue-50 p-4 rounded-xl">
-                    <p class="text-sm font-bold text-blue-900 mb-1">Tutor Response</p>
-                    <p class="text-blue-800 text-sm break-words">{{ review.tutorResponse }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
 
           <div class="space-y-6">
@@ -367,9 +397,93 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="h-16"></div>
+        <div class="bg-gray-50 rounded-[2rem] p-8 lg:p-12 mt-20">
+          <div v-if="reviewsLoading" class="flex justify-center py-12">
+            <div class="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+          </div>
+
+          <div v-else-if="profileReviews.length === 0" class="text-center py-12">
+            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">No Reviews Yet</h3>
+            <p class="text-gray-500">Be the first to leave a review for this tutor</p>
+          </div>
+
+          <div v-else-if="highRatedReviews.length < 2" class="text-center pt-12">
+            <span class="text-blue-600 font-semibold text-sm uppercase tracking-wide mb-3 block">Reviews</span>
+            <h2 class="text-3xl lg:text-4xl font-black text-gray-900 mb-4">
+              What students say about this tutor
+            </h2>
+            <p class="text-gray-500 mb-8 max-w-lg mx-auto">
+              Discover feedback from students who have learned with {{ tutor.user?.fullName?.split(' ')[0] }}
+            </p>
+
+            <div class="flex justify-center items-center gap-10">
+              <div class="flex justify-center items-center gap-3">
+                <div class="flex -space-x-3">
+                  <div class="w-10 h-10 rounded-full bg-blue-200 border-2 border-white flex items-center justify-center">
+                    <span class="text-blue-700 font-bold text-sm">{{ tutor.user?.fullName?.charAt(0) }}</span>
+                  </div>
+                  <div class="w-10 h-10 rounded-full bg-purple-200 border-2 border-white flex items-center justify-center">
+                    <svg class="w-5 h-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                  <div class="w-10 h-10 rounded-full bg-green-200 border-2 border-white flex items-center justify-center">
+                    <svg class="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                </div>
+                <span class="text-gray-500 text-sm">{{ tutor.totalReviews }} {{ tutor.totalReviews === 1 ? 'review' : 'reviews' }} available</span>
+              </div>
+  
+              <button
+                v-if="tutor.totalReviews > 0"
+                @click="$router.push(`/tutors/${tutor.id}/reviews`)"
+                class="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-900 font-bold rounded-full border-2 border-gray-200 hover:border-blue-500 hover:text-blue-600 transition-all cursor-pointer"
+              >
+                View all reviews
+                <IconArrowRight size="18" />
+              </button>
+            </div>
+          </div>
+
+          <div v-else class="flex flex-col lg:flex-row gap-8 lg:gap-12">
+            <div class="lg:w-1/3 flex flex-col justify-center">
+              <span class="text-blue-600 font-semibold text-sm uppercase tracking-wide mb-3">Reviews</span>
+              <h2 class="text-3xl lg:text-4xl font-black text-gray-900 mb-4 leading-tight">
+                What students say about this tutor
+              </h2>
+              <p class="text-gray-500 mb-6">
+                Real feedback from students who have learned with {{ tutor.user?.fullName?.split(' ')[0] }}
+              </p>
+              <button
+                v-if="tutor.totalReviews > 0"
+                @click="$router.push(`/tutors/${tutor.id}/reviews`)"
+                class="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-900 font-bold rounded-full border-2 border-gray-200 hover:border-blue-500 hover:text-blue-600 transition-all w-fit cursor-pointer"
+              >
+                View all reviews
+                <IconArrowRight size="18" />
+              </button>
+            </div>
+
+            <div class="lg:w-2/3">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <TestimonialCard
+                  v-for="(review, index) in highRatedReviews"
+                  :key="index"
+                  :review="review"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -379,30 +493,51 @@ import { defineComponent } from 'vue';
 import { useTutorStore } from '@/stores/tutor.store';
 import { useChatStore } from '@/stores/chat.store';
 import { useAuthStore } from '@/stores/auth.store';
+import { useReviewsStore } from '@/stores/reviews.store';
+import ReviewCard from '@/components/reviews/ReviewCard.vue';
+import TestimonialCard from '@/components/reviews/TestimonialCard.vue';
+import { IconArrowRight } from '@tabler/icons-vue';
 
 export default defineComponent({
   name: 'TutorProfilePublic',
+  components: {
+    ReviewCard,
+    TestimonialCard,
+    IconArrowRight,
+  },
   data() {
     return {
       selectedDate: new Date().toISOString().split('T')[0],
       sendingMessage: false,
+      initialLoading: true,
     };
   },
   computed: {
     tutorStore() {
       return useTutorStore();
     },
+    reviewsStore() {
+      return useReviewsStore();
+    },
     tutor() {
       return this.tutorStore.selectedTutor;
     },
-    reviews() {
-      return this.tutorStore.reviews;
+    profileReviews() {
+      return this.reviewsStore.reviews.slice(0, 3);
+    },
+    highRatedReviews() {
+      return this.reviewsStore.reviews
+        .filter((review: { rating: number }) => review.rating >= 4)
+        .slice(0, 2);
+    },
+    reviewsLoading() {
+      return this.reviewsStore.loading;
     },
     availability() {
       return this.tutorStore.availability;
     },
     loading() {
-      return this.tutorStore.loading;
+      return this.initialLoading || this.tutorStore.loading;
     },
     error() {
       return this.tutorStore.error;
@@ -461,12 +596,14 @@ export default defineComponent({
   },
   beforeUnmount() {
     this.tutorStore.clearSelectedTutor();
+    this.reviewsStore.clearReviews();
   },
   methods: {
     async loadTutorData(id: string) {
       await this.tutorStore.getTutorById(id);
+      this.initialLoading = false;
       if (this.tutor) {
-        this.tutorStore.getTutorReviews(id);
+        this.reviewsStore.fetchByTutor(id, 1, 3, 'newest');
         this.tutorStore.getTutorAvailability(id, this.selectedDate);
       }
     },
