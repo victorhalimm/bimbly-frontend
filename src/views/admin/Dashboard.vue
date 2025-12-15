@@ -244,65 +244,52 @@
   </admin-layout>
 </template>
 
-<script>
-import { adminService } from '@/services/admin.service';
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { useAdminStore } from '@/stores/admin.store';
+import { useToast } from '@/composables/useToast';
 import AdminLayout from '@/components/admin/AdminLayout.vue';
 
-export default {
+export default defineComponent({
   name: 'AdminDashboard',
   components: {
     AdminLayout,
   },
-  data() {
-    return {
-      loading: true,
-      loadingApplications: true,
-      stats: {
-        totalUsers: 0,
-        totalStudents: 0,
-        totalTutors: 0,
-        approvedTutors: 0,
-        pendingApplications: 0,
-        rejectedApplications: 0,
-        totalBookings: 0,
-        totalRevenue: 0,
-      },
-      pendingApplications: [],
-    };
+  setup() {
+    const toast = useToast();
+    return { toast };
   },
   computed: {
+    adminStore() {
+      return useAdminStore();
+    },
+    loading() {
+      return this.adminStore.loading;
+    },
+    loadingApplications() {
+      return this.adminStore.loadingApplications;
+    },
+    stats() {
+      return this.adminStore.stats;
+    },
+    pendingApplications() {
+      return this.adminStore.pendingApplications.slice(0, 5);
+    },
     approvalRate() {
-      if (this.stats.totalTutors === 0) return 0;
-      return ((this.stats.approvedTutors / this.stats.totalTutors) * 100).toFixed(1);
+      return this.adminStore.approvalRate;
     },
   },
   async mounted() {
-    await this.loadStats();
-    await this.loadPendingApplications();
+    await this.loadData();
   },
   methods: {
-    async loadStats() {
-      try {
-        this.loading = true;
-        this.stats = await adminService.getStats();
-      } catch (error) {
-        console.error('Failed to load stats:', error);
-      } finally {
-        this.loading = false;
-      }
+    async loadData() {
+      await Promise.all([
+        this.adminStore.fetchStats(),
+        this.adminStore.fetchApplications(),
+      ]);
     },
-    async loadPendingApplications() {
-      try {
-        this.loadingApplications = true;
-        const response = await adminService.getTutorApplications('pending', 5);
-        this.pendingApplications = response.slice(0, 5);
-      } catch (error) {
-        console.error('Failed to load pending applications:', error);
-      } finally {
-        this.loadingApplications = false;
-      }
-    },
-    getInitials(name) {
+    getInitials(name: string | undefined) {
       if (!name) return '?';
       return name
         .split(' ')
@@ -311,29 +298,27 @@ export default {
         .toUpperCase()
         .slice(0, 2);
     },
-    truncateSubjects(subjects) {
+    truncateSubjects(subjects: string[] | undefined) {
       if (!subjects || subjects.length === 0) return 'No subjects';
       if (Array.isArray(subjects)) {
         return subjects.slice(0, 2).join(', ');
       }
       return subjects;
     },
-    viewApplication(id) {
+    viewApplication(id: string) {
       this.$router.push(`/admin/tutor-applications`);
     },
-    async approveApplication(id) {
+    async approveApplication(id: string) {
       if (!confirm('Are you sure you want to approve this application?')) return;
 
       try {
-        await adminService.approveApplication(id);
-        alert('Application approved successfully');
-        await this.loadStats();
-        await this.loadPendingApplications();
+        await this.adminStore.approveApplication(id);
+        this.toast.success('Application Approved', 'The tutor application has been approved successfully');
+        await this.adminStore.fetchStats();
       } catch (error) {
-        console.error('Failed to approve application:', error);
-        alert('Failed to approve application');
+        this.toast.error('Approval Failed', 'Failed to approve application. Please try again.');
       }
     },
   },
-};
+});
 </script>

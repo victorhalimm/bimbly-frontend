@@ -1,2 +1,1 @@
-export { default as BSidebar } from './Sidebar.vue';
 export { default as BFooter } from './Footer.vue';

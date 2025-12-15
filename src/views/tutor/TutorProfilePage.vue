@@ -227,7 +227,7 @@
 
             <div class="space-y-8">
             <div>
-              <label class="block text-sm font-bold text-gray-700 mb-2">Bio (200-1000 characters)</label>
+              <label class="block text-sm font-bold text-gray-700 mb-2">Bio (50-1000 characters)</label>
               <textarea
                 v-model="form.bio"
                 rows="4"
@@ -280,39 +280,46 @@
               </div>
 
               <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Subjects (1-5)</label>
-                <input
-                  v-model="subjectsInput"
-                  type="text"
-                  placeholder="e.g., Matematika, Fisika, Kimia"
-                  :class="{
-                    'border-red-500 focus:border-red-500 focus:ring-red-100': fieldErrors.subjects,
-                    'border-gray-200 focus:border-blue-500 focus:ring-blue-100': !fieldErrors.subjects
-                  }"
-                  class="w-full px-5 py-3 border-2 rounded-2xl focus:ring-4 transition-all font-medium text-gray-900"
-                />
-                <p v-if="fieldErrors.subjects" class="text-sm text-red-600 font-medium mt-1">
+                <label class="block text-sm font-bold text-gray-700 mb-3">Subjects <span class="text-gray-400 font-normal">(Select up to 5)</span></label>
+                <div class="flex flex-wrap gap-2">
+                  <button
+                    v-for="subject in availableSubjects"
+                    :key="subject"
+                    type="button"
+                    @click="toggleSubject(subject)"
+                    class="px-4 py-2 rounded-full border-2 transition-all text-sm font-medium"
+                    :class="form.subjects.includes(subject)
+                      ? 'border-blue-500 bg-blue-50 text-blue-700'
+                      : 'border-gray-200 text-gray-600 hover:border-blue-300'"
+                    :disabled="!form.subjects.includes(subject) && form.subjects.length >= 5"
+                  >
+                    {{ subject }}
+                  </button>
+                </div>
+                <p v-if="fieldErrors.subjects" class="text-sm text-red-600 font-medium mt-2">
                   {{ fieldErrors.subjects }}
                 </p>
-                <p class="text-xs text-gray-400 mt-1">Separate with commas</p>
               </div>
 
               <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Grade Levels</label>
-                <input
-                  v-model="gradeLevelsInput"
-                  type="text"
-                  placeholder="e.g., 10, 11, 12"
-                  :class="{
-                    'border-red-500 focus:border-red-500 focus:ring-red-100': fieldErrors.gradeLevels,
-                    'border-gray-200 focus:border-blue-500 focus:ring-blue-100': !fieldErrors.gradeLevels
-                  }"
-                  class="w-full px-5 py-3 border-2 rounded-2xl focus:ring-4 transition-all font-medium text-gray-900"
-                />
-                <p v-if="fieldErrors.gradeLevels" class="text-sm text-red-600 font-medium mt-1">
+                <label class="block text-sm font-bold text-gray-700 mb-3">Grade Levels</label>
+                <div class="grid grid-cols-4 gap-2">
+                  <button
+                    v-for="grade in 12"
+                    :key="grade"
+                    type="button"
+                    @click="toggleGradeLevel(grade)"
+                    class="px-3 py-2 rounded-xl border-2 transition-all text-sm font-medium"
+                    :class="form.gradeLevels.includes(grade)
+                      ? 'border-blue-500 bg-blue-50 text-blue-700'
+                      : 'border-gray-200 text-gray-600 hover:border-blue-300'"
+                  >
+                    {{ grade }}
+                  </button>
+                </div>
+                <p v-if="fieldErrors.gradeLevels" class="text-sm text-red-600 font-medium mt-2">
                   {{ fieldErrors.gradeLevels }}
                 </p>
-                <p class="text-xs text-gray-400 mt-1">Separate with commas</p>
               </div>
             </div>
 
@@ -586,8 +593,20 @@ export default {
         province: '',
         availabilitySchedule: null,
       },
-      subjectsInput: '',
-      gradeLevelsInput: '',
+      availableSubjects: [
+        'Mathematics',
+        'Physics',
+        'Chemistry',
+        'Biology',
+        'English',
+        'Indonesian',
+        'History',
+        'Geography',
+        'Economics',
+        'Computer Science',
+        'Music',
+        'Art',
+      ],
       fieldErrors: {
         fullName: '',
         phoneNumber: '',
@@ -649,8 +668,6 @@ export default {
           this.form.city = this.profile.city || '';
           this.form.province = this.profile.province || '';
           this.form.availabilitySchedule = this.profile.availabilitySchedule || null;
-          this.subjectsInput = this.form.subjects.join(', ');
-          this.gradeLevelsInput = this.form.gradeLevels.join(', ');
         }
       } catch (err) {
         if (err.response?.status !== 404) {
@@ -658,6 +675,22 @@ export default {
         }
       } finally {
         this.loading = false;
+      }
+    },
+    toggleSubject(subject) {
+      const index = this.form.subjects.indexOf(subject);
+      if (index > -1) {
+        this.form.subjects.splice(index, 1);
+      } else if (this.form.subjects.length < 5) {
+        this.form.subjects.push(subject);
+      }
+    },
+    toggleGradeLevel(grade) {
+      const index = this.form.gradeLevels.indexOf(grade);
+      if (index > -1) {
+        this.form.gradeLevels.splice(index, 1);
+      } else {
+        this.form.gradeLevels.push(grade);
       }
     },
     clearFieldErrors() {
@@ -698,8 +731,8 @@ export default {
       if (!this.form.bio.trim()) {
         this.fieldErrors.bio = 'Bio is required';
         isValid = false;
-      } else if (this.form.bio.trim().length < 200 || this.form.bio.trim().length > 1000) {
-        this.fieldErrors.bio = 'Bio must be between 200 and 1000 characters';
+      } else if (this.form.bio.trim().length < 50 || this.form.bio.trim().length > 1000) {
+        this.fieldErrors.bio = 'Bio must be between 50 and 1000 characters';
         isValid = false;
       }
 
@@ -788,9 +821,6 @@ export default {
     },
     async handleSubmit() {
       this.clearFieldErrors();
-
-      this.form.subjects = this.subjectsInput.split(',').map(s => s.trim()).filter(Boolean);
-      this.form.gradeLevels = this.gradeLevelsInput.split(',').map(g => parseInt(g.trim())).filter(g => !isNaN(g));
 
       if (!this.validateForm()) {
         this.toast.error('Validation Failed', 'Please check the highlighted fields');
