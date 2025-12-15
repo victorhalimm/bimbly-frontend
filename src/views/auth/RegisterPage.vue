@@ -1027,10 +1027,10 @@ export default defineComponent({
               certifications: certifications,
             },
           });
+          this.toast.info("Application Received!", "We're reviewing your application. You'll be able to start teaching as soon as it's approved.", 10000)
         }
 
         this.showSuccess = true;
-        this.toast.info("Application Received!", "We're reviewing your application. You'll be able to start teaching as soon as it's approved.", 10000)
         setTimeout(() => {
           this.$router.push('/login');
         }, 300);

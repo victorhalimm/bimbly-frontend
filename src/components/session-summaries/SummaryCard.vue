@@ -41,14 +41,17 @@
         <p class="text-gray-700 font-medium leading-relaxed">{{ summary.notes }}</p>
       </div>
 
-      <div v-if="summary.homeworkAssigned" class="bg-purple-50 rounded-2xl p-6">
+      <div v-if="summary.quizAssignment" class="bg-purple-50 rounded-2xl p-6">
         <h4 class="text-lg font-bold text-purple-900 mb-3 flex items-center gap-2">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
           </svg>
-          Homework Assigned
+          Homework Quiz Assigned
         </h4>
-        <p class="text-gray-700 font-medium leading-relaxed">{{ summary.homeworkAssigned }}</p>
+        <p class="text-gray-700 font-medium leading-relaxed">{{ summary.quizAssignment.quizTemplate?.title || 'Quiz' }}</p>
+        <p v-if="summary.quizAssignment.deadline" class="text-gray-500 text-sm mt-2">
+          Deadline: {{ formatDate(summary.quizAssignment.deadline) }}
+        </p>
       </div>
 
       <div v-if="summary.nextSessionPlan" class="bg-gray-50 rounded-2xl p-6">

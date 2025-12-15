@@ -7,7 +7,8 @@ export interface CreateSessionSummaryDto {
   strengths: string;
   areasForImprovement: string;
   notes?: string;
-  homeworkAssigned?: string;
+  quizTemplateId?: string;
+  quizDeadline?: string;
   nextSessionPlan?: string;
 }
 
@@ -15,7 +16,6 @@ export interface UpdateSessionSummaryDto {
   strengths?: string;
   areasForImprovement?: string;
   notes?: string;
-  homeworkAssigned?: string;
   nextSessionPlan?: string;
 }
 
@@ -26,7 +26,15 @@ export interface SessionSummary {
   strengths: string;
   areasForImprovement: string;
   notes?: string;
-  homeworkAssigned?: string;
+  quizAssignmentId?: string;
+  quizAssignment?: {
+    id: string;
+    quizTemplate: {
+      id: string;
+      title: string;
+    };
+    deadline?: string;
+  };
   nextSessionPlan?: string;
   createdAt: string;
   updatedAt: string;

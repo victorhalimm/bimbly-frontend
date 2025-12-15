@@ -180,6 +180,26 @@ export const useBookingStore = defineStore('booking', {
       }
     },
 
+    async studentCompleteBooking(bookingId: string) {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const booking = await bookingService.studentCompleteBooking(bookingId);
+        this.updateBookingInList(booking);
+        if (this.selectedBooking?.bookingId === bookingId) {
+          this.selectedBooking = booking;
+        }
+        return booking;
+      } catch (err: unknown) {
+        const error = err as Error & { response?: { data?: { message?: string } } };
+        this.error = error.response?.data?.message || error.message || 'Failed to complete booking';
+        throw error;
+      } finally {
+        this.loading = false;
+      }
+    },
+
     async checkAvailability(
       tutorId: string,
       date: string,

@@ -33,6 +33,10 @@ export interface Booking {
   location: string | null;
   meetingUrl: string | null;
   cancellationReason: string | null;
+  tutorCompleted: boolean;
+  studentCompleted: boolean;
+  tutorCompletedAt: string | null;
+  studentCompletedAt: string | null;
 }
 
 export interface CreateBookingData {
@@ -122,6 +126,15 @@ export const bookingService = {
   async completeBooking(bookingId: string): Promise<Booking> {
     const response = await axios.patch(
       `${API_URL}/bookings/${bookingId}/complete`,
+      {},
+      { withCredentials: true },
+    );
+    return response.data;
+  },
+
+  async studentCompleteBooking(bookingId: string): Promise<Booking> {
+    const response = await axios.patch(
+      `${API_URL}/bookings/${bookingId}/student-complete`,
       {},
       { withCredentials: true },
     );
