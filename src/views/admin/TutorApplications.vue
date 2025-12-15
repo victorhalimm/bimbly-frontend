@@ -158,14 +158,15 @@
   </admin-layout>
 </template>
 
-<script>
-import { adminService } from '@/services/admin.service';
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { useAdminStore, type TutorApplication } from '@/stores/admin.store';
 import AdminLayout from '@/components/admin/AdminLayout.vue';
 import ApplicationReview from '@/components/admin/ApplicationReview.vue';
 import ConfirmationModal from '@/components/common/ConfirmationModal.vue';
 import { useToast } from '@/composables/useToast';
 
-export default {
+export default defineComponent({
   name: 'TutorApplications',
   components: {
     AdminLayout,
@@ -178,38 +179,35 @@ export default {
   },
   data() {
     return {
-      loading: true,
       activeTab: 'pending',
-      applications: [],
-      selectedApp: null,
+      selectedApp: null as TutorApplication | null,
       rejectModalVisible: false,
-      appToReject: null,
+      appToReject: null as TutorApplication | null,
       rejectingApplication: false,
     };
   },
   computed: {
-    currentApplications() {
+    adminStore() {
+      return useAdminStore();
+    },
+    loading() {
+      return this.adminStore.loadingApplications;
+    },
+    applications() {
+      return this.adminStore.applications;
+    },
+    currentApplications(): TutorApplication[] {
       return this.applications.filter((app) => app.status === this.activeTab);
     },
     pendingCount() {
-      return this.applications.filter((app) => app.status === 'pending').length;
+      return this.adminStore.pendingCount;
     },
   },
   async mounted() {
-    await this.loadApplications();
+    await this.adminStore.fetchApplications();
   },
   methods: {
-    async loadApplications() {
-      try {
-        this.loading = true;
-        this.applications = await adminService.getAllApplications();
-      } catch (error) {
-        console.error('Failed to load applications:', error);
-      } finally {
-        this.loading = false;
-      }
-    },
-    getInitials(name) {
+    getInitials(name: string | undefined) {
       if (!name) return '?';
       return name
         .split(' ')
@@ -218,7 +216,7 @@ export default {
         .toUpperCase()
         .slice(0, 2);
     },
-    showRejectModal(app) {
+    showRejectModal(app: TutorApplication) {
       this.appToReject = app;
       this.rejectModalVisible = true;
     },
@@ -227,79 +225,64 @@ export default {
       this.appToReject = null;
       this.rejectingApplication = false;
     },
-    async handleQuickApprove(id) {
+    async handleQuickApprove(id: string) {
       try {
-        await adminService.approveApplication(id);
-        await this.loadApplications();
+        await this.adminStore.approveApplication(id);
         this.toast.success('Application Approved', 'The tutor application has been approved successfully');
       } catch (error) {
-        console.error('Failed to approve application:', error);
         this.toast.error('Approval Failed', 'Failed to approve application. Please try again.');
       }
     },
-    async handleApprove(id) {
+    async handleApprove(id: string) {
       try {
-        await adminService.approveApplication(id);
+        await this.adminStore.approveApplication(id);
         this.selectedApp = null;
-        await this.loadApplications();
         this.toast.success('Application Approved', 'The tutor application has been approved successfully');
       } catch (error) {
-        console.error('Failed to approve application:', error);
         this.toast.error('Approval Failed', 'Failed to approve application. Please try again.');
       }
     },
-    async handleRejectConfirm(reason) {
+    async handleRejectConfirm(reason: string) {
+      if (!this.appToReject) return;
+
       try {
         this.rejectingApplication = true;
-        await adminService.rejectApplication(this.appToReject.id, reason);
+        await this.adminStore.rejectApplication(this.appToReject.id, reason);
         this.closeRejectModal();
-        await this.loadApplications();
         this.toast.success('Application Rejected', 'The tutor application has been rejected');
       } catch (error) {
-        console.error('Failed to reject application:', error);
         this.toast.error('Rejection Failed', 'Failed to reject application. Please try again.');
         this.rejectingApplication = false;
       }
     },
-    async handleRejectFromDetail({ id, reason }) {
+    async handleRejectFromDetail({ id, reason }: { id: string; reason: string }) {
       try {
-        await adminService.rejectApplication(id, reason);
+        await this.adminStore.rejectApplication(id, reason);
         this.selectedApp = null;
-        await this.loadApplications();
         this.toast.success('Application Rejected', 'The tutor application has been rejected');
       } catch (error) {
-        console.error('Failed to reject application:', error);
         this.toast.error('Rejection Failed', 'Failed to reject application. Please try again.');
       }
     },
-    async handleRequestInfo({ id, message }) {
+    async handleRequestInfo({ id, message }: { id: string; message: string }) {
       try {
-        await adminService.requestAdditionalInfo(id, message);
+        await this.adminStore.requestAdditionalInfo(id, message);
         this.selectedApp = null;
-        await this.loadApplications();
         this.toast.success('Request Sent', 'Additional information request has been sent to the tutor');
-      } catch (error) {
-        console.error('Failed to send request:', error);
+      } catch (error: any) {
         this.toast.error('Request Failed', error.response?.data?.message || 'Failed to send request. Please try again.');
       }
     },
-    isProfileUpdatedAfterRequest(app) {
+    isProfileUpdatedAfterRequest(app: TutorApplication) {
       if (!app.additionalInfoRequested || !app.requestedAt) return false;
       if (!app.tutorProfile?.updatedAt) return false;
 
       const profileUpdated = new Date(app.tutorProfile.updatedAt);
       const infoRequested = new Date(app.requestedAt);
 
-      console.log('=== List Badge Check ===');
-      console.log('Tutor:', app.tutorProfile?.user?.fullName);
-      console.log('Profile updatedAt:', app.tutorProfile.updatedAt);
-      console.log('Request requestedAt:', app.requestedAt);
-      console.log('Is Updated?:', profileUpdated > infoRequested);
-      console.log('=======================');
-
       return profileUpdated > infoRequested;
     },
-    formatDate(date) {
+    formatDate(date: string) {
       return new Date(date).toLocaleDateString('id-ID', {
         year: 'numeric',
         month: 'short',
@@ -308,7 +291,7 @@ export default {
       });
     },
   },
-};
+});
 </script>
 
 <style scoped>

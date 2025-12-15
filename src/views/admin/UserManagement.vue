@@ -157,13 +157,14 @@
   </admin-layout>
 </template>
 
-<script>
-import { adminService } from '@/services/admin.service';
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { useAdminStore, type User } from '@/stores/admin.store';
 import AdminLayout from '@/components/admin/AdminLayout.vue';
 import ConfirmationModal from '@/components/common/ConfirmationModal.vue';
 import { useToast } from '@/composables/useToast';
 
-export default {
+export default defineComponent({
   name: 'UserManagement',
   components: {
     AdminLayout,
@@ -175,18 +176,25 @@ export default {
   },
   data() {
     return {
-      loading: true,
-      users: [],
       searchQuery: '',
       filterType: '',
       filterStatus: '',
       showBlockModal: false,
-      selectedUser: null,
+      selectedUser: null as User | null,
       blockingUser: false,
     };
   },
   computed: {
-    filteredUsers() {
+    adminStore() {
+      return useAdminStore();
+    },
+    loading() {
+      return this.adminStore.loadingUsers;
+    },
+    users() {
+      return this.adminStore.users;
+    },
+    filteredUsers(): User[] {
       let filtered = this.users;
 
       if (this.searchQuery) {
@@ -214,20 +222,10 @@ export default {
     },
   },
   async mounted() {
-    await this.loadUsers();
+    await this.adminStore.fetchUsers();
   },
   methods: {
-    async loadUsers() {
-      try {
-        this.loading = true;
-        this.users = await adminService.getAllUsers();
-      } catch (error) {
-        console.error('Failed to load users:', error);
-      } finally {
-        this.loading = false;
-      }
-    },
-    getInitials(name) {
+    getInitials(name: string) {
       return name
         .split(' ')
         .map(word => word[0])
@@ -235,7 +233,7 @@ export default {
         .toUpperCase()
         .slice(0, 2);
     },
-    formatDate(date) {
+    formatDate(date: string) {
       return new Date(date).toLocaleDateString('id-ID', {
         year: 'numeric',
         month: 'short',
@@ -243,7 +241,7 @@ export default {
         timeZone: 'Asia/Jakarta'
       });
     },
-    openBlockModal(user) {
+    openBlockModal(user: User) {
       this.selectedUser = user;
       this.showBlockModal = true;
     },
@@ -252,29 +250,27 @@ export default {
       this.selectedUser = null;
       this.blockingUser = false;
     },
-    async handleBlockUserConfirm(reason) {
+    async handleBlockUserConfirm(reason: string) {
+      if (!this.selectedUser) return;
+
       try {
         this.blockingUser = true;
-        await adminService.blockUser(this.selectedUser.id, reason);
+        await this.adminStore.blockUser(this.selectedUser.id, reason);
         this.toast.success('User Blocked', `${this.selectedUser.fullName} has been blocked successfully`);
         this.closeBlockModal();
-        await this.loadUsers();
       } catch (error) {
-        console.error('Failed to block user:', error);
         this.toast.error('Block Failed', 'Failed to block user. Please try again.');
         this.blockingUser = false;
       }
     },
-    async handleUnblockUser(user) {
+    async handleUnblockUser(user: User) {
       try {
-        await adminService.unblockUser(user.id);
+        await this.adminStore.unblockUser(user.id);
         this.toast.success('User Unblocked', `${user.fullName} has been unblocked successfully`);
-        await this.loadUsers();
       } catch (error) {
-        console.error('Failed to unblock user:', error);
         this.toast.error('Unblock Failed', 'Failed to unblock user. Please try again.');
       }
     },
   },
-};
+});
 </script>
