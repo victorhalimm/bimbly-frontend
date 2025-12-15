@@ -10,7 +10,6 @@ export interface AuthUser {
   userType: 'student' | 'tutor' | 'admin';
   phoneNumber: string;
   profileImageUrl?: string;
-  isEmailVerified: boolean;
   createdAt: string;
   updatedAt: string;
 }
