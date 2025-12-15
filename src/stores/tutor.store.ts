@@ -8,10 +8,12 @@ import {
   type ReviewsResponse,
   type AvailabilityResponse,
 } from '@/services/tutor.service';
+import { userService } from '@/services/user.service';
 
 export interface TutorState {
   tutors: TutorListItem[];
   selectedTutor: TutorProfile | null;
+  currentUserProfile: TutorProfile | null;
   filters: TutorSearchFilters;
   meta: PaginationMeta;
   reviews: ReviewsResponse | null;
@@ -24,6 +26,7 @@ export const useTutorStore = defineStore('tutor', {
   state: (): TutorState => ({
     tutors: [],
     selectedTutor: null,
+    currentUserProfile: null,
     filters: {
       sortBy: 'rating',
       order: 'DESC',
@@ -48,6 +51,7 @@ export const useTutorStore = defineStore('tutor', {
     currentPage: (state) => state.meta.page,
     totalPages: (state) => state.meta.totalPages,
     totalResults: (state) => state.meta.total,
+    isCurrentUserApproved: (state) => state.currentUserProfile?.isApproved ?? false,
   },
 
   actions: {
@@ -129,6 +133,37 @@ export const useTutorStore = defineStore('tutor', {
       this.selectedTutor = null;
       this.reviews = null;
       this.availability = null;
+    },
+
+    async fetchCurrentUserProfile() {
+      try {
+        const profile = await tutorService.getProfile();
+        this.currentUserProfile = profile;
+      } catch (err: unknown) {
+        const error = err as Error;
+        this.error = error.message || 'Failed to fetch tutor profile';
+        this.currentUserProfile = null;
+      }
+    },
+
+    clearCurrentUserProfile() {
+      this.currentUserProfile = null;
+    },
+
+    async updateProfile(data: Record<string, unknown>) {
+      this.loading = true;
+      this.error = null;
+      try {
+        const response = await userService.updateProfile(data);
+        await this.fetchCurrentUserProfile();
+        return response;
+      } catch (err: unknown) {
+        const error = err as Error;
+        this.error = error.message || 'Failed to update profile';
+        throw err;
+      } finally {
+        this.loading = false;
+      }
     },
   },
 });

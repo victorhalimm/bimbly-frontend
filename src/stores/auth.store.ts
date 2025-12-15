@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
 import { authService } from '../services/auth.service';
+import { useTutorStore } from './tutor.store';
+import { useStudentStore } from './student.store';
 
 export interface AuthUser {
   id: string;
@@ -64,6 +66,15 @@ export const useAuthStore = defineStore('auth', {
         const response = await authService.login(credentials);
         this.user = response.user;
         this.isAuthenticated = true;
+
+        if (response.user.userType === 'tutor') {
+          const tutorStore = useTutorStore();
+          await tutorStore.fetchCurrentUserProfile();
+        } else if (response.user.userType === 'student') {
+          const studentStore = useStudentStore();
+          await studentStore.fetchCurrentUserProfile();
+        }
+
         return response;
       } catch (error: any) {
         this.error = error.response?.data?.message || 'Login failed';
@@ -81,6 +92,10 @@ export const useAuthStore = defineStore('auth', {
       } finally {
         this.user = null;
         this.isAuthenticated = false;
+        const tutorStore = useTutorStore();
+        const studentStore = useStudentStore();
+        tutorStore.clearCurrentUserProfile();
+        studentStore.clearCurrentUserProfile();
       }
     },
 
@@ -89,39 +104,17 @@ export const useAuthStore = defineStore('auth', {
         const user = await authService.getCurrentUser();
         this.user = user;
         this.isAuthenticated = true;
+
+        if (user.userType === 'tutor') {
+          const tutorStore = useTutorStore();
+          await tutorStore.fetchCurrentUserProfile();
+        } else if (user.userType === 'student') {
+          const studentStore = useStudentStore();
+          await studentStore.fetchCurrentUserProfile();
+        }
       } catch (error) {
         this.user = null;
         this.isAuthenticated = false;
-      }
-    },
-
-    async verifyEmail(token: string) {
-      this.loading = true;
-      this.error = null;
-      try {
-        const response = await authService.verifyEmail(token);
-        return response;
-      } catch (error: any) {
-        this.error =
-          error.response?.data?.message || 'Email verification failed';
-        throw error;
-      } finally {
-        this.loading = false;
-      }
-    },
-
-    async forgotPassword(email: string) {
-      this.loading = true;
-      this.error = null;
-      try {
-        const response = await authService.forgotPassword(email);
-        return response;
-      } catch (error: any) {
-        this.error =
-          error.response?.data?.message || 'Password reset request failed';
-        throw error;
-      } finally {
-        this.loading = false;
       }
     },
 
