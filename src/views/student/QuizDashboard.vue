@@ -9,7 +9,7 @@
       <div class="absolute bottom-1/3 right-24 w-4 h-4 bg-yellow-400 rounded-full animate-float animation-delay-1000"></div>
       <div class="absolute top-1/2 left-1/4 w-2 h-2 bg-green-400 rounded-full animate-float animation-delay-1500"></div>
 
-      <div class="max-w-7xl mx-auto relative z-10">
+      <div class="max-w-7xl px-12 mx-auto relative z-10">
         <h1 class="text-5xl text-center md:text-6xl font-black text-gray-900 mb-4">
           My
           <span class="relative inline-block px-1">
@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-12">
       <div class="flex flex-wrap gap-2 justify-center mb-8">
         <button
           v-for="filter in statusFilters"
@@ -51,7 +51,7 @@
         </button>
       </div>
 
-      <div v-if="loading" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <div v-if="loading" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
         <div v-for="i in 10" :key="i" class="bg-white rounded-2xl overflow-hidden shadow-md animate-pulse">
           <div class="h-28 bg-gray-200"></div>
           <div class="p-4">
@@ -79,7 +79,7 @@
         <p class="text-gray-500">Check back later for new assignments!</p>
       </div>
 
-      <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
         <QuizCard
           v-for="assignment in filteredAssignments"
           :key="assignment.id"

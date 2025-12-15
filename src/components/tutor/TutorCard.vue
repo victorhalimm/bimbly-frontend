@@ -10,7 +10,7 @@
         :alt="tutor.fullName"
         class="w-full h-full rounded-4xl object-cover"
       />
-      <div class="absolute rounded-4xl bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
+      <div class="absolute rounded-b-4xl bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
         <h3 class="text-xl font-black text-white mb-1 break-words">{{ tutor.fullName }}</h3>
         <p class="text-sm text-white/90 font-medium break-words">
           {{ tutor.city }} ({{ teachingMethodLabel }})

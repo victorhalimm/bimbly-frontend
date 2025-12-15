@@ -230,20 +230,18 @@
 </template>
 
 <script>
-import { computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { studentService } from '@/services/student.service';
-import { userService } from '@/services/user.service';
 import { useAuthStore } from '@/stores/auth.store';
+import { useStudentStore } from '@/stores/student.store';
 import { useToast } from '@/composables/useToast';
 
 export default {
   name: 'StudentProfilePage',
   setup() {
     const authStore = useAuthStore();
+    const studentStore = useStudentStore();
     const toast = useToast();
 
-    return { authStore, toast };
+    return { authStore, studentStore, toast };
   },
   data() {
     return {
@@ -289,7 +287,8 @@ export default {
           }
         }
 
-        this.profile = await studentService.getProfile();
+        await this.studentStore.fetchCurrentUserProfile();
+        this.profile = this.studentStore.currentUserProfile;
 
         if (this.profile) {
           this.form.currentGrade = this.profile.currentGrade || 10;
@@ -431,7 +430,7 @@ export default {
           payload.profileImageUrl = this.avatarFile;
         }
 
-        await userService.updateProfile(payload);
+        await this.studentStore.updateProfile(payload);
 
         this.toast.success(
           this.profile ? 'Profile Updated!' : 'Profile Created!',
@@ -439,7 +438,7 @@ export default {
         );
 
         await this.authStore.fetchCurrentUser();
-        await this.loadProfile();
+        this.profile = this.studentStore.currentUserProfile;
       } catch (err) {
         this.toast.error('Save Failed', err.response?.data?.message || 'An error occurred while saving');
       } finally {

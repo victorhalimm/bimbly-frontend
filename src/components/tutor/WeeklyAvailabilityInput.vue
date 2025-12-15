@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white rounded-3xl shadow-lg p-6">
+  <div class="bg-white p-6">
     <div class="mb-6">
       <h3 class="text-xl font-bold text-gray-900 mb-1">Weekly Working Hours</h3>
       <p class="text-sm text-gray-500">

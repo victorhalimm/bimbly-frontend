@@ -466,6 +466,85 @@
             </p>
           </div>
 
+          <!-- Step 8: Tutor Certifications (Optional) -->
+          <div v-else-if="currentStep === 8 && form.userType === 'tutor'">
+            <h1 class="text-3xl lg:text-4xl font-black text-gray-900 mb-3">Upload Certifications</h1>
+            <p class="text-lg text-gray-600 mb-8">Add your teaching certifications and qualifications</p>
+
+            <div class="space-y-6">
+              <div v-if="form.tutorProfile.certifications.length > 0" class="space-y-3">
+                <div
+                  v-for="(cert, index) in form.tutorProfile.certifications"
+                  :key="index"
+                  class="flex items-center justify-between p-4 bg-gray-50 rounded-xl border-2 border-gray-200"
+                >
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <IconFile size="20" class="text-blue-600" />
+                    </div>
+                    <div>
+                      <p class="font-semibold text-gray-900">{{ cert.name }}</p>
+                      <p class="text-sm text-gray-500">{{ cert.fileName }}</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    @click="removeCertification(index)"
+                    class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  >
+                    <IconTrash size="18" />
+                  </button>
+                </div>
+              </div>
+
+              <div class="border-2 border-dashed border-gray-300 rounded-xl p-6">
+                <div class="space-y-4">
+                  <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Certification Name</label>
+                    <input
+                      v-model="certificationName"
+                      type="text"
+                      placeholder="e.g., Bachelor of Education, Teaching Certificate"
+                      class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all"
+                    />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Upload File</label>
+                    <input
+                      type="file"
+                      ref="certificationInput"
+                      accept=".jpg,.jpeg,.png,.pdf"
+                      @change="handleCertificationFileChange"
+                      class="hidden"
+                    />
+                    <button
+                      type="button"
+                      @click="($refs.certificationInput as HTMLInputElement).click()"
+                      class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl text-gray-600 hover:border-blue-500 hover:bg-blue-50 transition-all flex items-center justify-center gap-2"
+                    >
+                      <IconUpload size="20" />
+                      <span>{{ certificationFile ? certificationFile.name : 'Choose File (JPG, PNG, PDF - Max 10MB)' }}</span>
+                    </button>
+                  </div>
+
+                  <button
+                    type="button"
+                    @click="addCertification"
+                    :disabled="!certificationName || !certificationFile"
+                    class="w-full bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Add Certification
+                  </button>
+                </div>
+              </div>
+
+              <p class="text-sm text-gray-500">
+                This step is optional. You can skip it and upload certifications later from your profile.
+              </p>
+            </div>
+          </div>
+
           <!-- Error Alert -->
           <div v-if="globalError" class="mt-6 flex items-start gap-3 px-5 py-4 bg-red-50 text-red-900 rounded-xl border-2 border-red-200">
             <IconAlertCircle size="20" class="shrink-0 mt-0.5" />
@@ -576,11 +655,15 @@ import {
   IconAlertCircle,
   IconDeviceLaptop,
   IconUsers,
+  IconUpload,
+  IconFile,
+  IconTrash,
 } from '@tabler/icons-vue';
 import { authService } from '@/services/auth.service';
 import logoBox from '@assets/images/logo/logo-box.png';
 import WeeklyAvailabilityInput from '@/components/tutor/WeeklyAvailabilityInput.vue';
 import type { AvailabilitySchedule } from '@/types/availability';
+import { useToast } from '@/composables/useToast';
 
 interface StudentProfileForm {
   currentGrade: number | '';
@@ -588,6 +671,13 @@ interface StudentProfileForm {
   city: string;
   province: string;
   address: string;
+}
+
+interface CertificationUpload {
+  name: string;
+  fileData: string;
+  fileName: string;
+  fileType: string;
 }
 
 interface TutorProfileForm {
@@ -602,6 +692,7 @@ interface TutorProfileForm {
   city: string;
   province: string;
   availabilitySchedule: AvailabilitySchedule | null;
+  certifications: CertificationUpload[];
 }
 
 interface FormData {
@@ -633,7 +724,14 @@ export default defineComponent({
     IconAlertCircle,
     IconDeviceLaptop,
     IconUsers,
+    IconUpload,
+    IconFile,
+    IconTrash,
     WeeklyAvailabilityInput,
+  },
+  setup() {
+    const toast = useToast();
+    return { toast };
   },
   data() {
     return {
@@ -644,6 +742,8 @@ export default defineComponent({
       globalError: null as string | null,
       showSuccess: false,
       specializationsInput: '',
+      certificationName: '',
+      certificationFile: null as File | null,
       logoBox,
       form: {
         userType: '',
@@ -671,6 +771,7 @@ export default defineComponent({
           city: '',
           province: '',
           availabilitySchedule: null,
+          certifications: [],
         },
       } as FormData,
       errors: {} as FormErrors,
@@ -695,7 +796,7 @@ export default defineComponent({
       if (this.form.userType === 'student') {
         return 4;
       } else if (this.form.userType === 'tutor') {
-        return 7;
+        return 8;
       }
       return 4;
     },
@@ -736,6 +837,47 @@ export default defineComponent({
       } else {
         this.form.tutorProfile.teachingMethods.push(method);
       }
+    },
+    handleCertificationFileChange(event: Event) {
+      const input = event.target as HTMLInputElement;
+      const file = input.files?.[0];
+      if (!file) return;
+
+      if (file.size > 10 * 1024 * 1024) {
+        this.globalError = 'File size must be less than 10MB';
+        return;
+      }
+
+      const validTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+      if (!validTypes.includes(file.type)) {
+        this.globalError = 'Only JPG, PNG, and PDF files are allowed';
+        return;
+      }
+
+      this.certificationFile = file;
+      this.globalError = null;
+    },
+    addCertification() {
+      if (!this.certificationName || !this.certificationFile) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const fileData = e.target?.result as string;
+        this.form.tutorProfile.certifications.push({
+          name: this.certificationName,
+          fileData: fileData,
+          fileName: this.certificationFile!.name,
+          fileType: this.certificationFile!.type,
+        });
+        this.certificationName = '';
+        this.certificationFile = null;
+        const input = this.$refs.certificationInput as HTMLInputElement;
+        if (input) input.value = '';
+      };
+      reader.readAsDataURL(this.certificationFile);
+    },
+    removeCertification(index: number) {
+      this.form.tutorProfile.certifications.splice(index, 1);
     },
     validateStep(): boolean {
       this.errors = {};
@@ -858,6 +1000,13 @@ export default defineComponent({
             },
           });
         } else {
+          const certifications = this.form.tutorProfile.certifications.length > 0
+            ? this.form.tutorProfile.certifications.map(cert => ({
+                name: cert.name,
+                fileData: cert.fileData,
+              }))
+            : undefined;
+
           await authService.registerTutor({
             email: this.form.email,
             password: this.form.password,
@@ -875,14 +1024,16 @@ export default defineComponent({
               city: this.form.tutorProfile.city,
               province: this.form.tutorProfile.province,
               availabilitySchedule: this.form.tutorProfile.availabilitySchedule || undefined,
+              certifications: certifications,
             },
           });
         }
 
         this.showSuccess = true;
+        this.toast.info("Application Received!", "We're reviewing your application. You'll be able to start teaching as soon as it's approved.", 10000)
         setTimeout(() => {
           this.$router.push('/login');
-        }, 3000);
+        }, 300);
       } catch (error: any) {
         this.globalError = error.response?.data?.message || 'Registration failed. Please try again.';
       } finally {

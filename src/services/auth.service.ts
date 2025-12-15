@@ -11,6 +11,11 @@ interface StudentProfileData {
   address?: string;
 }
 
+interface CertificationData {
+  name: string;
+  fileData: string;
+}
+
 interface TutorProfileData {
   bio: string;
   educationBackground: string;
@@ -23,6 +28,7 @@ interface TutorProfileData {
   city: string;
   province: string;
   availabilitySchedule?: AvailabilitySchedule;
+  certifications?: CertificationData[];
 }
 
 export const authService = {
@@ -80,20 +86,6 @@ export const authService = {
   async getCurrentUser() {
     const response = await axios.get(`${API_URL}/auth/me`, {
       withCredentials: true,
-    });
-    return response.data;
-  },
-
-  async verifyEmail(token: string) {
-    const response = await axios.post(`${API_URL}/auth/verify-email`, {
-      token,
-    });
-    return response.data;
-  },
-
-  async forgotPassword(email: string) {
-    const response = await axios.post(`${API_URL}/auth/forgot-password`, {
-      email,
     });
     return response.data;
   },
