@@ -56,8 +56,7 @@
           v-for="report in filteredReports"
           :key="report.id"
           :subject="{
-            id: report.subject.id,
-            name: report.subject.name,
+            name: report.subject,
             subtopicScores: report.subtopicScores,
             averageScore: report.averageScore,
           }"
@@ -71,7 +70,6 @@
       <div class="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <ReportForm
           :report="editingReport"
-          :subjects="subjects"
           @cancel="closeForm"
           @success="onSuccess"
         />
@@ -107,9 +105,6 @@ export default defineComponent({
     reports(): AcademicReport[] {
       return this.store.reports;
     },
-    subjects() {
-      return this.store.subjects;
-    },
     loading(): boolean {
       return this.store.loading;
     },
@@ -121,15 +116,9 @@ export default defineComponent({
     },
   },
   async mounted() {
-    await this.loadData();
+    await this.store.fetchReports();
   },
   methods: {
-    async loadData() {
-      await Promise.all([
-        this.store.fetchReports(),
-        this.store.fetchSubjects(),
-      ]);
-    },
     editReport(report: AcademicReport) {
       this.editingReport = report;
       this.showForm = true;

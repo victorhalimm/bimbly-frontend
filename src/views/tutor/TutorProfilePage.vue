@@ -550,6 +550,7 @@ import { tutorService } from '@/services/tutor.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { useTutorStore } from '@/stores/tutor.store';
 import { useToast } from '@/composables/useToast';
+import { SUBJECT_NAMES } from '@/config';
 import WeeklyAvailabilityInput from '@/components/tutor/WeeklyAvailabilityInput.vue';
 
 export default {
@@ -593,20 +594,7 @@ export default {
         province: '',
         availabilitySchedule: null,
       },
-      availableSubjects: [
-        'Mathematics',
-        'Physics',
-        'Chemistry',
-        'Biology',
-        'English',
-        'Indonesian',
-        'History',
-        'Geography',
-        'Economics',
-        'Computer Science',
-        'Music',
-        'Art',
-      ],
+      availableSubjects: SUBJECT_NAMES,
       fieldErrors: {
         fullName: '',
         phoneNumber: '',

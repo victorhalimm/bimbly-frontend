@@ -69,9 +69,11 @@
           :booking="booking"
           view-as="tutor"
           @view="handleView"
+          @viewPayment="openPaymentProofModal"
+          @viewSummary="openViewSummaryModal"
           @cancel="openCancelModal"
           @confirm="openConfirmModal"
-          @complete="handleComplete"
+          @complete="openCompleteModal"
         />
       </div>
 
@@ -179,6 +181,29 @@
         </div>
       </div>
     </div>
+
+    <CreateSessionSummaryModal
+      v-if="showCompleteModal && selectedBookingId"
+      :booking-id="selectedBookingId"
+      :submitting="completing"
+      @close="closeCompleteModal"
+      @submit="handleComplete"
+    />
+
+    <ViewPaymentProofModal
+      v-if="showPaymentProofModal"
+      :image-url="paymentProofUrl"
+      :loading="loadingPaymentProof"
+      @close="closePaymentProofModal"
+    />
+
+    <ViewSessionSummaryModal
+      v-if="showViewSummaryModal"
+      :summary="sessionSummary"
+      :loading="loadingSummary"
+      view-as="tutor"
+      @close="closeViewSummaryModal"
+    />
   </div>
 </template>
 
@@ -186,8 +211,14 @@
 import { defineComponent } from 'vue';
 import { useBookingStore } from '@/stores/booking.store';
 import { useToast } from '@/composables/useToast';
+import { sessionSummariesService } from '@/services/session-summaries.service';
+import { paymentService } from '@/services/payment.service';
 import BookingCard from '@/components/booking/BookingCard.vue';
+import CreateSessionSummaryModal from '@/components/booking/CreateSessionSummaryModal.vue';
+import ViewPaymentProofModal from '@/components/booking/ViewPaymentProofModal.vue';
+import ViewSessionSummaryModal from '@/components/booking/ViewSessionSummaryModal.vue';
 import type { Booking } from '@/services/booking.service';
+import type { SessionSummary, CreateSessionSummaryDto } from '@/services/session-summaries.service';
 
 interface TabItem {
   value: string;
@@ -199,6 +230,9 @@ export default defineComponent({
   name: 'TutorBookingsPage',
   components: {
     BookingCard,
+    CreateSessionSummaryModal,
+    ViewPaymentProofModal,
+    ViewSessionSummaryModal,
   },
   setup() {
     const toast = useToast();
@@ -209,12 +243,19 @@ export default defineComponent({
       activeTab: 'pending',
       showConfirmModal: false,
       showCancelModal: false,
+      showCompleteModal: false,
+      showPaymentProofModal: false,
+      showViewSummaryModal: false,
       selectedBookingId: null as string | null,
       meetingUrl: '',
       cancelReason: '',
       confirming: false,
       cancelling: false,
       completing: false,
+      paymentProofUrl: null as string | null,
+      loadingPaymentProof: false,
+      sessionSummary: null as SessionSummary | null,
+      loadingSummary: false,
     };
   },
   computed: {
@@ -367,15 +408,61 @@ export default defineComponent({
         this.cancelling = false;
       }
     },
-    async handleComplete(bookingId: string) {
+    openCompleteModal(bookingId: string) {
+      this.selectedBookingId = bookingId;
+      this.showCompleteModal = true;
+    },
+    closeCompleteModal() {
+      this.showCompleteModal = false;
+      this.selectedBookingId = null;
+    },
+    async handleComplete(summaryData: CreateSessionSummaryDto) {
       this.completing = true;
       try {
-        await this.bookingStore.completeBooking(bookingId);
-        this.toast.success('Session Completed', 'The session has been marked as completed');
+        await sessionSummariesService.create(summaryData);
+        await this.bookingStore.completeBooking(summaryData.bookingId);
+        this.toast.success('Session Completed', 'Session summary created and session marked as completed');
+        this.closeCompleteModal();
       } catch {
+        this.toast.error('Error', 'Failed to complete session');
       } finally {
         this.completing = false;
       }
+    },
+    async openPaymentProofModal(bookingId: string) {
+      this.showPaymentProofModal = true;
+      this.loadingPaymentProof = true;
+      this.paymentProofUrl = null;
+
+      try {
+        const payment = await paymentService.getPaymentByBooking(bookingId);
+        this.paymentProofUrl = payment?.paymentProofUrl || null;
+      } catch {
+        this.toast.error('Error', 'Failed to load payment proof');
+      } finally {
+        this.loadingPaymentProof = false;
+      }
+    },
+    closePaymentProofModal() {
+      this.showPaymentProofModal = false;
+      this.paymentProofUrl = null;
+    },
+    async openViewSummaryModal(bookingId: string) {
+      this.showViewSummaryModal = true;
+      this.loadingSummary = true;
+      this.sessionSummary = null;
+
+      try {
+        this.sessionSummary = await sessionSummariesService.getByBooking(bookingId);
+      } catch {
+        this.toast.error('Error', 'Failed to load session summary');
+      } finally {
+        this.loadingSummary = false;
+      }
+    },
+    closeViewSummaryModal() {
+      this.showViewSummaryModal = false;
+      this.sessionSummary = null;
     },
   },
 });

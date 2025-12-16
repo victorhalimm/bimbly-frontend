@@ -48,14 +48,14 @@
         </label>
         <select
           id="subject"
-          v-model="formData.subjectId"
+          v-model="formData.subject"
           @change="onSubjectChange"
           required
           class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all"
         >
           <option value="" disabled>Select Subject</option>
-          <option v-for="subject in subjects" :key="subject.id" :value="subject.id">
-            {{ subject.name }}
+          <option v-for="subject in subjects" :key="subject" :value="subject">
+            {{ subject }}
           </option>
         </select>
       </div>
@@ -142,11 +142,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useAcademicReportsStore } from '../../stores/academic-reports.store';
+import { SUBJECT_NAMES } from '@/config';
 import type { AcademicReport } from '../../services/academic-reports.service';
 
-export interface ReportFormData {
+interface ReportFormData {
   grade: number | '';
-  subjectId: string;
+  subject: string;
   subtopicScores: Record<string, number>;
 }
 
@@ -157,10 +158,6 @@ export default defineComponent({
       type: Object as () => AcademicReport | null,
       default: null,
     },
-    subjects: {
-      type: Array as () => Array<{ id: string; name: string }>,
-      required: true,
-    },
   },
   emits: ['cancel', 'success'],
   data(): {
@@ -168,16 +165,18 @@ export default defineComponent({
     selectedCurriculum: string;
     templateSubtopics: string[];
     loading: boolean;
+    subjects: string[];
   } {
     return {
       formData: {
         grade: this.report?.grade || '',
-        subjectId: this.report?.subjectId || '',
+        subject: this.report?.subject || '',
         subtopicScores: this.report?.subtopicScores || {},
       },
       selectedCurriculum: '',
       templateSubtopics: [],
       loading: false,
+      subjects: SUBJECT_NAMES,
     };
   },
   computed: {
@@ -196,12 +195,9 @@ export default defineComponent({
           this.formData.grade as number,
         );
 
-        const selectedSubject = this.subjects.find(
-          (s) => s.id === this.formData.subjectId,
-        );
-        if (selectedSubject && template.subjects) {
+        if (this.formData.subject && template.subjects) {
           const subjectTemplate = template.subjects.find(
-            (s) => s.name === selectedSubject.name,
+            (s) => s.name === this.formData.subject,
           );
           if (subjectTemplate) {
             this.templateSubtopics = subjectTemplate.subtopics;
@@ -243,7 +239,7 @@ export default defineComponent({
         } else {
           await store.createReport({
             grade: this.formData.grade as number,
-            subjectId: this.formData.subjectId,
+            subject: this.formData.subject,
             subtopicScores: this.formData.subtopicScores,
           });
         }

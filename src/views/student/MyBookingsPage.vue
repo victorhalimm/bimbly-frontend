@@ -75,7 +75,9 @@
           :booking="booking"
           view-as="student"
           @view="handleView"
+          @viewSummary="openViewSummaryModal"
           @cancel="openCancelModal"
+          @studentComplete="openStudentCompleteModal"
           @review="handleReview"
         />
       </div>
@@ -148,6 +150,24 @@
         </div>
       </div>
     </div>
+
+    <StudentCompleteModal
+      v-if="showStudentCompleteModal && selectedBookingId"
+      ref="studentCompleteModal"
+      :booking-id="selectedBookingId"
+      :submitting="completing"
+      @close="closeStudentCompleteModal"
+      @confirm="handleStudentComplete"
+      @review="handleReviewFromModal"
+    />
+
+    <ViewSessionSummaryModal
+      v-if="showViewSummaryModal"
+      :summary="sessionSummary"
+      :loading="loadingSummary"
+      view-as="student"
+      @close="closeViewSummaryModal"
+    />
   </div>
 </template>
 
@@ -155,8 +175,12 @@
 import { defineComponent } from 'vue';
 import { useBookingStore } from '@/stores/booking.store';
 import { useToast } from '@/composables/useToast';
+import { sessionSummariesService } from '@/services/session-summaries.service';
 import BookingCard from '@/components/booking/BookingCard.vue';
+import StudentCompleteModal from '@/components/booking/StudentCompleteModal.vue';
+import ViewSessionSummaryModal from '@/components/booking/ViewSessionSummaryModal.vue';
 import type { Booking } from '@/services/booking.service';
+import type { SessionSummary } from '@/services/session-summaries.service';
 
 interface TabItem {
   value: string;
@@ -168,6 +192,8 @@ export default defineComponent({
   name: 'MyBookingsPage',
   components: {
     BookingCard,
+    StudentCompleteModal,
+    ViewSessionSummaryModal,
   },
   setup() {
     const toast = useToast();
@@ -177,9 +203,15 @@ export default defineComponent({
     return {
       activeTab: 'all',
       showCancelModal: false,
+      showStudentCompleteModal: false,
+      showViewSummaryModal: false,
       cancelBookingId: null as string | null,
+      selectedBookingId: null as string | null,
       cancelReason: '',
       cancelling: false,
+      completing: false,
+      sessionSummary: null as SessionSummary | null,
+      loadingSummary: false,
     };
   },
   computed: {
@@ -315,8 +347,52 @@ export default defineComponent({
         this.cancelling = false;
       }
     },
+    openStudentCompleteModal(bookingId: string) {
+      this.selectedBookingId = bookingId;
+      this.showStudentCompleteModal = true;
+    },
+    closeStudentCompleteModal() {
+      this.showStudentCompleteModal = false;
+      this.selectedBookingId = null;
+    },
+    async handleStudentComplete(bookingId: string) {
+      this.completing = true;
+      try {
+        await this.bookingStore.studentCompleteBooking(bookingId);
+        this.toast.success('Session Completed', 'Thank you for confirming the session');
+        const modal = this.$refs.studentCompleteModal as { markAsCompleted: () => void } | undefined;
+        if (modal) {
+          modal.markAsCompleted();
+        }
+      } catch {
+        this.toast.error('Error', 'Failed to complete session');
+      } finally {
+        this.completing = false;
+      }
+    },
+    handleReviewFromModal(bookingId: string) {
+      this.closeStudentCompleteModal();
+      this.$router.push(`/student/reviews/write?bookingId=${bookingId}`);
+    },
     handleReview(bookingId: string) {
       this.$router.push(`/student/reviews/write?bookingId=${bookingId}`);
+    },
+    async openViewSummaryModal(bookingId: string) {
+      this.showViewSummaryModal = true;
+      this.loadingSummary = true;
+      this.sessionSummary = null;
+
+      try {
+        this.sessionSummary = await sessionSummariesService.getByBooking(bookingId);
+      } catch {
+        this.toast.error('Error', 'Failed to load session summary');
+      } finally {
+        this.loadingSummary = false;
+      }
+    },
+    closeViewSummaryModal() {
+      this.showViewSummaryModal = false;
+      this.sessionSummary = null;
     },
   },
 });

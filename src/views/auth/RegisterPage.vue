@@ -662,6 +662,7 @@ import {
 import { authService } from '@/services/auth.service';
 import logoBox from '@assets/images/logo/logo-box.png';
 import WeeklyAvailabilityInput from '@/components/tutor/WeeklyAvailabilityInput.vue';
+import { SUBJECT_NAMES } from '@/config';
 import type { AvailabilitySchedule } from '@/types/availability';
 import { useToast } from '@/composables/useToast';
 
@@ -775,20 +776,7 @@ export default defineComponent({
         },
       } as FormData,
       errors: {} as FormErrors,
-      availableSubjects: [
-        'Mathematics',
-        'Physics',
-        'Chemistry',
-        'Biology',
-        'English',
-        'Indonesian',
-        'History',
-        'Geography',
-        'Economics',
-        'Computer Science',
-        'Music',
-        'Art',
-      ],
+      availableSubjects: SUBJECT_NAMES,
     };
   },
   computed: {
@@ -1027,10 +1015,10 @@ export default defineComponent({
               certifications: certifications,
             },
           });
+          this.toast.info("Application Received!", "We're reviewing your application. You'll be able to start teaching as soon as it's approved.", 10000)
         }
 
         this.showSuccess = true;
-        this.toast.info("Application Received!", "We're reviewing your application. You'll be able to start teaching as soon as it's approved.", 10000)
         setTimeout(() => {
           this.$router.push('/login');
         }, 300);

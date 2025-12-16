@@ -30,14 +30,17 @@
               <label for="subject" class="block text-sm font-semibold text-gray-700 mb-2">
                 Subject <span class="text-red-500">*</span>
               </label>
-              <input
+              <select
                 id="subject"
                 v-model="formData.subject"
-                type="text"
                 required
-                placeholder="e.g., Mathematics"
                 class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all"
-              />
+              >
+                <option value="" disabled>Select a subject</option>
+                <option v-for="subject in availableSubjects" :key="subject" :value="subject">
+                  {{ subject }}
+                </option>
+              </select>
             </div>
           </div>
 
@@ -161,6 +164,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useQuizStore } from '../../stores/quiz.store';
+import { SUBJECT_NAMES } from '@/config';
 import QuestionBuilder from '../../components/quiz/QuestionBuilder.vue';
 import type { QuizQuestion } from '../../services/quiz-templates.service';
 
@@ -179,7 +183,7 @@ export default defineComponent({
   components: {
     QuestionBuilder,
   },
-  data(): { formData: FormData; gradeLevelsInput: string; loading: boolean } {
+  data(): { formData: FormData; gradeLevelsInput: string; loading: boolean; availableSubjects: string[] } {
     return {
       formData: {
         title: '',
@@ -192,6 +196,7 @@ export default defineComponent({
       },
       gradeLevelsInput: '',
       loading: false,
+      availableSubjects: SUBJECT_NAMES,
     };
   },
   computed: {

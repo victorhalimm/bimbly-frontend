@@ -51,15 +51,41 @@
           </div>
         </div>
 
-        <div class="mt-4 flex items-center justify-between">
+        <div v-if="showLocationInfo" class="mt-3 p-3 bg-gray-50 rounded-xl">
+          <div class="flex items-center gap-2 text-sm">
+            <svg v-if="booking.teachingMethod === 'online'" class="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+            <svg v-else class="w-4 h-4 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span v-if="booking.teachingMethod === 'online' && booking.meetingUrl" class="text-gray-700 font-medium truncate">
+              <a :href="booking.meetingUrl" target="_blank" class="text-blue-600 hover:underline">{{ booking.meetingUrl }}</a>
+            </span>
+            <span v-else-if="booking.teachingMethod === 'offline' && booking.location" class="text-gray-700 font-medium">
+              {{ booking.location }}
+            </span>
+            <span v-else class="text-gray-400 italic">Location not set</span>
+          </div>
+        </div>
+
+        <div class="mt-4 flex items-center justify-between flex-wrap gap-2">
           <p class="text-lg font-bold text-blue-600">{{ formattedPrice }}</p>
-          <div class="flex gap-2">
+          <div class="flex gap-2 flex-wrap">
             <button
-              v-if="showViewButton"
+              v-if="showViewPaymentButton"
               class="px-4 py-2 text-sm font-semibold text-blue-600 bg-blue-50 rounded-full hover:bg-blue-100 transition-colors"
-              @click="$emit('view', booking.bookingId)"
+              @click="$emit('viewPayment', booking.bookingId)"
             >
-              View
+              View Payment
+            </button>
+            <button
+              v-if="showViewSummaryButton"
+              class="px-4 py-2 text-sm font-semibold text-purple-600 bg-purple-50 rounded-full hover:bg-purple-100 transition-colors"
+              @click="$emit('viewSummary', booking.bookingId)"
+            >
+              View Summary
             </button>
             <button
               v-if="showCancelButton"
@@ -76,11 +102,18 @@
               Confirm
             </button>
             <button
-              v-if="showCompleteButton"
+              v-if="showTutorCompleteButton"
               class="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-colors"
               @click="$emit('complete', booking.bookingId)"
             >
               Complete
+            </button>
+            <button
+              v-if="showStudentCompleteButton"
+              class="px-4 py-2 text-sm font-semibold text-white bg-green-500 rounded-full hover:bg-green-600 transition-colors"
+              @click="$emit('studentComplete', booking.bookingId)"
+            >
+              Confirm Complete
             </button>
             <button
               v-if="showReviewButton"
@@ -120,7 +153,7 @@ export default defineComponent({
       default: 'student',
     },
   },
-  emits: ['view', 'cancel', 'confirm', 'complete', 'review'],
+  emits: ['view', 'viewPayment', 'viewSummary', 'cancel', 'confirm', 'complete', 'studentComplete', 'review'],
   computed: {
     userName(): string {
       return this.viewAs === 'student'
@@ -161,6 +194,9 @@ export default defineComponent({
       return classes[this.booking.status] || 'bg-gray-100 text-gray-700';
     },
     statusLabel(): string {
+      if (this.booking.status === 'confirmed' && this.booking.tutorCompleted && !this.booking.studentCompleted) {
+        return 'Awaiting Confirmation';
+      }
       const labels: Record<BookingStatus, string> = {
         pending_payment: 'Pending',
         confirmed: 'Confirmed',
@@ -169,10 +205,30 @@ export default defineComponent({
       };
       return labels[this.booking.status] || this.booking.status;
     },
-    showViewButton(): boolean {
-      return true;
+    isSessionEnded(): boolean {
+      const bookingEnd = new Date(
+        `${this.booking.bookingDate}T${this.booking.startTime}`,
+      );
+      bookingEnd.setHours(bookingEnd.getHours() + this.booking.durationHours);
+      return new Date() >= bookingEnd;
+    },
+    showLocationInfo(): boolean {
+      return this.booking.status === 'confirmed';
+    },
+    showViewPaymentButton(): boolean {
+      return (
+        this.viewAs === 'tutor' &&
+        this.booking.status === 'pending_payment'
+      );
+    },
+    showViewSummaryButton(): boolean {
+      return (
+        (this.booking.status === 'completed' ||
+          (this.booking.status === 'confirmed' && this.booking.tutorCompleted))
+      );
     },
     showCancelButton(): boolean {
+      if (this.booking.tutorCompleted) return false;
       return (
         this.booking.status === 'pending_payment' ||
         this.booking.status === 'confirmed'
@@ -183,15 +239,20 @@ export default defineComponent({
         this.viewAs === 'tutor' && this.booking.status === 'pending_payment'
       );
     },
-    showCompleteButton(): boolean {
+    showTutorCompleteButton(): boolean {
       if (this.viewAs !== 'tutor' || this.booking.status !== 'confirmed') {
         return false;
       }
-      const bookingEnd = new Date(
-        `${this.booking.bookingDate}T${this.booking.startTime}`,
-      );
-      bookingEnd.setHours(bookingEnd.getHours() + this.booking.durationHours);
-      return new Date() >= bookingEnd;
+      if (this.booking.tutorCompleted) {
+        return false;
+      }
+      return this.isSessionEnded;
+    },
+    showStudentCompleteButton(): boolean {
+      if (this.viewAs !== 'student' || this.booking.status !== 'confirmed') {
+        return false;
+      }
+      return this.booking.tutorCompleted && !this.booking.studentCompleted;
     },
     showReviewButton(): boolean {
       return (
