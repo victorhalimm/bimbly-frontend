@@ -662,6 +662,7 @@ import {
 import { authService } from '@/services/auth.service';
 import logoBox from '@assets/images/logo/logo-box.png';
 import WeeklyAvailabilityInput from '@/components/tutor/WeeklyAvailabilityInput.vue';
+import { SUBJECT_NAMES } from '@/config';
 import type { AvailabilitySchedule } from '@/types/availability';
 import { useToast } from '@/composables/useToast';
 
@@ -775,20 +776,7 @@ export default defineComponent({
         },
       } as FormData,
       errors: {} as FormErrors,
-      availableSubjects: [
-        'Mathematics',
-        'Physics',
-        'Chemistry',
-        'Biology',
-        'English',
-        'Indonesian',
-        'History',
-        'Geography',
-        'Economics',
-        'Computer Science',
-        'Music',
-        'Art',
-      ],
+      availableSubjects: SUBJECT_NAMES,
     };
   },
   computed: {

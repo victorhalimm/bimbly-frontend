@@ -8,7 +8,7 @@ export interface SubtopicScores {
 
 export interface CreateAcademicReportDto {
   grade: number;
-  subjectId: string;
+  subject: string;
   subtopicScores: SubtopicScores;
 }
 
@@ -20,11 +20,7 @@ export interface AcademicReport {
   id: string;
   studentId: string;
   grade: number;
-  subjectId: string;
-  subject: {
-    id: string;
-    name: string;
-  };
+  subject: string;
   subtopicScores: SubtopicScores;
   averageScore: number;
   createdAt: string;

@@ -45,18 +45,24 @@
           <form @submit.prevent="handleSubmit" class="space-y-6">
             <div>
               <label for="studentId" class="block text-sm font-semibold text-gray-700 mb-2">
-                Student ID <span class="text-red-500">*</span>
+                Student <span class="text-red-500">*</span>
               </label>
-              <input
+              <select
                 id="studentId"
                 v-model="formData.studentId"
-                type="text"
                 required
-                placeholder="Enter student profile ID"
+                :disabled="loadingStudents"
                 class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all"
-              />
-              <p class="mt-2 text-sm text-gray-500">
-                You can find the student ID from your tutoring session records
+              >
+                <option value="" disabled>
+                  {{ loadingStudents ? 'Loading students...' : 'Select a student' }}
+                </option>
+                <option v-for="student in students" :key="student.id" :value="student.id">
+                  {{ student.fullName }}
+                </option>
+              </select>
+              <p v-if="students.length === 0 && !loadingStudents" class="mt-2 text-sm text-yellow-600">
+                No students found. You need to have completed sessions with students first.
               </p>
             </div>
 
@@ -119,7 +125,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useQuizStore } from '../../stores/quiz.store';
+import { studentService } from '../../services/student.service';
 import type { QuizTemplate } from '../../services/quiz-templates.service';
+import type { TutoredStudent } from '../../services/student.service';
 
 interface FormData {
   studentId: string;
@@ -132,6 +140,8 @@ interface ComponentData {
   submitting: boolean;
   submitError: string | null;
   submitSuccess: boolean;
+  students: TutoredStudent[];
+  loadingStudents: boolean;
 }
 
 export default defineComponent({
@@ -146,6 +156,8 @@ export default defineComponent({
       submitting: false,
       submitError: null,
       submitSuccess: false,
+      students: [],
+      loadingStudents: false,
     };
   },
   computed: {
@@ -169,8 +181,19 @@ export default defineComponent({
     if (!this.template) {
       await this.store.fetchTemplate(this.templateId);
     }
+    await this.fetchStudents();
   },
   methods: {
+    async fetchStudents() {
+      this.loadingStudents = true;
+      try {
+        this.students = await studentService.getTutoredStudents();
+      } catch (error: any) {
+        console.error('Failed to fetch students:', error);
+      } finally {
+        this.loadingStudents = false;
+      }
+    },
     async handleSubmit() {
       this.submitting = true;
       this.submitError = null;

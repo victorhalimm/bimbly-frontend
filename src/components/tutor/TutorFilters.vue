@@ -229,6 +229,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { SUBJECT_NAMES, PROVINCE_NAMES } from '@/config';
 import type { FilterData } from '@/types/tutor';
 
 export default defineComponent({
@@ -249,33 +250,8 @@ export default defineComponent({
         location: false,
         price: false,
       } as Record<string, boolean>,
-      subjects: [
-        'Matematika',
-        'Fisika',
-        'Kimia',
-        'Biologi',
-        'Bahasa Indonesia',
-        'Bahasa Inggris',
-        'IPA',
-        'IPS',
-        'Ekonomi',
-        'Geografi',
-        'Sejarah',
-        'PKN',
-        'Informatika',
-      ],
-      provinces: [
-        'DKI Jakarta',
-        'Jawa Barat',
-        'Jawa Tengah',
-        'Jawa Timur',
-        'Banten',
-        'Yogyakarta',
-        'Bali',
-        'Sumatera Utara',
-        'Sumatera Selatan',
-        'Sulawesi Selatan',
-      ],
+      subjects: SUBJECT_NAMES,
+      provinces: PROVINCE_NAMES,
     };
   },
   watch: {

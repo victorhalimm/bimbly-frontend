@@ -6,11 +6,9 @@ import {
   type UpdateAcademicReportDto,
   type CurriculumTemplate,
 } from '../services/academic-reports.service';
-import { subjectsService } from '../services/subjects.service';
 
 export interface AcademicReportsState {
   reports: AcademicReport[];
-  subjects: Array<{ id: string; name: string }>;
   loading: boolean;
   error: string | null;
 }
@@ -18,7 +16,6 @@ export interface AcademicReportsState {
 export const useAcademicReportsStore = defineStore('academicReports', {
   state: (): AcademicReportsState => ({
     reports: [],
-    subjects: [],
     loading: false,
     error: null,
   }),
@@ -27,9 +24,9 @@ export const useAcademicReportsStore = defineStore('academicReports', {
     reportsByGrade: (state) => (grade: number) => {
       return state.reports.filter((r) => r.grade === grade);
     },
-    reportBySubject: (state) => (grade: number, subjectId: string) => {
+    reportBySubject: (state) => (grade: number, subject: string) => {
       return state.reports.find(
-        (r) => r.grade === grade && r.subjectId === subjectId,
+        (r) => r.grade === grade && r.subject === subject,
       );
     },
   },
@@ -45,15 +42,6 @@ export const useAcademicReportsStore = defineStore('academicReports', {
         throw error;
       } finally {
         this.loading = false;
-      }
-    },
-
-    async fetchSubjects() {
-      try {
-        this.subjects = await subjectsService.getAll();
-      } catch (error: any) {
-        this.error = error.response?.data?.message || 'Failed to fetch subjects';
-        throw error;
       }
     },
 

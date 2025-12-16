@@ -406,6 +406,7 @@ import { useTutorStore } from '@/stores/tutor.store';
 import { useToast } from '@/composables/useToast';
 import TutorCard from '@/components/tutor/TutorCard.vue';
 import Navbar from '@/components/common/layout/Navbar.vue';
+import { SUBJECT_NAMES, PROVINCE_NAMES } from '@/config';
 import type { FilterData } from '@/types/filters';
 
 export default defineComponent({
@@ -423,33 +424,8 @@ export default defineComponent({
       searchQuery: '',
       filters: { province: '' } as FilterData,
       openFilter: null as string | null,
-      subjects: [
-        'Matematika',
-        'Fisika',
-        'Kimia',
-        'Biologi',
-        'Bahasa Indonesia',
-        'Bahasa Inggris',
-        'IPA',
-        'IPS',
-        'Ekonomi',
-        'Geografi',
-        'Sejarah',
-        'PKN',
-        'Informatika',
-      ],
-      provinces: [
-        'DKI Jakarta',
-        'Jawa Barat',
-        'Jawa Tengah',
-        'Jawa Timur',
-        'Banten',
-        'Yogyakarta',
-        'Bali',
-        'Sumatera Utara',
-        'Sumatera Selatan',
-        'Sulawesi Selatan',
-      ],
+      subjects: SUBJECT_NAMES,
+      provinces: PROVINCE_NAMES,
     };
   },
   computed: {

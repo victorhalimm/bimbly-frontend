@@ -59,7 +59,6 @@
 import { defineComponent } from 'vue';
 
 export interface SubjectData {
-  id: string;
   name: string;
   subtopicScores: Record<string, number>;
   averageScore: number;

@@ -51,7 +51,7 @@
         <div>
           <label class="block text-sm font-bold text-gray-700 mb-2">
             Assign Homework Quiz
-          </label>
+          </label>  
           <div v-if="loadingTemplates" class="flex items-center gap-2 text-gray-500 py-3">
             <div class="w-5 h-5 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
             <span>Loading quiz templates...</span>

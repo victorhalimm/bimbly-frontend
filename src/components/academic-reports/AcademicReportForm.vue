@@ -114,7 +114,7 @@
 
       <div v-if="isEdit" class="bg-blue-50 rounded-2xl p-4 mb-4">
         <p class="text-sm text-gray-600">
-          <span class="font-bold">Subject:</span> {{ report?.subject.name }}
+          <span class="font-bold">Subject:</span> {{ report?.subject }}
         </p>
         <p class="text-sm text-gray-600">
           <span class="font-bold">Grade:</span> {{ report?.grade }}
@@ -223,7 +223,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useAcademicReportsStore } from '../../stores/academic-reports.store';
-import { subjectsService } from '../../services/subjects.service';
 import type { AcademicReport, CurriculumTemplate } from '../../services/academic-reports.service';
 import type { SubtopicEntry } from '../../types/academic-reports';
 
@@ -233,10 +232,6 @@ export default defineComponent({
     report: {
       type: Object as () => AcademicReport | null,
       default: null,
-    },
-    subjects: {
-      type: Array as () => Array<{ id: string; name: string }>,
-      required: true,
     },
     defaultGrade: {
       type: Number,
@@ -389,26 +384,19 @@ export default defineComponent({
         if (this.isEdit && this.report) {
           await store.updateReport(this.report.id, { subtopicScores });
         } else {
-          const subjectName = this.entryMethod === 'template'
+          const subject = this.entryMethod === 'template'
             ? this.selectedTemplateSubject
             : this.customSubjectName.trim();
 
-          let subjectId: string | undefined = this.subjects.find(s => s.name === subjectName)?.id;
-
-          if (!subjectId) {
-            const newSubject = await subjectsService.create(subjectName);
-            subjectId = newSubject.id;
-            await store.fetchSubjects();
-          }
-
-          if (!subjectId) {
-            this.formError = 'Failed to find or create subject';
+          if (!subject) {
+            this.formError = 'Please select or enter a subject name';
+            this.saving = false;
             return;
           }
 
           await store.createReport({
             grade: this.formData.grade as number,
-            subjectId: subjectId,
+            subject,
             subtopicScores,
           });
         }

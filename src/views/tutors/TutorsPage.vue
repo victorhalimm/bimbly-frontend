@@ -227,6 +227,7 @@ import { defineComponent } from 'vue';
 import { useTutorStore } from '@/stores/tutor.store';
 import { useToast } from '@/composables/useToast';
 import TutorCard from '@/components/tutor/TutorCard.vue';
+import { SUBJECTS } from '@/config';
 import {
   IconLanguage,
   IconMath,
@@ -271,21 +272,11 @@ export default defineComponent({
     return {
       searchQuery: '',
       selectedSubject: null as string | null,
-      subjectFilters: [
-        { name: 'Matematika', label: 'Matematika', icon: 'IconMath' },
-        { name: 'Fisika', label: 'Fisika', icon: 'IconRocket' },
-        { name: 'Kimia', label: 'Kimia', icon: 'IconFlask2' },
-        { name: 'Biologi', label: 'Biologi', icon: 'IconPlant' },
-        { name: 'Bahasa Indonesia', label: 'Bahasa Indonesia', icon: 'IconLanguage' },
-        { name: 'Bahasa Inggris', label: 'Bahasa Inggris', icon: 'IconLetterA' },
-        { name: 'IPA', label: 'IPA', icon: 'IconAtom' },
-        { name: 'IPS', label: 'IPS', icon: 'IconVocabulary' },
-        { name: 'Ekonomi', label: 'Ekonomi', icon: 'IconCoin' },
-        { name: 'Geografi', label: 'Geografi', icon: 'IconWorld' },
-        { name: 'Sejarah', label: 'Sejarah', icon: 'IconArticle' },
-        { name: 'PKN', label: 'PKN', icon: 'IconFriends' },
-        { name: 'Informatika', label: 'Informatika', icon: 'IconDeviceDesktop' },
-      ],
+      subjectFilters: SUBJECTS.map(s => ({
+        name: s.name,
+        label: s.label,
+        icon: s.iconName,
+      })),
       canScrollLeft: false,
       canScrollRight: false,
     };

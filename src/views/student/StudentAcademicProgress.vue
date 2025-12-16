@@ -117,7 +117,7 @@
 
                   <div class="relative z-10">
                     <div class="flex items-start justify-between mb-4">
-                      <h4 class="text-xl font-black text-gray-900">{{ report.subject.name }}</h4>
+                      <h4 class="text-xl font-black text-gray-900">{{ report.subject }}</h4>
                       <div class="flex gap-2">
                         <button
                           @click.stop="editReport(report)"
@@ -183,7 +183,6 @@
       <div class="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <AcademicReportForm
           :report="editingReport"
-          :subjects="subjects"
           :default-grade="selectedGrade"
           @cancel="closeForm"
           @success="onFormSuccess"
@@ -245,9 +244,6 @@ export default defineComponent({
     reports(): AcademicReport[] {
       return this.store.reports;
     },
-    subjects() {
-      return this.store.subjects;
-    },
     loading(): boolean {
       return this.store.loading;
     },
@@ -295,10 +291,7 @@ export default defineComponent({
     },
     async loadData() {
       try {
-        await Promise.all([
-          this.store.fetchReports(),
-          this.store.fetchSubjects(),
-        ]);
+        await this.store.fetchReports();
       } catch (err: any) {
         this.toast.error('Load Failed', err.message || 'Failed to load academic data');
       }
