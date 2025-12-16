@@ -979,11 +979,11 @@ export default defineComponent({
             password: this.form.password,
             fullName: this.form.fullName,
             phoneNumber: this.form.phoneNumber,
+            city: this.form.studentProfile.city,
+            province: this.form.studentProfile.province,
             studentProfile: {
               currentGrade: this.form.studentProfile.currentGrade as number,
               schoolName: this.form.studentProfile.schoolName,
-              city: this.form.studentProfile.city,
-              province: this.form.studentProfile.province,
               address: this.form.studentProfile.address || undefined,
             },
           });
@@ -1000,6 +1000,8 @@ export default defineComponent({
             password: this.form.password,
             fullName: this.form.fullName,
             phoneNumber: this.form.phoneNumber,
+            city: this.form.tutorProfile.city,
+            province: this.form.tutorProfile.province,
             tutorProfile: {
               bio: this.form.tutorProfile.bio,
               educationBackground: this.form.tutorProfile.educationBackground,
@@ -1009,8 +1011,6 @@ export default defineComponent({
               gradeLevels: this.form.tutorProfile.gradeLevels,
               teachingMethods: this.form.tutorProfile.teachingMethods,
               hourlyRate: this.form.tutorProfile.hourlyRate,
-              city: this.form.tutorProfile.city,
-              province: this.form.tutorProfile.province,
               availabilitySchedule: this.form.tutorProfile.availabilitySchedule || undefined,
               certifications: certifications,
             },

@@ -53,7 +53,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { tutorService } from '@/services/tutor.service';
 import type { TimeSlot } from '@/services/tutor.service';
 import TimeSlotChip from './TimeSlotChip.vue';
@@ -131,8 +130,8 @@ export default defineComponent({
 
       try {
         const response = await tutorService.getAvailableSlots(this.tutorId, this.date);
-        this.slots = this.getMockSlots();
-      } catch (err: any) {
+        this.slots = response.slots.length > 0 ? response.slots : this.getMockSlots();
+      } catch {
         this.slots = this.getMockSlots();
       } finally {
         this.loading = false;

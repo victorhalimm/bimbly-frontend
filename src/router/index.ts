@@ -163,6 +163,19 @@ const routes : RouteType[] = [
     },
   },
 
+  // ==================== Student - Reviews ====================
+  {
+    path: '/student/reviews/write',
+    name: 'WriteReview',
+    component: () => import('../views/student/WriteReview.vue'),
+    meta: {
+      requiresAuth: true,
+      roles: ['student'],
+      navbar: { show: true, hideOnTop: false },
+      footer: { show: true, backgroundColor: '#ffffff' },
+    },
+  },
+
   // ==================== Student - Quiz System ====================
   {
     path: '/student/quizzes',
@@ -358,7 +371,7 @@ const routes : RouteType[] = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior(to, from, savedPosition) {
+  scrollBehavior(to, _from, savedPosition) {
     if (savedPosition) {
       return savedPosition;
     }

@@ -74,6 +74,7 @@
           :key="booking.bookingId"
           :booking="booking"
           view-as="student"
+          :has-reviewed-tutor="hasReviewedTutor(booking.tutor.id)"
           @view="handleView"
           @viewSummary="openViewSummaryModal"
           @cancel="openCancelModal"
@@ -176,6 +177,7 @@ import { defineComponent } from 'vue';
 import { useBookingStore } from '@/stores/booking.store';
 import { useToast } from '@/composables/useToast';
 import { sessionSummariesService } from '@/services/session-summaries.service';
+import { reviewsService } from '@/services/reviews.service';
 import BookingCard from '@/components/booking/BookingCard.vue';
 import StudentCompleteModal from '@/components/booking/StudentCompleteModal.vue';
 import ViewSessionSummaryModal from '@/components/booking/ViewSessionSummaryModal.vue';
@@ -212,6 +214,7 @@ export default defineComponent({
       completing: false,
       sessionSummary: null as SessionSummary | null,
       loadingSummary: false,
+      reviewedTutorIds: new Set<string>(),
     };
   },
   computed: {
@@ -314,6 +317,24 @@ export default defineComponent({
     async loadBookings() {
       this.bookingStore.resetFilters();
       await this.bookingStore.fetchBookings();
+      await this.loadReviewedTutors();
+    },
+    async loadReviewedTutors() {
+      const completedBookings = this.bookings.filter(b => b.status === 'completed');
+      const uniqueTutorIds = [...new Set(completedBookings.map(b => b.tutor.id))];
+
+      for (const tutorId of uniqueTutorIds) {
+        try {
+          const result = await reviewsService.checkReview(tutorId);
+          if (result.hasReviewed) {
+            this.reviewedTutorIds.add(tutorId);
+          }
+        } catch {
+        }
+      }
+    },
+    hasReviewedTutor(tutorId: string): boolean {
+      return this.reviewedTutorIds.has(tutorId);
     },
     handleTabChange(tab: string) {
       this.activeTab = tab;

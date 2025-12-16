@@ -46,11 +46,11 @@
           <div class="flex items-center gap-4">
             <img
               :src="tutorAvatar"
-              :alt="tutor.user?.fullName"
+              :alt="tutor.fullName"
               class="w-20 h-20 rounded-full object-cover bg-blue-100"
             />
             <div class="flex-1">
-              <h2 class="text-xl font-bold text-gray-900">{{ tutor.user?.fullName }}</h2>
+              <h2 class="text-xl font-bold text-gray-900">{{ tutor.fullName }}</h2>
               <p class="text-gray-500">{{ tutor.city }}</p>
               <div class="flex items-center gap-2 mt-1">
                 <div class="flex items-center gap-1">
@@ -293,10 +293,10 @@ export default defineComponent({
       return this.$route.params.tutorId as string;
     },
     tutorAvatar(): string {
-      if (this.tutor?.user?.profileImageUrl) {
-        return this.tutor.user.profileImageUrl;
+      if (this.tutor?.profileImageUrl) {
+        return this.tutor.profileImageUrl;
       }
-      const name = this.tutor?.user?.fullName || 'Tutor';
+      const name = this.tutor?.fullName || 'Tutor';
       return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=3b82f6&color=fff`;
     },
     formattedHourlyRate(): string {

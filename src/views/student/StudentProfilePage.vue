@@ -282,6 +282,8 @@ export default {
           this.form.fullName = this.authStore.user.fullName || '';
           this.form.email = this.authStore.user.email || '';
           this.form.phoneNumber = this.authStore.user.phoneNumber || '';
+          this.form.city = this.authStore.user.city || '';
+          this.form.province = this.authStore.user.province || '';
           if (this.authStore.user.profileImageUrl) {
             this.avatarPreview = this.authStore.user.profileImageUrl;
           }
@@ -293,8 +295,6 @@ export default {
         if (this.profile) {
           this.form.currentGrade = this.profile.currentGrade || 10;
           this.form.schoolName = this.profile.schoolName || '';
-          this.form.city = this.profile.city || '';
-          this.form.province = this.profile.province || '';
           this.form.address = this.profile.address || '';
         }
       } catch (err) {

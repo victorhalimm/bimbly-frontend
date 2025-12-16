@@ -6,7 +6,7 @@ export interface CreateReviewDto {
   tutorId: string;
   rating: number;
   reviewTitle: string;
-  reviewText?: string;
+  reviewText: string;
 }
 
 export interface RatingDistribution {
@@ -74,5 +74,12 @@ export const reviewsService = {
     await axios.delete(`${API_URL}/reviews/${id}`, {
       withCredentials: true,
     });
+  },
+
+  async checkReview(tutorUserId: string): Promise<{ hasReviewed: boolean }> {
+    const response = await axios.get(`${API_URL}/reviews/check/${tutorUserId}`, {
+      withCredentials: true,
+    });
+    return response.data;
   },
 };

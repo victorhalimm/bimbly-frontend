@@ -231,8 +231,8 @@ export default defineComponent({
 
         this.booking = {
           id: bookingData.bookingId,
-          tutorName: bookingData.tutorName,
-          tutorImageUrl: bookingData.tutorImageUrl || null,
+          tutorName: bookingData.tutor.fullName,
+          tutorImageUrl: bookingData.tutor.profileImageUrl || null,
           subject: bookingData.subject,
           bookingDate: bookingData.bookingDate,
           startTime: bookingData.startTime,

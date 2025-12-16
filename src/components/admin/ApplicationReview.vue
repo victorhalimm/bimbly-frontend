@@ -18,11 +18,11 @@
           </div>
           <div class="flex">
             <span class="font-medium text-gray-500 w-24 flex-shrink-0">City:</span>
-            <span class="text-gray-900 flex-1 min-w-0 break-words">{{ application.tutorProfile.city }}</span>
+            <span class="text-gray-900 flex-1 min-w-0 break-words">{{ application.tutorProfile.user?.city }}</span>
           </div>
           <div class="flex">
             <span class="font-medium text-gray-500 w-24 flex-shrink-0">Province:</span>
-            <span class="text-gray-900 flex-1 min-w-0 break-words">{{ application.tutorProfile.province }}</span>
+            <span class="text-gray-900 flex-1 min-w-0 break-words">{{ application.tutorProfile.user?.province }}</span>
           </div>
         </div>
       </div>
