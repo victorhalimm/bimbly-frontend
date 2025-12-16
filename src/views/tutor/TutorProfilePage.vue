@@ -637,6 +637,8 @@ export default {
           this.form.fullName = this.authStore.user.fullName || '';
           this.form.email = this.authStore.user.email || '';
           this.form.phoneNumber = this.authStore.user.phoneNumber || '';
+          this.form.city = this.authStore.user.city || '';
+          this.form.province = this.authStore.user.province || '';
           if (this.authStore.user.profileImageUrl) {
             this.avatarPreview = this.authStore.user.profileImageUrl;
           }
@@ -653,8 +655,6 @@ export default {
           this.form.gradeLevels = this.profile.gradeLevels || [];
           this.form.teachingMethods = this.profile.teachingMethods || [];
           this.form.hourlyRate = parseInt(this.profile.hourlyRate) || 100000;
-          this.form.city = this.profile.city || '';
-          this.form.province = this.profile.province || '';
           this.form.availabilitySchedule = this.profile.availabilitySchedule || null;
         }
       } catch (err) {

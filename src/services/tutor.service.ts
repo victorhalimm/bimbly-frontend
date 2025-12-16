@@ -51,6 +51,10 @@ export interface TutorSearchResponse {
 export interface TutorProfile {
   id: string;
   userId: string;
+  fullName: string;
+  profileImageUrl?: string;
+  city: string;
+  province: string;
   bio: string;
   educationBackground: string;
   teachingExperienceYears: number;
@@ -59,21 +63,13 @@ export interface TutorProfile {
   gradeLevels: number[];
   teachingMethods: ('online' | 'offline')[];
   hourlyRate: number;
-  city: string;
-  province: string;
   certifications?: { name: string; fileUrl: string }[];
-  availabilitySchedule?: Record<string, { start: string; end: string }[]>;
+  availabilitySchedule?: { start: string; end: string; dayOfWeek: number }[];
   averageRating: number;
   totalReviews: number;
   totalSessions: number;
-  isApproved: boolean;
-  createdAt: string;
-  user: {
-    id: string;
-    fullName: string;
-    email: string;
-    profileImageUrl: string | null;
-  };
+  isApproved?: boolean;
+  createdAt?: string;
 }
 
 export interface TimeSlot {

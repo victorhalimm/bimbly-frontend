@@ -120,7 +120,7 @@
               <div class="aspect-square lg:aspect-auto lg:h-full bg-gradient-to-br from-blue-100 to-purple-100">
                 <img
                   :src="avatarUrl"
-                  :alt="tutor.user?.fullName"
+                  :alt="tutor.fullName"
                   class="w-full h-full object-cover"
                 />
               </div>
@@ -136,7 +136,7 @@
             <div class="lg:w-2/3 p-8 lg:p-10">
               <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
                 <div class="flex-1">
-                  <h1 class="text-3xl lg:text-4xl font-black text-gray-900 mb-2 break-words">{{ tutor.user?.fullName }}</h1>
+                  <h1 class="text-3xl lg:text-4xl font-black text-gray-900 mb-2 break-words">{{ tutor.fullName }}</h1>
 
                   <div class="flex items-center gap-3 mb-4">
                     <div class="flex items-center gap-1 bg-yellow-50 px-3 py-1.5 rounded-full">
@@ -155,7 +155,7 @@
                     </span>
                   </div>
 
-                  <p class="text-gray-600 leading-relaxed mb-6 line-clamp-3 break-all overflow-hidden">{{ tutor.bio }}</p>
+                  <p class="text-gray-600 leading-relaxed mb-6 line-clamp-3 break-words overflow-hidden">{{ tutor.bio }}</p>
 
                   <div class="flex flex-wrap gap-2 mb-6">
                     <span
@@ -215,7 +215,7 @@
                 </span>
                 About Me
               </h2>
-              <p class="text-gray-600 leading-relaxed whitespace-pre-line break-all overflow-hidden">{{ tutor.bio }}</p>
+              <p class="text-gray-600 leading-relaxed whitespace-pre-line break-words overflow-hidden">{{ tutor.bio }}</p>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 pt-6 border-t border-gray-100">
                 <div>
@@ -419,14 +419,14 @@
               What students say about this tutor
             </h2>
             <p class="text-gray-500 mb-8 max-w-lg mx-auto">
-              Discover feedback from students who have learned with {{ tutor.user?.fullName?.split(' ')[0] }}
+              Discover feedback from students who have learned with {{ tutor.fullName?.split(' ')[0] }}
             </p>
 
             <div class="flex justify-center items-center gap-10">
               <div class="flex justify-center items-center gap-3">
                 <div class="flex -space-x-3">
                   <div class="w-10 h-10 rounded-full bg-blue-200 border-2 border-white flex items-center justify-center">
-                    <span class="text-blue-700 font-bold text-sm">{{ tutor.user?.fullName?.charAt(0) }}</span>
+                    <span class="text-blue-700 font-bold text-sm">{{ tutor.fullName?.charAt(0) }}</span>
                   </div>
                   <div class="w-10 h-10 rounded-full bg-purple-200 border-2 border-white flex items-center justify-center">
                     <svg class="w-5 h-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -460,7 +460,7 @@
                 What students say about this tutor
               </h2>
               <p class="text-gray-500 mb-6">
-                Real feedback from students who have learned with {{ tutor.user?.fullName?.split(' ')[0] }}
+                Real feedback from students who have learned with {{ tutor.fullName?.split(' ')[0] }}
               </p>
               <button
                 v-if="tutor.totalReviews > 0"
@@ -543,10 +543,10 @@ export default defineComponent({
       return this.tutorStore.error;
     },
     avatarUrl(): string {
-      if (this.tutor?.user?.profileImageUrl) {
-        return this.tutor.user.profileImageUrl;
+      if (this.tutor?.profileImageUrl) {
+        return this.tutor.profileImageUrl;
       }
-      const name = this.tutor?.user?.fullName || 'Unknown';
+      const name = this.tutor?.fullName || 'Unknown';
       return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=3b82f6&color=fff&size=256`;
     },
     formattedPrice(): string {
@@ -582,7 +582,7 @@ export default defineComponent({
       return `Grade ${ranges.join(', ')}`;
     },
     memberSince(): string {
-      if (!this.tutor) return '';
+      if (!this.tutor || !this.tutor.createdAt) return '';
       return new Date(this.tutor.createdAt).toLocaleDateString('id-ID', {
         month: 'long',
         year: 'numeric',

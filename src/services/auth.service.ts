@@ -6,8 +6,6 @@ const API_URL = import.meta.env.VITE_API_URL;
 interface StudentProfileData {
   currentGrade: number;
   schoolName: string;
-  city: string;
-  province: string;
   address?: string;
 }
 
@@ -25,8 +23,6 @@ interface TutorProfileData {
   gradeLevels: number[];
   teachingMethods: ('online' | 'offline')[];
   hourlyRate: number;
-  city: string;
-  province: string;
   availabilitySchedule?: AvailabilitySchedule;
   certifications?: CertificationData[];
 }
@@ -48,6 +44,8 @@ export const authService = {
     password: string;
     fullName: string;
     phoneNumber: string;
+    city: string;
+    province: string;
     studentProfile: StudentProfileData;
   }) {
     const response = await axios.post(`${API_URL}/auth/register/student`, userData);
@@ -59,6 +57,8 @@ export const authService = {
     password: string;
     fullName: string;
     phoneNumber: string;
+    city: string;
+    province: string;
     tutorProfile: TutorProfileData;
   }) {
     const response = await axios.post(`${API_URL}/auth/register/tutor`, userData);

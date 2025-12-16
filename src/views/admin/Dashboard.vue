@@ -142,7 +142,7 @@
                 </div>
                 <div class="flex-1 min-w-0">
                   <p class="text-sm font-medium text-gray-900">{{ app.tutorProfile?.user?.fullName }}</p>
-                  <p class="text-xs text-gray-500">{{ app.tutorProfile?.experience }} years • {{ truncateSubjects(app.tutorProfile?.subjects) }}</p>
+                  <p class="text-xs text-gray-500">{{ app.tutorProfile?.teachingExperienceYears }} years • {{ truncateSubjects(app.tutorProfile?.subjects) }}</p>
                 </div>
                 <div class="flex items-center gap-3 flex-shrink-0">
                   <button
@@ -305,7 +305,7 @@ export default defineComponent({
       }
       return subjects;
     },
-    viewApplication(id: string) {
+    viewApplication(_id: string) {
       this.$router.push(`/admin/tutor-applications`);
     },
     async approveApplication(id: string) {

@@ -152,6 +152,10 @@ export default defineComponent({
       type: String as () => 'student' | 'tutor',
       default: 'student',
     },
+    hasReviewedTutor: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ['view', 'viewPayment', 'viewSummary', 'cancel', 'confirm', 'complete', 'studentComplete', 'review'],
   computed: {
@@ -256,7 +260,9 @@ export default defineComponent({
     },
     showReviewButton(): boolean {
       return (
-        this.viewAs === 'student' && this.booking.status === 'completed'
+        this.viewAs === 'student' &&
+        this.booking.status === 'completed' &&
+        !this.hasReviewedTutor
       );
     },
     showJoinButton(): boolean {
