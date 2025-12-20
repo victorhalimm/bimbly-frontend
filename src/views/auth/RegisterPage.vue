@@ -29,7 +29,7 @@
           <!-- Step 1: Role Selection -->
           <div v-if="currentStep === 1">
             <h1 class="text-3xl lg:text-4xl font-black text-gray-900 mb-3">
-              Welcome to <span class="text-blue-600" style="font-family: 'Comic Sans MS', cursive; font-style: italic;">Bimbly</span>
+              Welcome to <span class="text-blue-600">Bimbly</span>
             </h1>
             <p class="text-lg text-gray-600 mb-8">How would you like to join us?</p>
 

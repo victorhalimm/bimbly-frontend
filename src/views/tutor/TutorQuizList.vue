@@ -152,6 +152,7 @@ import {
   IconAlertTriangle,
 } from '@tabler/icons-vue';
 import type { QuizTemplate } from '../../services/quiz-templates.service';
+import { useToast } from '@/composables/useToast';
 
 interface ComponentData {
   showDeleteModal: boolean;
@@ -167,6 +168,10 @@ export default defineComponent({
     IconFileDescription,
     IconTrash,
     IconAlertTriangle,
+  },
+  setup() {
+    const toast = useToast();
+    return { toast };
   },
   data(): ComponentData {
     return {
@@ -220,9 +225,10 @@ export default defineComponent({
         await this.store.deleteTemplate(this.templateToDelete.id);
         this.showDeleteModal = false;
         this.templateToDelete = null;
+        this.toast.success('Quiz Deleted', 'Quiz has been deleted successfully.');
       } catch (error: unknown) {
         const message = error instanceof Error ? error.message : 'Failed to delete quiz';
-        alert(message);
+        this.toast.error('Failed to Delete Quiz', message);
       } finally {
         this.deleting = false;
       }

@@ -113,7 +113,7 @@ const routes : RouteType[] = [
       requiresAuth: true,
       roles: ['student'],
       navbar: { show: true, hideOnTop: false },
-      footer: { show: true, backgroundColor: '#ffffff' },
+      footer: { show: true, backgroundColor: '#eff6ff' },
     },
   },
   {
@@ -124,7 +124,7 @@ const routes : RouteType[] = [
       requiresAuth: true,
       roles: ['student'],
       navbar: { show: true, hideOnTop: false },
-      footer: { show: true, backgroundColor: '#ffffff' },
+      footer: { show: true, backgroundColor: '#eff6ff' },
     },
   },
 
@@ -205,12 +205,12 @@ const routes : RouteType[] = [
     component: () => import('../views/student/QuizResults.vue'),
     meta: {
       requiresAuth: true,
-      roles: ['student'],
+      roles: ['student', 'tutor'],
       navbar: { show: true, hideOnTop: false },
       footer: { show: true, backgroundColor: '#ffffff' },
     }
   },
-  // ==================== Tutor - Profiles ====================
+  // ==================== Chat ====================
   {
     path: '/chat',
     name: 'Chat',
@@ -231,7 +231,7 @@ const routes : RouteType[] = [
       requiresAuth: true,
       roles: ['tutor'],
       navbar: { show: true, hideOnTop: false },
-      footer: { show: true, backgroundColor: '#ffffff' },
+      footer: { show: true, backgroundColor: '#eff6ff' },
     },
   },
 

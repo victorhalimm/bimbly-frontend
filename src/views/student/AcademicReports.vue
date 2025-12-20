@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-12">
         <h1 class="text-5xl font-black text-gray-900 mb-4">
-          My <span class="text-blue-600" style="font-family: 'Comic Sans MS', cursive; font-style: italic;">Academic</span> Progress
+          My <span class="text-blue-600">Academic</span> Progress
         </h1>
         <p class="text-lg font-medium text-gray-600">Track your learning journey across all subjects</p>
         <div class="w-32 h-1 bg-blue-500 rounded-full mx-auto mt-4"></div>
@@ -66,7 +66,7 @@
       </div>
     </div>
 
-    <div v-if="showForm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" @click.self="showForm = false">
+    <div v-if="showForm" class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50" @click.self="showForm = false">
       <div class="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <ReportForm
           :report="editingReport"
@@ -75,6 +75,18 @@
         />
       </div>
     </div>
+
+    <SimpleConfirmModal
+      v-if="showDeleteConfirm"
+      title="Delete Report"
+      message="Are you sure you want to delete this report? This action cannot be undone."
+      confirm-text="Delete"
+      cancel-text="Cancel"
+      variant="danger"
+      :loading="deletingReport"
+      @confirm="confirmDelete"
+      @cancel="cancelDelete"
+    />
   </div>
 </template>
 
@@ -83,6 +95,7 @@ import { defineComponent } from 'vue';
 import { useAcademicReportsStore } from '../../stores/academic-reports.store';
 import SubjectCard from '../../components/academic-reports/SubjectCard.vue';
 import ReportForm from '../../components/academic-reports/ReportForm.vue';
+import SimpleConfirmModal from '../../components/common/SimpleConfirmModal.vue';
 import type { AcademicReport } from '../../services/academic-reports.service';
 
 export default defineComponent({
@@ -90,12 +103,16 @@ export default defineComponent({
   components: {
     SubjectCard,
     ReportForm,
+    SimpleConfirmModal,
   },
   data() {
     return {
       selectedGrade: 10,
       showForm: false,
       editingReport: null as AcademicReport | null,
+      showDeleteConfirm: false,
+      deletingReport: false,
+      reportToDelete: null as string | null,
     };
   },
   computed: {
@@ -123,14 +140,27 @@ export default defineComponent({
       this.editingReport = report;
       this.showForm = true;
     },
-    async deleteReport(id: string) {
-      if (!confirm('Are you sure you want to delete this report?')) return;
+    deleteReport(id: string) {
+      this.reportToDelete = id;
+      this.showDeleteConfirm = true;
+    },
+    async confirmDelete() {
+      if (!this.reportToDelete) return;
 
+      this.deletingReport = true;
       try {
-        await this.store.deleteReport(id);
+        await this.store.deleteReport(this.reportToDelete);
       } catch (error: any) {
         alert(error.message || 'Failed to delete report');
+      } finally {
+        this.deletingReport = false;
+        this.showDeleteConfirm = false;
+        this.reportToDelete = null;
       }
+    },
+    cancelDelete() {
+      this.showDeleteConfirm = false;
+      this.reportToDelete = null;
     },
     closeForm() {
       this.showForm = false;

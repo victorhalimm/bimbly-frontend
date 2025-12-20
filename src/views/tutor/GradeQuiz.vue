@@ -3,7 +3,7 @@
     <div class="max-w-4xl mx-auto">
       <div class="text-center mb-8">
         <h1 class="text-5xl font-black text-gray-900 mb-4">
-          Grade <span class="text-blue-600" style="font-family: 'Comic Sans MS', cursive; font-style: italic;">Quiz</span>
+          Grade <span class="text-blue-600">Quiz</span>
         </h1>
         <p class="text-lg font-medium text-gray-600">Review and grade student answers</p>
         <div class="w-32 h-1 bg-blue-500 rounded-full mx-auto mt-4"></div>
@@ -201,6 +201,7 @@ import { useQuizStore } from '../../stores/quiz.store';
 import type { QuizAssignment } from '../../services/quiz-assignments.service';
 import type { StudentAnswer } from '../../services/student-answers.service';
 import { quizAssignmentsService } from '../../services/quiz-assignments.service';
+import { useToast } from '@/composables/useToast';
 
 interface GradeInput {
   pointsEarned: number;
@@ -215,6 +216,10 @@ interface ComponentData {
 
 export default defineComponent({
   name: 'GradeQuiz',
+  setup() {
+    const toast = useToast();
+    return { toast };
+  },
   data(): ComponentData {
     return {
       gradeData: [],
@@ -245,7 +250,7 @@ export default defineComponent({
       return this.answers.reduce((sum, a) => sum + a.questionPoints, 0);
     },
     currentScore(): number {
-      return this.answers.reduce((sum, a) => sum + (a.pointsEarned || 0), 0);
+      return this.answers.reduce((sum, a) => sum + Number(a.pointsEarned || 0), 0);
     },
     gradedCount(): number {
       return this.answers.filter(a =>
@@ -313,25 +318,26 @@ export default defineComponent({
             tutorFeedback: this.gradeData[index].tutorFeedback || undefined,
           }
         );
+        this.toast.success('Grade Saved', 'Grade has been saved successfully.');
       } catch (error: any) {
-        alert(error.message || 'Failed to save grade');
+        this.toast.error('Failed to Save Grade', error.message || 'Failed to save grade');
       } finally {
         this.gradingIndex = null;
       }
     },
     async completeGrading() {
       if (!this.allEssaysGraded) {
-        alert('Please grade all essay questions before completing');
+        this.toast.warning('Incomplete Grading', 'Please grade all essay questions before completing');
         return;
       }
 
       this.completing = true;
       try {
-        await quizAssignmentsService.submitQuiz(this.assignmentId);
-        alert('Grading completed successfully!');
+        await quizAssignmentsService.updateScore(this.assignmentId, this.currentScore);
+        this.toast.success('Grading Completed', 'Quiz grading has been completed successfully!');
         this.$router.push('/tutor/assignments');
       } catch (error: any) {
-        alert(error.message || 'Failed to complete grading');
+        this.toast.error('Failed to Complete Grading', error.message || 'Failed to complete grading');
       } finally {
         this.completing = false;
       }

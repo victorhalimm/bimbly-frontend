@@ -132,7 +132,7 @@
             <h2 class="text-3xl font-black text-gray-900 mb-4">Quiz Submitted!</h2>
             <p class="text-lg text-gray-600 mb-8">Your answers have been submitted for grading.</p>
             <button
-              @click="$router.push('/student/dashboard')"
+              @click="$router.push('/student/quizzes')"
               class="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-full font-bold hover:bg-blue-700 transition-colors"
             >
               Back to Dashboard
@@ -141,20 +141,43 @@
         </div>
       </div>
     </div>
+
+    <SimpleConfirmModal
+      v-if="showSubmitConfirm"
+      title="Submit Quiz"
+      message="Are you sure you want to submit? You cannot change your answers after submission."
+      confirm-text="Submit"
+      cancel-text="Cancel"
+      variant="warning"
+      :loading="submittingQuiz"
+      @confirm="confirmSubmit"
+      @cancel="cancelSubmit"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useQuizStore } from '../../stores/quiz.store';
+import { useToast } from '@/composables/useToast';
+import SimpleConfirmModal from '../../components/common/SimpleConfirmModal.vue';
 
 export default defineComponent({
   name: 'TakeQuiz',
+  components: {
+    SimpleConfirmModal,
+  },
   data() {
     return {
       answers: {} as Record<number, string>,
       loadingAction: false,
+      showSubmitConfirm: false,
+      submittingQuiz: false,
     };
+  },
+  setup() {
+    const toast = useToast();
+    return { toast };
   },
   computed: {
     store() {
@@ -185,8 +208,9 @@ export default defineComponent({
       try {
         await this.store.startQuiz(this.assignment.id);
         await this.store.fetchAssignment(this.assignment.id);
+        this.toast.success('Quiz Started', 'Good luck with your quiz!');
       } catch (error: any) {
-        alert(error.message || 'Failed to start quiz');
+        this.toast.error('Failed to Start Quiz', error.message || 'Failed to start quiz');
       } finally {
         this.loadingAction = false;
       }
@@ -215,29 +239,34 @@ export default defineComponent({
             studentAnswer: answer,
           });
         }
-        alert('Progress saved!');
+        this.toast.success('Progress Saved', 'Your answers have been saved successfully.');
       } catch (error: any) {
-        alert(error.message || 'Failed to save progress');
+        this.toast.error('Failed to Save Progress', error.message || 'Failed to save progress');
       } finally {
         this.loadingAction = false;
       }
     },
-    async submitQuiz() {
+    submitQuiz() {
+      this.showSubmitConfirm = true;
+    },
+    async confirmSubmit() {
       if (!this.assignment) return;
 
-      if (!confirm('Are you sure you want to submit? You cannot change your answers after submission.')) {
-        return;
-      }
-
-      this.loadingAction = true;
+      this.submittingQuiz = true;
       try {
         await this.saveProgress();
         await this.store.submitQuiz(this.assignment.id);
+        await this.store.fetchAssignment(this.assignment.id);
+        this.toast.success('Quiz Submitted', 'Your quiz has been submitted successfully for grading.');
       } catch (error: any) {
-        alert(error.message || 'Failed to submit quiz');
+        this.toast.error('Failed to Submit Quiz', error.message || 'Failed to submit quiz');
       } finally {
-        this.loadingAction = false;
+        this.submittingQuiz = false;
+        this.showSubmitConfirm = false;
       }
+    },
+    cancelSubmit() {
+      this.showSubmitConfirm = false;
     },
   },
 });

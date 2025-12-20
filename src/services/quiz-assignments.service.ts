@@ -79,4 +79,15 @@ export const quizAssignmentsService = {
     return response.data;
   },
 
+  async updateScore(id: string, score: number): Promise<QuizAssignment> {
+    const response = await axios.patch(
+      `${API_URL}/quiz-assignments/${id}/score`,
+      { score },
+      {
+        withCredentials: true,
+      },
+    );
+    return response.data;
+  },
+
 };

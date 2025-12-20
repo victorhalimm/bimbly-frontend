@@ -1,9 +1,9 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 px-4">
+  <div class="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 pt-32 px-4">
     <div class="max-w-4xl mx-auto">
       <div class="text-center mb-8">
         <h1 class="text-5xl font-black text-gray-900 mb-4">
-          Quiz <span class="text-blue-600" style="font-family: 'Comic Sans MS', cursive; font-style: italic;">Results</span>
+          Quiz <span class="text-blue-600">Results</span>
         </h1>
         <p class="text-lg font-medium text-gray-600">Review your performance and feedback</p>
         <div class="w-32 h-1 bg-blue-500 rounded-full mx-auto mt-4"></div>
@@ -148,7 +148,7 @@
 
         <div class="mt-8 text-center">
           <button
-            @click="$router.push('/student/quizzes')"
+            @click="$router.push(quizzesPath)"
             class="inline-flex items-center gap-3 bg-blue-600 text-white px-8 py-4 rounded-full font-bold hover:bg-blue-700 hover:scale-105 transition-all shadow-xl"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -167,9 +167,14 @@ import { defineComponent } from 'vue';
 import { useQuizStore } from '../../stores/quiz.store';
 import type { QuizAssignment } from '../../services/quiz-assignments.service';
 import type { StudentAnswer } from '../../services/student-answers.service';
+import { useAuthStore } from '@/stores/auth.store';
 
 export default defineComponent({
   name: 'QuizResults',
+  setup() {
+    const authStore = useAuthStore();
+    return { authStore }
+  },
   computed: {
     store() {
       return useQuizStore();
@@ -186,6 +191,9 @@ export default defineComponent({
     loading(): boolean {
       return this.store.loading;
     },
+    user() {
+      return this.authStore.user;
+    },
     error(): string | null {
       return this.store.error;
     },
@@ -193,7 +201,7 @@ export default defineComponent({
       return this.answers.reduce((sum, a) => sum + a.questionPoints, 0);
     },
     currentScore(): number {
-      return this.answers.reduce((sum, a) => sum + (a.pointsEarned || 0), 0);
+      return this.answers.reduce((sum, a) => sum + Number(a.pointsEarned || 0), 0);
     },
     scorePercentage(): number {
       if (this.totalPoints === 0) return 0;
@@ -215,6 +223,10 @@ export default defineComponent({
       if (this.scorePercentage >= 60) return 'text-yellow-600';
       return 'text-red-600';
     },
+    quizzesPath(): string {
+      if (this.user?.userType === 'student') return '/student/quizzes'
+      return '/tutor/assignments'
+    }
   },
   async mounted() {
     await this.loadData();
@@ -252,7 +264,7 @@ export default defineComponent({
         return 'bg-yellow-500 text-white';
       }
       return 'bg-red-500 text-white';
-    },
+    }
   },
 });
 </script>

@@ -17,7 +17,7 @@
           <h1 class="text-5xl font-black text-gray-900 leading-tight mb-6">
             Welcome back to
             <span class="block mt-2">
-              <span class="text-blue-600" style="font-family: 'Comic Sans MS', cursive; font-style: italic;">Bimbly</span>
+              <span class="text-blue-600">Bimbly</span>
             </span>
           </h1>
           <p class="text-xl text-gray-600 leading-relaxed">
@@ -70,7 +70,7 @@
           </div>
           <h2 class="text-3xl lg:text-4xl font-black text-gray-900 mb-2">
             Welcome to
-            <span class="text-blue-600" style="font-family: 'Comic Sans MS', cursive; font-style: italic;">Bimbly</span>
+            <span class="text-blue-600">Bimbly</span>
           </h2>
           <p class="text-lg text-gray-600">Let's sign you in</p>
         </div>

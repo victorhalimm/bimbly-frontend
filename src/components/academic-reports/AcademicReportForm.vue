@@ -5,7 +5,7 @@
     <div class="relative mb-8">
       <h2 class="text-3xl font-black text-gray-900 text-center">
         {{ isEdit ? 'Edit' : 'Add' }}
-        <span class="text-blue-600" style="font-family: 'Comic Sans MS', cursive; font-style: italic;">Academic</span>
+        <span class="text-blue-600">Academic</span>
         Report
       </h2>
       <div class="w-24 h-1 bg-blue-500 rounded-full mx-auto mt-4"></div>

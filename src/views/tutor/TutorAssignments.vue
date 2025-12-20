@@ -9,7 +9,7 @@
       <div class="absolute bottom-1/3 right-24 w-4 h-4 bg-yellow-400 rounded-full animate-float animation-delay-1000"></div>
       <div class="absolute top-1/2 left-1/4 w-2 h-2 bg-green-400 rounded-full animate-float animation-delay-1500"></div>
 
-      <div class="max-w-7xl mx-auto relative z-10">
+      <div class="max-w-7xl px-12 mx-auto relative z-10">
         <h1 class="text-5xl text-center md:text-6xl font-black text-gray-900 mb-4">
           Quiz
           <span class="relative inline-block px-1">
@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 py-12">
       <div class="flex flex-wrap gap-2 justify-center mb-8">
         <button
           v-for="filter in statusFilters"
@@ -51,7 +51,7 @@
         </button>
       </div>
 
-      <div v-if="loading" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <div v-if="loading" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
         <div v-for="i in 10" :key="i" class="bg-white rounded-2xl overflow-hidden shadow-md animate-pulse">
           <div class="h-28 bg-gray-200"></div>
           <div class="p-4">
@@ -81,7 +81,7 @@
         </p>
       </div>
 
-      <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
         <div
           v-for="assignment in filteredAssignments"
           :key="assignment.id"
@@ -89,7 +89,7 @@
           @click="handleCardClick(assignment)"
         >
           <div
-            class="h-28 relative overflow-hidden"
+            class="h-28 md:h-40 relative overflow-hidden"
             :class="getSubjectGradient(assignment.quizTemplate?.subject)"
           >
             <div class="absolute inset-0 flex items-center justify-center">
@@ -117,7 +117,7 @@
 
             <div class="flex items-center gap-1 text-xs text-gray-500 mb-2">
               <IconUser size="14" stroke="2" />
-              <span class="truncate">{{ assignment.student?.user?.fullName || 'Student' }}</span>
+              <span class="truncate">{{ assignment.student?.fullName || 'Student' }}</span>
             </div>
 
             <div class="flex flex-wrap gap-1 mb-3">
@@ -154,7 +154,7 @@
                 Grade
               </button>
               <button
-                v-else
+                v-if="assignment.status === 'graded'"
                 @click.stop="viewDetails(assignment.id)"
                 class="flex-1 py-2 bg-blue-600 text-white text-xs font-bold rounded-full hover:bg-blue-700 transition-colors"
               >
@@ -305,7 +305,7 @@ export default defineComponent({
     handleCardClick(assignment: QuizAssignment): void {
       if (assignment.status === 'submitted') {
         this.gradeQuiz(assignment.id);
-      } else {
+      } else if (assignment.status === 'graded') {
         this.viewDetails(assignment.id);
       }
     },
@@ -313,7 +313,7 @@ export default defineComponent({
       this.$router.push(`/tutor/assignments/${assignmentId}/grade`);
     },
     viewDetails(assignmentId: string): void {
-      this.$router.push(`/tutor/assignments/${assignmentId}`);
+      this.$router.push(`/student/quiz/${assignmentId}/results`);
     },
   },
 });

@@ -3,7 +3,7 @@
     <div class="max-w-3xl mx-auto">
       <div class="text-center mb-8">
         <h1 class="text-5xl font-black text-gray-900 mb-4">
-          Create <span class="text-blue-600" style="font-family: 'Comic Sans MS', cursive; font-style: italic;">Session</span> Summary
+          Create <span class="text-blue-600">Session</span> Summary
         </h1>
         <p class="text-lg font-medium text-gray-600">Document student progress and feedback</p>
         <div class="w-32 h-1 bg-blue-500 rounded-full mx-auto mt-4"></div>
@@ -104,8 +104,9 @@
 import { defineComponent } from 'vue';
 import { useSessionSummariesStore } from '../../stores/session-summaries.store';
 import type { CreateSessionSummaryDto } from '../../services/session-summaries.service';
+import { useToast } from '@/composables/useToast';
 
-interface FormData {
+interface SummaryFormData {
   strengths: string;
   areasForImprovement: string;
   notes: string;
@@ -115,7 +116,11 @@ interface FormData {
 
 export default defineComponent({
   name: 'CreateSummary',
-  data(): { formData: FormData; loading: boolean } {
+  setup() {
+    const toast = useToast();
+    return { toast };
+  },
+  data(): { formData: SummaryFormData; loading: boolean } {
     return {
       formData: {
         strengths: '',
@@ -131,7 +136,7 @@ export default defineComponent({
     async handleSubmit() {
       const bookingId = this.$route.params.bookingId as string;
       if (!bookingId) {
-        alert('Booking ID is required');
+        this.toast.error('Missing Booking ID', 'Booking ID is required');
         return;
       }
 
@@ -144,10 +149,10 @@ export default defineComponent({
           ...this.formData,
         };
         await store.createSummary(data);
-        alert('Session summary created successfully!');
+        this.toast.success('Summary Created', 'Session summary has been created successfully!');
         this.$router.back();
       } catch (error: any) {
-        alert(error.message || 'Failed to create summary');
+        this.toast.error('Failed to Create Summary', error.message || 'Failed to create summary');
       } finally {
         this.loading = false;
       }
