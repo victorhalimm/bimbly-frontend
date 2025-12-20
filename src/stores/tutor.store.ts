@@ -31,12 +31,12 @@ export const useTutorStore = defineStore('tutor', {
       sortBy: 'rating',
       order: 'DESC',
       page: 1,
-      limit: 20,
+      limit: 18,
     },
     meta: {
       total: 0,
       page: 1,
-      limit: 20,
+      limit: 18,
       totalPages: 0,
     },
     reviews: null,
@@ -122,7 +122,7 @@ export const useTutorStore = defineStore('tutor', {
         sortBy: 'rating',
         order: 'DESC',
         page: 1,
-        limit: 20,
+        limit: 18,
       };
     },
 

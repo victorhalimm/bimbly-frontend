@@ -81,7 +81,7 @@ const routes : RouteType[] = [
     name: 'TutorProfilePublic',
     component: () => import('../views/tutors/TutorProfilePublic.vue'),
     meta: {
-      navbar: { show: true, hideOnTop: true },
+      navbar: { show: true, hideOnTop: false },
       footer: { show: true, backgroundColor: '#f9fafb' },
     },
   },
@@ -136,7 +136,7 @@ const routes : RouteType[] = [
     meta: {
       requiresAuth: true,
       roles: ['student'],
-      navbar: { show: true, hideOnTop: true }
+      navbar: { show: true, hideOnTop: false }
     }
   },
   {

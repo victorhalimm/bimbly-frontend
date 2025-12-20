@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="min-h-screen">
     <Navbar
       :notificationCount="unreadCount"
       :unreadMessages="unreadMessages"

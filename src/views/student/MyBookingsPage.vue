@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <div class="bg-blue-100 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div class="bg-blue-100 pt-24 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div class="absolute top-10 right-10 w-32 h-32 bg-blue-200 rounded-full opacity-50 blur-2xl"></div>
       <div class="absolute bottom-10 left-10 w-24 h-24 bg-purple-200 rounded-full opacity-40 blur-xl"></div>
 
@@ -239,6 +239,7 @@ export default defineComponent({
     tabs(): TabItem[] {
       return [
         { value: 'all', label: 'All', count: this.bookings.length },
+        { value: 'pending', label: 'Pending', count: this.pendingCount },
         { value: 'upcoming', label: 'Upcoming', count: this.upcomingCount },
         { value: 'past', label: 'Past', count: this.pastCount },
         { value: 'cancelled', label: 'Cancelled', count: this.cancelledCount },
@@ -248,10 +249,12 @@ export default defineComponent({
       const today = new Date().toISOString().split('T')[0];
 
       switch (this.activeTab) {
+        case 'pending':
+          return this.bookings.filter((b) => b.status === 'pending_payment');
         case 'upcoming':
           return this.bookings.filter(
             (b) =>
-              (b.status === 'pending_payment' || b.status === 'confirmed') &&
+              b.status === 'confirmed' &&
               b.bookingDate >= today
           );
         case 'past':
@@ -264,11 +267,14 @@ export default defineComponent({
           return this.bookings;
       }
     },
+    pendingCount(): number {
+      return this.bookings.filter((b) => b.status === 'pending_payment').length;
+    },
     upcomingCount(): number {
       const today = new Date().toISOString().split('T')[0];
       return this.bookings.filter(
         (b) =>
-          (b.status === 'pending_payment' || b.status === 'confirmed') &&
+          b.status === 'confirmed' &&
           b.bookingDate >= today
       ).length;
     },
@@ -283,6 +289,8 @@ export default defineComponent({
     },
     emptyStateMessage(): string {
       switch (this.activeTab) {
+        case 'pending':
+          return 'You have no pending payments.';
         case 'upcoming':
           return 'You have no upcoming sessions scheduled.';
         case 'past':

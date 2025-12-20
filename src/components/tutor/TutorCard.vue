@@ -4,11 +4,11 @@
     @click="handleViewProfile"
   >
 
-    <div class="relative h-72">
+    <div class="relative h-72 overflow-hidden rounded-4xl">
       <img
         :src="tutor.profileImageUrl || defaultAvatar"
         :alt="tutor.fullName"
-        class="w-full h-full rounded-4xl object-cover"
+        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
       />
       <div class="absolute rounded-b-4xl bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
         <h3 class="text-xl font-black text-white mb-1 break-words">{{ tutor.fullName }}</h3>

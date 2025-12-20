@@ -19,6 +19,18 @@
       </div>
     </div>
 
+    <div class="absolute bottom-0 left-0 right-0 h-16">
+      <svg preserveAspectRatio="none" viewBox="0 0 1200 120" fill="white" class="w-full h-full">
+        <path d="M0,0 C150,90 350,90 600,45 C850,0 1050,0 1200,45 L1200,120 L0,120 Z" fill="#f9fafb"></path>
+      </svg>
+    </div>
+
+    <div class="absolute bottom-0 left-0 right-0 h-16">
+      <svg preserveAspectRatio="none" viewBox="0 0 1200 120" fill="white" class="w-full h-full">
+        <path d="M0,0 C150,90 350,90 600,45 C850,0 1050,0 1200,45 L1200,120 L0,120 Z" fill="#f9fafb"></path>
+      </svg>
+    </div>
+
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 relative z-10 pb-12">
       <div v-if="loadingTutor" class="bg-white rounded-[2rem] shadow-xl p-8 text-center">
         <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>

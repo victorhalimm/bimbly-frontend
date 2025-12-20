@@ -130,7 +130,7 @@
 import { defineComponent } from 'vue';
 import { quizTemplatesService, type QuizTemplate } from '@/services/quiz-templates.service';
 
-interface FormData {
+export interface FormData {
   strengths: string;
   areasForImprovement: string;
   notes: string;
