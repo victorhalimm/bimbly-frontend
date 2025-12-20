@@ -180,7 +180,7 @@
         </div>
       </div>
   
-      <div v-if="showForm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" @click.self="closeForm">
+      <div v-if="showForm" class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" @click.self="closeForm">
         <div class="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
           <AcademicReportForm
             :report="editingReport"
@@ -191,7 +191,7 @@
         </div>
       </div>
   
-      <div v-if="selectedReport" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" @click.self="closeSubjectDetail">
+      <div v-if="selectedReport" class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" @click.self="closeSubjectDetail">
         <SubjectDetailModal
           :report="selectedReport"
           @close="closeSubjectDetail"
