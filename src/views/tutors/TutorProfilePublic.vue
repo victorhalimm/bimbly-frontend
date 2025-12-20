@@ -501,6 +501,7 @@ import { useReviewsStore } from '@/stores/reviews.store';
 import ReviewCard from '@/components/reviews/ReviewCard.vue';
 import TestimonialCard from '@/components/reviews/TestimonialCard.vue';
 import { IconArrowRight } from '@tabler/icons-vue';
+import { useToast } from '@/composables/useToast';
 
 export default defineComponent({
   name: 'TutorProfilePublic',
@@ -508,6 +509,10 @@ export default defineComponent({
     ReviewCard,
     TestimonialCard,
     IconArrowRight,
+  },
+  setup() {
+    const toast = useToast();
+    return { toast };
   },
   data() {
     return {
@@ -654,7 +659,7 @@ export default defineComponent({
         this.$router.push(`/chat?conversation=${conversation.id}`);
       } catch (error) {
         console.error('Failed to create conversation:', error);
-        alert('Failed to start conversation. Please try again.');
+        this.toast.error('Failed to Start Conversation', 'Failed to start conversation. Please try again.');
       } finally {
         this.sendingMessage = false;
       }

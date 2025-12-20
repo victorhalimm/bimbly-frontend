@@ -1,9 +1,9 @@
 <template>
-  <div class="bg-white rounded-[2.5rem] p-8 shadow-xl max-w-2xl mx-auto">
+  <div class="bg-white rounded-[2.5rem] p-8 shadow-xl max-w-4xl mx-auto">
     <div class="relative mb-8">
       <h2 class="text-4xl font-black text-gray-900 text-center">
         {{ isEdit ? 'Edit' : 'Add' }}
-        <span class="text-blue-600" style="font-family: 'Comic Sans MS', cursive; font-style: italic;">Academic</span>
+        <span class="text-blue-600">Academic</span>
         Report
       </h2>
       <div class="w-24 h-1 bg-blue-500 rounded-full mx-auto mt-4"></div>
@@ -144,8 +144,9 @@ import { defineComponent } from 'vue';
 import { useAcademicReportsStore } from '../../stores/academic-reports.store';
 import { SUBJECT_NAMES } from '@/config';
 import type { AcademicReport } from '../../services/academic-reports.service';
+import { useToast } from '@/composables/useToast';
 
-interface ReportFormData {
+export interface ReportFormData {
   grade: number | '';
   subject: string;
   subtopicScores: Record<string, number>;
@@ -160,6 +161,10 @@ export default defineComponent({
     },
   },
   emits: ['cancel', 'success'],
+  setup() {
+    const toast = useToast();
+    return { toast };
+  },
   data(): {
     formData: ReportFormData;
     selectedCurriculum: string;
@@ -236,16 +241,18 @@ export default defineComponent({
           await store.updateReport(this.report.id, {
             subtopicScores: this.formData.subtopicScores,
           });
+          this.toast.success('Report Updated', 'The academic report has been updated successfully.');
         } else {
           await store.createReport({
             grade: this.formData.grade as number,
             subject: this.formData.subject,
             subtopicScores: this.formData.subtopicScores,
           });
+          this.toast.success('Report Created', 'The academic report has been created successfully.');
         }
         this.$emit('success');
       } catch (error: any) {
-        alert(error.message || 'Failed to save report');
+        this.toast.error('Failed to Save Report', error.message || 'Failed to save report');
       } finally {
         this.loading = false;
       }

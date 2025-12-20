@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white rounded-[2.5rem] p-8 shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+  <div class="bg-white rounded-[2.5rem] p-8 shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
     <div class="flex items-start justify-between mb-8">
       <div>
         <h2 class="text-3xl font-black text-gray-900 mb-2">{{ report.subject }}</h2>

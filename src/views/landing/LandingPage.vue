@@ -20,7 +20,6 @@
             Why students
             <span
               class="text-blue-600"
-              style="font-family: 'Comic Sans MS', cursive; font-style: italic"
               >love</span
             >
             Bimbly
@@ -41,10 +40,6 @@
                 Qualified
                 <span
                   class="block"
-                  style="
-                    font-family: 'Comic Sans MS', cursive;
-                    font-style: italic;
-                  "
                   >Tutors</span
                 >
               </h3>
@@ -74,10 +69,6 @@
                 Flexible
                 <span
                   class="block"
-                  style="
-                    font-family: 'Comic Sans MS', cursive;
-                    font-style: italic;
-                  "
                   >Scheduling</span
                 >
               </h3>
@@ -105,10 +96,6 @@
                 Affordable
                 <span
                   class="block"
-                  style="
-                    font-family: 'Comic Sans MS', cursive;
-                    font-style: italic;
-                  "
                   >Pricing</span
                 >
               </h3>
@@ -139,20 +126,18 @@
       <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
         <div class="text-white mb-16 max-w-4xl mx-auto text-center">
           <div class="relative">
-            <p class="text-3xl lg:text-4xl leading-relaxed mb-3">
+            <p class="text-3xl lg:text-3xl leading-relaxed mb-3">
               Our mission is to make every student
             </p>
             <p
-              class="text-5xl lg:text-6xl font-black leading-tight mb-3"
+              class="text-5xl lg:text-6xl font-bold leading-tight mb-3"
               style="
-                font-family: 'Comic Sans MS', cursive;
-                font-style: italic;
                 color: #fde047;
               "
             >
               unlock their full potential
             </p>
-            <p class="text-3xl lg:text-4xl leading-relaxed">
+            <p class="text-3xl lg:text-3xl leading-relaxed">
               through personalized one-on-one tutoring that makes learning engaging, effective, and accessible for everyone.
             </p>
           </div>
@@ -207,10 +192,8 @@
             <h2 class="text-4xl lg:text-5xl font-black mb-4">
               Ready to
               <span
-                class="block mt-2"
+                class="block"
                 style="
-                  font-family: 'Comic Sans MS', cursive;
-                  font-style: italic;
                   color: #fde047;
                 "
               >
@@ -275,10 +258,6 @@
             <span class="relative inline-block mx-2">
               <span
                 class="text-blue-600"
-                style="
-                  font-family: 'Comic Sans MS', cursive;
-                  font-style: italic;
-                "
                 >succeed</span
               >
               <svg

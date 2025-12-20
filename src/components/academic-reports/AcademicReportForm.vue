@@ -1,11 +1,11 @@
 <template>
-  <div class="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-2xl">
+  <div class="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-2xl max-w-4xl mx-auto">
     <div class="absolute top-10 right-10 w-32 h-32 bg-blue-200 rounded-full opacity-10 blur-3xl"></div>
 
     <div class="relative mb-8">
       <h2 class="text-3xl font-black text-gray-900 text-center">
         {{ isEdit ? 'Edit' : 'Add' }}
-        <span class="text-blue-600" style="font-family: 'Comic Sans MS', cursive; font-style: italic;">Academic</span>
+        <span class="text-blue-600">Academic</span>
         Report
       </h2>
       <div class="w-24 h-1 bg-blue-500 rounded-full mx-auto mt-4"></div>

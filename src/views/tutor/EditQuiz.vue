@@ -3,7 +3,7 @@
     <div class="max-w-4xl mx-auto">
       <div class="text-center mb-8">
         <h1 class="text-5xl font-black text-gray-900 mb-4">
-          Edit <span class="text-blue-600" style="font-family: 'Comic Sans MS', cursive; font-style: italic;">Quiz</span>
+          Edit <span class="text-blue-600">Quiz</span>
         </h1>
         <p class="text-lg font-medium text-gray-600">Update your quiz template</p>
         <div class="w-32 h-1 bg-blue-500 rounded-full mx-auto mt-4"></div>
@@ -178,6 +178,7 @@ import { defineComponent } from 'vue';
 import { useQuizStore } from '../../stores/quiz.store';
 import QuestionBuilder from '../../components/quiz/QuestionBuilder.vue';
 import type { QuizQuestion } from '../../services/quiz-templates.service';
+import { useToast } from '@/composables/useToast';
 
 interface FormData {
   title: string;
@@ -199,6 +200,10 @@ export default defineComponent({
   name: 'EditQuiz',
   components: {
     QuestionBuilder,
+  },
+  setup() {
+    const toast = useToast();
+    return { toast };
   },
   data(): ComponentData {
     return {
@@ -275,7 +280,7 @@ export default defineComponent({
         .filter((g) => !isNaN(g) && g >= 1 && g <= 12);
 
       if (gradeLevels.length === 0) {
-        alert('Please enter valid grade levels (1-12)');
+        this.toast.warning('Invalid Grade Levels', 'Please enter valid grade levels (1-12)');
         return;
       }
 
@@ -289,10 +294,10 @@ export default defineComponent({
           description: this.formData.description || undefined,
           durationMinutes: this.formData.durationMinutes || undefined,
         });
-        alert('Quiz updated successfully!');
+        this.toast.success('Quiz Updated', 'Quiz has been updated successfully!');
         this.$router.push('/tutor/quizzes');
       } catch (error: any) {
-        alert(error.message || 'Failed to update quiz');
+        this.toast.error('Failed to Update Quiz', error.message || 'Failed to update quiz');
       } finally {
         this.saving = false;
       }

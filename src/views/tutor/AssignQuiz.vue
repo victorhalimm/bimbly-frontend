@@ -1,9 +1,9 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 px-4">
-    <div class="max-w-2xl mx-auto">
+  <div class="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 pt-32 px-4">
+    <div class="max-w-7xl px-12 mx-auto">
       <div class="text-center mb-8">
         <h1 class="text-5xl font-black text-gray-900 mb-4">
-          Assign <span class="text-blue-600" style="font-family: 'Comic Sans MS', cursive; font-style: italic;">Quiz</span>
+          Assign <span class="text-blue-600">Quiz</span>
         </h1>
         <p class="text-lg font-medium text-gray-600">Assign this quiz to a student</p>
         <div class="w-32 h-1 bg-blue-500 rounded-full mx-auto mt-4"></div>
@@ -67,19 +67,6 @@
             </div>
 
             <div>
-              <label for="sessionId" class="block text-sm font-semibold text-gray-700 mb-2">
-                Session ID (Optional)
-              </label>
-              <input
-                id="sessionId"
-                v-model="formData.sessionId"
-                type="text"
-                placeholder="Link to a tutoring session"
-                class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all"
-              />
-            </div>
-
-            <div>
               <label for="deadline" class="block text-sm font-semibold text-gray-700 mb-2">
                 Deadline (Optional)
               </label>
@@ -128,10 +115,10 @@ import { useQuizStore } from '../../stores/quiz.store';
 import { studentService } from '../../services/student.service';
 import type { QuizTemplate } from '../../services/quiz-templates.service';
 import type { TutoredStudent } from '../../services/student.service';
+import type { Booking } from '../../services/booking.service';
 
 interface FormData {
   studentId: string;
-  sessionId: string;
   deadline: string;
 }
 
@@ -142,6 +129,8 @@ interface ComponentData {
   submitSuccess: boolean;
   students: TutoredStudent[];
   loadingStudents: boolean;
+  bookings: Booking[];
+  loadingBookings: boolean;
 }
 
 export default defineComponent({
@@ -150,7 +139,6 @@ export default defineComponent({
     return {
       formData: {
         studentId: '',
-        sessionId: '',
         deadline: '',
       },
       submitting: false,
@@ -158,6 +146,8 @@ export default defineComponent({
       submitSuccess: false,
       students: [],
       loadingStudents: false,
+      bookings: [],
+      loadingBookings: false,
     };
   },
   computed: {
@@ -203,13 +193,11 @@ export default defineComponent({
         await this.store.assignQuiz({
           quizTemplateId: this.templateId,
           studentId: this.formData.studentId,
-          sessionId: this.formData.sessionId || undefined,
           deadline: this.formData.deadline || undefined,
         });
         this.submitSuccess = true;
         this.formData = {
           studentId: '',
-          sessionId: '',
           deadline: '',
         };
       } catch (error: any) {

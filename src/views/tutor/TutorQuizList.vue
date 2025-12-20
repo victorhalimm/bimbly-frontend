@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 py-12">
       <div v-if="loading" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
         <div v-for="i in 10" :key="i" class="bg-white rounded-2xl overflow-hidden shadow-md animate-pulse">
           <div class="h-28 bg-gray-200"></div>
@@ -86,7 +86,6 @@
           :total-points="template.totalPoints"
           :date="formatDate(template.createdAt)"
           :show-actions="true"
-          @click="viewTemplate(template.id)"
         >
           <template #actions>
             <button
@@ -152,6 +151,7 @@ import {
   IconAlertTriangle,
 } from '@tabler/icons-vue';
 import type { QuizTemplate } from '../../services/quiz-templates.service';
+import { useToast } from '@/composables/useToast';
 
 interface ComponentData {
   showDeleteModal: boolean;
@@ -167,6 +167,10 @@ export default defineComponent({
     IconFileDescription,
     IconTrash,
     IconAlertTriangle,
+  },
+  setup() {
+    const toast = useToast();
+    return { toast };
   },
   data(): ComponentData {
     return {
@@ -199,9 +203,6 @@ export default defineComponent({
         day: 'numeric',
       });
     },
-    viewTemplate(id: string): void {
-      this.$router.push(`/tutor/quizzes/${id}`);
-    },
     editTemplate(id: string): void {
       this.$router.push(`/tutor/quizzes/${id}/edit`);
     },
@@ -220,9 +221,10 @@ export default defineComponent({
         await this.store.deleteTemplate(this.templateToDelete.id);
         this.showDeleteModal = false;
         this.templateToDelete = null;
+        this.toast.success('Quiz Deleted', 'Quiz has been deleted successfully.');
       } catch (error: unknown) {
         const message = error instanceof Error ? error.message : 'Failed to delete quiz';
-        alert(message);
+        this.toast.error('Failed to Delete Quiz', message);
       } finally {
         this.deleting = false;
       }

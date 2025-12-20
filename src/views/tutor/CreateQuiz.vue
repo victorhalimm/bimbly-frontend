@@ -1,9 +1,9 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 px-4">
+  <div class="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 pt-32 px-4">
     <div class="max-w-4xl mx-auto">
       <div class="text-center mb-8">
         <h1 class="text-5xl font-black text-gray-900 mb-4">
-          Create <span class="text-blue-600" style="font-family: 'Comic Sans MS', cursive; font-style: italic;">Quiz</span>
+          Create <span class="text-blue-600">Quiz</span>
         </h1>
         <p class="text-lg font-medium text-gray-600">Design a quiz with multiple question types</p>
         <div class="w-32 h-1 bg-blue-500 rounded-full mx-auto mt-4"></div>
@@ -17,7 +17,7 @@
                 Quiz Title <span class="text-red-500">*</span>
               </label>
               <input
-                id="title"
+              id="title"
                 v-model="formData.title"
                 type="text"
                 required
@@ -167,6 +167,7 @@ import { useQuizStore } from '../../stores/quiz.store';
 import { SUBJECT_NAMES } from '@/config';
 import QuestionBuilder from '../../components/quiz/QuestionBuilder.vue';
 import type { QuizQuestion } from '../../services/quiz-templates.service';
+import { useToast } from '@/composables/useToast';
 
 interface FormData {
   title: string;
@@ -182,6 +183,10 @@ export default defineComponent({
   name: 'CreateQuiz',
   components: {
     QuestionBuilder,
+  },
+  setup() {
+    const toast = useToast();
+    return { toast };
   },
   data(): { formData: FormData; gradeLevelsInput: string; loading: boolean; availableSubjects: string[] } {
     return {
@@ -227,7 +232,7 @@ export default defineComponent({
         .filter((g) => !isNaN(g) && g >= 1 && g <= 12);
 
       if (gradeLevels.length === 0) {
-        alert('Please enter valid grade levels (1-12)');
+        this.toast.warning('Invalid Grade Levels', 'Please enter valid grade levels (1-12)');
         return;
       }
 
@@ -242,10 +247,10 @@ export default defineComponent({
           description: this.formData.description || undefined,
           durationMinutes: this.formData.durationMinutes || undefined,
         });
-        alert('Quiz created successfully!');
+        this.toast.success('Quiz Created', 'Quiz has been created successfully!');
         this.$router.back();
       } catch (error: any) {
-        alert(error.message || 'Failed to create quiz');
+        this.toast.error('Failed to Create Quiz', error.message || 'Failed to create quiz');
       } finally {
         this.loading = false;
       }
