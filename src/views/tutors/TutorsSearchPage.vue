@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-white">
-    <div class="bg-gradient-to-br from-blue-50 via-blue-100 to-blue-50 py-20 px-4 pt-44 pb-28 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div class="bg-gradient-to-br from-blue-50 via-blue-100 to-blue-50 py-24 px-4 pt-44 pb-42 sm:px-6 lg:px-8 relative overflow-hidden">
       <div class="absolute top-16 right-16 w-40 h-40 bg-blue-200 rounded-full opacity-40 blur-3xl animate-blob"></div>
       <div class="absolute bottom-20 left-8 w-56 h-56 bg-yellow-200 rounded-full opacity-30 blur-3xl animate-blob animation-delay-2000"></div>
 
@@ -10,33 +10,28 @@
       <div class="absolute top-1/2 left-1/5 w-2 h-2 bg-green-400 rounded-full animate-float animation-delay-1500"></div>
 
       <div class="max-w-7xl mx-auto relative z-10">
-        <h1 class="text-4xl md:text-5xl font-black text-gray-900 text-center mb-8">
-          Find Your Perfect Tutor
+        <h1 class="text-4xl md:text-5xl font-black text-gray-900 text-center mb-4">
+          Find Your
+          <span class="relative inline-block px-1">
+            <span class="relative z-20">Perfect</span>
+            <svg class="absolute -bottom-2 left-0 w-full h-4 z-10" viewBox="0 0 100 12" preserveAspectRatio="none" fill="none">
+              <path d="M2,8 Q25,2 50,8 T98,6" stroke="#3b82f6" stroke-width="4" stroke-linecap="round" opacity="0.4"/>
+            </svg>
+          </span>
+          Tutor
         </h1>
+        <p class="text-xl text-center text-gray-600 mb-8 font-medium max-w-xl mx-auto">
+          Search from hundreds of qualified tutors ready to help your learning journey
+        </p>
 
-        <div class="max-w-3xl mx-auto bg-white rounded-[2.5rem] shadow-lg p-6">
-          <div class="flex flex-col sm:flex-row gap-3">
-            <div class="flex-1 relative">
-              <div class="absolute inset-y-0 left-5 flex items-center pointer-events-none">
-                <svg class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </div>
-              <input
-                v-model="searchQuery"
-                type="text"
-                placeholder="Search for subjects or tutor name..."
-                class="w-full pl-14 pr-4 py-4 bg-white border-2 border-gray-200 rounded-[1.5rem] text-gray-900 placeholder-gray-400 text-base font-medium focus:outline-none transition-all"
-                @keyup.enter="handleSearch"
-              />
-            </div>
-            <button
-              class="px-8 py-4 bg-blue-600 text-white font-bold text-base rounded-[1.5rem] hover:bg-blue-700 hover:scale-105 transition-all shadow-lg"
-              @click="handleSearch"
-            >
-              Search
-            </button>
-          </div>
+        <div class="w-full max-w-md mx-auto">
+          <SearchBar
+            placeholder="Search for subjects or tutor name..."
+            :provinces="provincesWithCount"
+            @search="handleSearchFromBar"
+            @filter-subject="handleSubjectFilter"
+            @filter-province="handleProvinceFilter"
+          />
         </div>
       </div>
 
@@ -405,7 +400,7 @@ import { defineComponent } from 'vue';
 import { useTutorStore } from '@/stores/tutor.store';
 import { useToast } from '@/composables/useToast';
 import TutorCard from '@/components/tutor/TutorCard.vue';
-import Navbar from '@/components/common/layout/Navbar.vue';
+import SearchBar from '@/components/common/SearchBar.vue';
 import { SUBJECT_NAMES, PROVINCE_NAMES } from '@/config';
 import type { FilterData } from '@/types/filters';
 
@@ -413,7 +408,7 @@ export default defineComponent({
   name: 'TutorsSearchPage',
   components: {
     TutorCard,
-    Navbar
+    SearchBar
   },
   setup() {
     const toast = useToast();
@@ -490,6 +485,11 @@ export default defineComponent({
       if (this.filters.teachingMethod === 'offline') return 'In-Person';
       return 'Teaching Method';
     },
+    provincesWithCount() {
+      return PROVINCE_NAMES.map(name => ({
+        name
+      }));
+    },
   },
   watch: {
     error(newError: string | null) {
@@ -497,13 +497,24 @@ export default defineComponent({
         this.toast.error('Search Error', newError);
       }
     },
+    filters: {
+      handler() {
+        this.updateQueryParams();
+      },
+      deep: true
+    },
   },
   mounted() {
     const query = this.$route.query.q as string;
     const subject = this.$route.query.subject as string;
+    const province = this.$route.query.province as string;
 
     if (subject) {
       this.filters.subject = subject;
+    }
+
+    if (province) {
+      this.filters.province = province;
     }
 
     if (query) {
@@ -517,6 +528,56 @@ export default defineComponent({
     document.removeEventListener('click', this.handleClickOutside);
   },
   methods: {
+    handleSearchFromBar(query: string) {
+      this.searchQuery = query;
+      this.updateQueryParams();
+      this.handleSearch();
+    },
+    handleSubjectFilter(subject: string) {
+      this.filters.subject = subject;
+      this.updateQueryParams();
+      this.handleSearch();
+    },
+    handleProvinceFilter(province: string) {
+      this.filters.province = province;
+      this.updateQueryParams();
+      this.handleSearch();
+    },
+    updateQueryParams() {
+      const query: Record<string, string> = {};
+
+      if (this.searchQuery) {
+        query.q = this.searchQuery;
+      }
+      if (this.filters.subject) {
+        query.subject = this.filters.subject;
+      }
+      if (this.filters.gradeLevel) {
+        query.grade = this.filters.gradeLevel.toString();
+      }
+      if (this.filters.city) {
+        query.city = this.filters.city;
+      }
+      if (this.filters.province && this.filters.province !== '') {
+        query.province = this.filters.province;
+      }
+      if (this.filters.minPrice) {
+        query.minPrice = this.filters.minPrice.toString();
+      }
+      if (this.filters.maxPrice) {
+        query.maxPrice = this.filters.maxPrice.toString();
+      }
+      if (this.filters.teachingMethod) {
+        query.method = this.filters.teachingMethod;
+      }
+      if (this.filters.minRating) {
+        query.minRating = this.filters.minRating.toString();
+      }
+
+      this.$router.replace({
+        query: Object.keys(query).length > 0 ? query : undefined
+      });
+    },
     formatPrice(price: number): string {
       if (price >= 1000000) {
         return `${(price / 1000000).toFixed(1)}M`;

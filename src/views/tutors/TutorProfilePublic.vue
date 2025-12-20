@@ -100,6 +100,17 @@
         <div class="absolute top-10 right-10 w-32 h-32 bg-blue-200 rounded-full opacity-50 blur-2xl"></div>
         <div class="absolute bottom-20 left-20 w-24 h-24 bg-purple-200 rounded-full opacity-40 blur-xl"></div>
 
+        <div class="absolute top-1/4 left-10 w-3 h-3 bg-blue-400 rounded-full animate-float"></div>
+        <div class="absolute top-1/3 right-1/4 w-2 h-2 bg-blue-300 rounded-full animate-float animation-delay-500"></div>
+        <div class="absolute bottom-1/3 right-20 w-4 h-4 bg-yellow-400 rounded-full animate-float animation-delay-1000"></div>
+        <div class="absolute top-1/2 left-1/4 w-2 h-2 bg-green-400 rounded-full animate-float animation-delay-1500"></div>
+
+        <div class="absolute bottom-0 left-0 right-0 h-16 z-10">
+          <svg preserveAspectRatio="none" viewBox="0 0 1200 120" fill="white" class="w-full h-full">
+            <path d="M0,0 C150,90 350,90 600,45 C850,0 1050,0 1200,45 L1200,120 L0,120 Z" fill="#f9fafb"></path>
+          </svg>
+        </div>
+
         <div class="max-w-6xl mx-auto">
           <button
             class="flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium mb-6 transition-colors cursor-pointer"
@@ -124,13 +135,6 @@
                   class="w-full h-full object-cover"
                 />
               </div>
-              <button
-                class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
-              >
-                <svg class="h-5 w-5 text-gray-400 hover:text-red-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-              </button>
             </div>
 
             <div class="lg:w-2/3 p-8 lg:p-10">
@@ -186,7 +190,7 @@
                 <div class="lg:text-right lg:min-w-[200px]">
                   <p class="text-sm text-gray-500 mb-1">Hourly Rate</p>
                   <p class="text-3xl font-black text-blue-600 mb-4">{{ formattedPrice }}</p>
-                  <div class="space-y-3">
+                  <div v-if="!isTutor" class="space-y-3">
                     <button @click="handleBookSession" class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-lg cursor-pointer">
                       Book Session
                     </button>
@@ -519,8 +523,14 @@ export default defineComponent({
     reviewsStore() {
       return useReviewsStore();
     },
+    authStore() {
+      return useAuthStore()
+    },
     tutor() {
       return this.tutorStore.selectedTutor;
+    },
+    isTutor() {
+      return this.authStore.isTutor
     },
     profileReviews() {
       return this.reviewsStore.reviews.slice(0, 3);
@@ -652,3 +662,30 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animation-delay-500 {
+  animation-delay: 0.5s;
+}
+
+.animation-delay-1000 {
+  animation-delay: 1s;
+}
+
+.animation-delay-1500 {
+  animation-delay: 1.5s;
+}
+</style>

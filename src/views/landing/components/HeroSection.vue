@@ -39,12 +39,12 @@
             <span class="block mt-3">
               <span class="relative inline-block">
                 <span class="highlight-box highlight-box-blue"></span>
-                <span class="relative z-10 text-blue-700">learn</span>
+                <span class="relative z-10 text-blue-800">learn</span>
               </span>
               <span class="mx-3">and</span>
               <span class="relative inline-block">
                 <span class="highlight-box highlight-box-yellow"></span>
-                <span class="relative z-10 text-yellow-600">find tutors</span>
+                <span class="relative z-10 text-yellow-900">find tutors</span>
               </span>
             </span>
             <span class="block mt-3">for students</span>

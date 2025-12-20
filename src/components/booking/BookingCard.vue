@@ -232,6 +232,7 @@ export default defineComponent({
       );
     },
     showCancelButton(): boolean {
+      if (this.viewAs !== 'student') return false
       if (this.booking.tutorCompleted) return false;
       return (
         this.booking.status === 'pending_payment' ||

@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <div class="bg-blue-100 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div class="bg-blue-100 pt-24 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div class="absolute top-10 right-10 w-32 h-32 bg-blue-200 rounded-full opacity-50 blur-2xl"></div>
       <div class="absolute bottom-10 left-10 w-24 h-24 bg-purple-200 rounded-full opacity-40 blur-xl"></div>
 

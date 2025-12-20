@@ -423,7 +423,6 @@ import {
   IconChartBar,
   IconSchool
 } from '@tabler/icons-vue'
-import Navbar from '@/components/common/layout/Navbar.vue'
 import studentTutor from '@/assets/images/student-tutor.png'
 
 export default defineComponent({
@@ -436,8 +435,7 @@ export default defineComponent({
     IconBook,
     IconMessageCircle,
     IconChartBar,
-    IconSchool,
-    Navbar
+    IconSchool
   },
   data() {
     return {

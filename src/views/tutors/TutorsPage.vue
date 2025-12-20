@@ -24,29 +24,14 @@
           Hundreds of qualified tutors ready to help your learning journey
         </p>
 
-        <div class="max-w-md mx-auto bg-white rounded-full shadow-lg px-3 py-2">
-          <div class="flex items-center gap-2">
-            <div class="flex-1 relative">
-              <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                <svg class="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </div>
-              <input
-                v-model="searchQuery"
-                type="text"
-                placeholder="Search tutors..."
-                class="w-full pl-9 pr-2 py-2 bg-transparent text-gray-900 placeholder-gray-400 text-sm font-medium focus:outline-none"
-                @keyup.enter="goToSearch"
-              />
-            </div>
-            <button
-              class="px-5 py-2 bg-blue-600 text-white font-bold text-sm rounded-full hover:bg-blue-700 hover:scale-105 transition-all shadow-md cursor-pointer"
-              @click="goToSearch"
-            >
-              Search
-            </button>
-          </div>
+        <div class="w-full max-w-md mx-auto">
+          <SearchBar
+            placeholder="Search tutors..."
+            :provinces="provincesWithCount"
+            @search="handleSearch"
+            @filter-subject="handleSubjectFilter"
+            @filter-province="handleProvinceFilter"
+          />
         </div>
 
         <div class="max-w-4xl mx-auto mt-6 bg-white rounded-full shadow-md px-2 py-3 overflow-hidden">
@@ -227,7 +212,8 @@ import { defineComponent } from 'vue';
 import { useTutorStore } from '@/stores/tutor.store';
 import { useToast } from '@/composables/useToast';
 import TutorCard from '@/components/tutor/TutorCard.vue';
-import { SUBJECTS } from '@/config';
+import SearchBar from '@/components/common/SearchBar.vue';
+import { SUBJECTS, PROVINCE_NAMES } from '@/config';
 import {
   IconLanguage,
   IconMath,
@@ -249,6 +235,7 @@ export default defineComponent({
   name: 'TutorsPage',
   components: {
     TutorCard,
+    SearchBar,
     IconLanguage,
     IconMath,
     IconBook,
@@ -269,7 +256,7 @@ export default defineComponent({
     return { toast };
   },
   data() {
-    return {
+    return { 
       searchQuery: '',
       selectedSubject: null as string | null,
       subjectFilters: SUBJECTS.map(s => ({
@@ -294,6 +281,11 @@ export default defineComponent({
     error() {
       return this.tutorStore.error;
     },
+    provincesWithCount() {
+      return PROVINCE_NAMES.map(name => ({
+        name
+      }));
+    },
   },
   watch: {
     error(newError: string | null) {
@@ -310,6 +302,19 @@ export default defineComponent({
     });
   },
   methods: {
+    handleSearch(query: string) {
+      if (query) {
+        this.$router.push(`/tutors/search?q=${encodeURIComponent(query)}`);
+      } else {
+        this.$router.push('/tutors/search');
+      }
+    },
+    handleSubjectFilter(subject: string) {
+      this.$router.push(`/tutors/search?subject=${encodeURIComponent(subject)}`);
+    },
+    handleProvinceFilter(province: string) {
+      this.$router.push(`/tutors/search?province=${encodeURIComponent(province)}`);
+    },
     goToSearch() {
       if (this.searchQuery) {
         this.$router.push(`/tutors/search?q=${encodeURIComponent(this.searchQuery)}`);

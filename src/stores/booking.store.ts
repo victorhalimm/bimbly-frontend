@@ -254,5 +254,7 @@ export const useBookingStore = defineStore('booking', {
     clearSelectedBooking() {
       this.selectedBooking = null;
     },
+
+    
   },
 });
