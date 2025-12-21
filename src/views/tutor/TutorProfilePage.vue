@@ -386,25 +386,26 @@
                   </p>
                 </div>
 
-                <div>
-                  <label class="block text-sm font-bold text-gray-700 mb-2">Province</label>
-                  <input
-                    v-model="form.province"
-                    type="text"
-                    :class="{
-                      'border-red-500 focus:border-red-500 focus:ring-red-100': fieldErrors.province,
-                      'border-gray-200 focus:border-blue-500 focus:ring-blue-100': !fieldErrors.province
-                    }"
-                    class="w-full px-5 py-3 border-2 rounded-2xl focus:ring-4 transition-all font-medium text-gray-900"
-                    placeholder="Enter your province"
-                  />
-                  <p v-if="fieldErrors.province" class="text-sm text-red-600 font-medium mt-1">
-                    {{ fieldErrors.province }}
-                  </p>
-                </div>
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Province</label>
+                <select
+                  v-model="form.province"
+                  :class="{
+                    'border-red-500 focus:border-red-500 focus:ring-red-100': fieldErrors.province,
+                    'border-gray-200 focus:border-blue-500 focus:ring-blue-100': !fieldErrors.province
+                  }"
+                  class="w-full px-5 py-3 border-2 rounded-2xl focus:ring-4 transition-all font-medium text-gray-900"
+                >
+                  <option value="">Select your province</option>
+                  <option v-for="province in provinces" :key="province.name" :value="province.name">{{ province.label }}</option>
+                </select>
+                <p v-if="fieldErrors.province" class="text-sm text-red-600 font-medium mt-1">
+                  {{ fieldErrors.province }}
+                </p>
               </div>
             </div>
-            </div>
+          </div>
+          </div>
 
             <div class="bg-white rounded-[2.5rem] shadow-xl p-8 md:p-12">
               <div class="flex items-center gap-4 mb-8 pb-6 border-b-2 border-blue-50">
@@ -551,6 +552,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useTutorStore } from '@/stores/tutor.store';
 import { useToast } from '@/composables/useToast';
 import { SUBJECT_NAMES } from '@/config';
+import { PROVINCES } from '@/config/provinces.config';
 import WeeklyAvailabilityInput from '@/components/tutor/WeeklyAvailabilityInput.vue';
 
 export default {
@@ -579,6 +581,7 @@ export default {
       showSubmitModal: false,
       hasApplication: false,
       application: null,
+      provinces: PROVINCES,
       form: {
         fullName: '',
         email: '',
@@ -904,7 +907,11 @@ export default {
         if (this.$refs.certificationInput) {
           this.$refs.certificationInput.value = '';
         }
-        await this.loadProfile();
+
+        await this.tutorStore.fetchCurrentUserProfile();
+        if (this.tutorStore.currentUserProfile?.certifications) {
+          this.profile.certifications = this.tutorStore.currentUserProfile.certifications;
+        }
       } catch (error) {
         this.toast.error('Upload Failed', error.response?.data?.message || 'Failed to upload certification');
       } finally {

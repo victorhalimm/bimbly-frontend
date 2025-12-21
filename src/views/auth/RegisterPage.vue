@@ -233,14 +233,15 @@
 
                 <div>
                   <label for="studentProvince" class="block text-sm font-semibold text-gray-700 mb-2">Province</label>
-                  <input
+                  <select
                     id="studentProvince"
                     v-model="form.studentProfile.province"
-                    type="text"
-                    placeholder="Your province"
-                    class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all"
+                    class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl text-gray-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all"
                     :class="{ 'border-red-500 focus:border-red-500 focus:ring-red-100': errors.studentProvince }"
-                  />
+                  >
+                    <option value="">Select your province</option>
+                    <option v-for="province in provinces" :key="province.name" :value="province.name">{{ province.label }}</option>
+                  </select>
                   <p v-if="errors.studentProvince" class="mt-2 text-sm text-red-600">{{ errors.studentProvince }}</p>
                 </div>
               </div>
@@ -428,14 +429,15 @@
 
                 <div>
                   <label for="tutorProvince" class="block text-sm font-semibold text-gray-700 mb-2">Province</label>
-                  <input
+                  <select
                     id="tutorProvince"
                     v-model="form.tutorProfile.province"
-                    type="text"
-                    placeholder="Your province"
-                    class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all"
+                    class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl text-gray-900 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all"
                     :class="{ 'border-red-500 focus:border-red-500 focus:ring-red-100': errors.tutorProvince }"
-                  />
+                  >
+                    <option value="">Select your province</option>
+                    <option v-for="province in provinces" :key="province.name" :value="province.name">{{ province.label }}</option>
+                  </select>
                   <p v-if="errors.tutorProvince" class="mt-2 text-sm text-red-600">{{ errors.tutorProvince }}</p>
                 </div>
               </div>
@@ -663,6 +665,7 @@ import { authService } from '@/services/auth.service';
 import logoBox from '@assets/images/logo/logo-box.png';
 import WeeklyAvailabilityInput from '@/components/tutor/WeeklyAvailabilityInput.vue';
 import { SUBJECT_NAMES } from '@/config';
+import { PROVINCES } from '@/config/provinces.config';
 import type { AvailabilitySchedule } from '@/types/availability';
 import { useToast } from '@/composables/useToast';
 
@@ -777,6 +780,7 @@ export default defineComponent({
       } as FormData,
       errors: {} as FormErrors,
       availableSubjects: SUBJECT_NAMES,
+      provinces: PROVINCES,
     };
   },
   computed: {
