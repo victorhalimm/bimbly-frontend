@@ -130,7 +130,7 @@
 import { defineComponent } from 'vue';
 import { quizTemplatesService, type QuizTemplate } from '@/services/quiz-templates.service';
 
-export interface FormData {
+export interface SessionFormData {
   strengths: string;
   areasForImprovement: string;
   notes: string;
@@ -161,7 +161,7 @@ export default defineComponent({
         quizTemplateId: '',
         quizDeadline: '',
         nextSessionPlan: '',
-      } as FormData,
+      } as SessionFormData,
       quizTemplates: [] as QuizTemplate[],
       loadingTemplates: false,
     };

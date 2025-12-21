@@ -117,13 +117,13 @@ import type { QuizTemplate } from '../../services/quiz-templates.service';
 import type { TutoredStudent } from '../../services/student.service';
 import type { Booking } from '../../services/booking.service';
 
-interface FormData {
+interface AssignQuizFormData {
   studentId: string;
   deadline: string;
 }
 
 interface ComponentData {
-  formData: FormData;
+  formData: AssignQuizFormData;
   submitting: boolean;
   submitError: string | null;
   submitSuccess: boolean;

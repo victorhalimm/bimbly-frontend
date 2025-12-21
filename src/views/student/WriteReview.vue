@@ -133,7 +133,7 @@ import { reviewsService } from '@/services/reviews.service';
 import { useToast } from '@/composables/useToast';
 import type { Booking } from '@/services/booking.service';
 
-interface FormData {
+interface ReviewFormData {
   rating: number;
   reviewTitle: string;
   reviewText: string;
@@ -154,7 +154,7 @@ export default defineComponent({
     loading: boolean;
     submitting: boolean;
     hoverRating: number;
-    formData: FormData;
+    formData: ReviewFormData;
   } {
     return {
       booking: null,

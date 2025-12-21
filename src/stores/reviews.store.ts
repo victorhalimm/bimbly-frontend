@@ -78,20 +78,6 @@ export const useReviewsStore = defineStore('reviews', {
       }
     },
 
-    async deleteReview(id: string) {
-      this.loading = true;
-      this.error = null;
-      try {
-        await reviewsService.delete(id);
-        this.reviews = this.reviews.filter((r) => r.reviewTitle !== id);
-      } catch (error: any) {
-        this.error = error.response?.data?.message || 'Failed to delete review';
-        throw error;
-      } finally {
-        this.loading = false;
-      }
-    },
-
     clearReviews() {
       this.reviews = [];
       this.meta = null;

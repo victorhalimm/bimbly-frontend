@@ -699,7 +699,7 @@ interface TutorProfileForm {
   certifications: CertificationUpload[];
 }
 
-interface FormData {
+interface RegisterFormData {
   userType: 'student' | 'tutor' | '';
   email: string;
   fullName: string;
@@ -777,7 +777,7 @@ export default defineComponent({
           availabilitySchedule: null,
           certifications: [],
         },
-      } as FormData,
+      } as RegisterFormData,
       errors: {} as FormErrors,
       availableSubjects: SUBJECT_NAMES,
       provinces: PROVINCES,
