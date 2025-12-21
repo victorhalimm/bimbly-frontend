@@ -70,12 +70,6 @@ export const reviewsService = {
     return response.data;
   },
 
-  async delete(id: string): Promise<void> {
-    await axios.delete(`${API_URL}/reviews/${id}`, {
-      withCredentials: true,
-    });
-  },
-
   async checkReview(tutorUserId: string): Promise<{ hasReviewed: boolean }> {
     const response = await axios.get(`${API_URL}/reviews/check/${tutorUserId}`, {
       withCredentials: true,

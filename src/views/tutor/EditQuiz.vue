@@ -180,7 +180,7 @@ import QuestionBuilder from '../../components/quiz/QuestionBuilder.vue';
 import type { QuizQuestion } from '../../services/quiz-templates.service';
 import { useToast } from '@/composables/useToast';
 
-interface FormData {
+interface EditQuizFormData {
   title: string;
   description: string;
   subject: string;
@@ -191,7 +191,7 @@ interface FormData {
 }
 
 interface ComponentData {
-  formData: FormData;
+  formData: EditQuizFormData;
   gradeLevelsInput: string;
   saving: boolean;
 }

@@ -169,7 +169,7 @@ import QuestionBuilder from '../../components/quiz/QuestionBuilder.vue';
 import type { QuizQuestion } from '../../services/quiz-templates.service';
 import { useToast } from '@/composables/useToast';
 
-interface FormData {
+interface CreateQuizFormData {
   title: string;
   description: string;
   subject: string;
@@ -188,7 +188,7 @@ export default defineComponent({
     const toast = useToast();
     return { toast };
   },
-  data(): { formData: FormData; gradeLevelsInput: string; loading: boolean; availableSubjects: string[] } {
+  data(): { formData: CreateQuizFormData; gradeLevelsInput: string; loading: boolean; availableSubjects: string[] } {
     return {
       formData: {
         title: '',
