@@ -1,4 +1,5 @@
 import axios from 'axios';
+import type { TeachingMethod } from './booking.service';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -9,7 +10,7 @@ export interface TutorSearchFilters {
   province?: string;
   minPrice?: number;
   maxPrice?: number;
-  teachingMethod?: 'online' | 'offline';
+  teachingMethod?: TeachingMethod;
   minRating?: number;
   name?: string;
   sortBy?: 'rating' | 'price' | 'experience' | 'sessions';
@@ -26,7 +27,7 @@ export interface TutorListItem {
   bio: string;
   subjects: string[];
   gradeLevels: number[];
-  teachingMethods: ('online' | 'offline')[];
+  teachingMethods: TeachingMethod[];
   hourlyRate: number;
   city: string;
   province: string;
@@ -61,7 +62,7 @@ export interface TutorProfile {
   specializations?: string[];
   subjects: string[];
   gradeLevels: number[];
-  teachingMethods: ('online' | 'offline')[];
+  teachingMethods: TeachingMethod[];
   hourlyRate: number;
   certifications?: { name: string; fileUrl: string }[];
   availabilitySchedule?: { start: string; end: string; dayOfWeek: number }[];

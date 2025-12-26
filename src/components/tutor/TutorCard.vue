@@ -61,6 +61,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import type { TeachingMethod } from '@/services/booking.service';
 
 export interface TutorData {
   id: string;
@@ -70,7 +71,7 @@ export interface TutorData {
   bio: string;
   subjects: string[];
   gradeLevels: number[];
-  teachingMethods: ('online' | 'offline')[];
+  teachingMethods: TeachingMethod[];
   hourlyRate: number;
   city: string;
   province: string;

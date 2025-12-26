@@ -339,7 +339,7 @@ export default defineComponent({
     availableGrades(): number[] {
       return this.tutor?.gradeLevels || [];
     },
-    availableMethods(): ('online' | 'offline')[] {
+    availableMethods(): TeachingMethod[] {
       return this.tutor?.teachingMethods || [];
     },
     minDate(): string {

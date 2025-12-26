@@ -44,7 +44,7 @@ export default defineComponent({
       return useAuthStore();
     },
     unreadCount(): number {
-      return this.notificationStore.unreadCount;
+      return 0;
     },
     isAuthenticated(): boolean {
       return this.authStore.isAuthenticated;
@@ -69,10 +69,11 @@ export default defineComponent({
   },
   methods: {
     startPolling() {
-      this.notificationStore.fetchUnreadCount();
-      this.pollingInterval = window.setInterval(() => {
-        this.notificationStore.fetchUnreadCount();
-      }, 30000);
+      // DISABLED: Backend notifications module not implemented
+      // this.notificationStore.fetchUnreadCount();
+      // this.pollingInterval = window.setInterval(() => {
+      //   this.notificationStore.fetchUnreadCount();
+      // }, 30000);
     },
     stopPolling() {
       if (this.pollingInterval !== null) {

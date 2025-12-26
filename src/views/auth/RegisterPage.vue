@@ -668,6 +668,7 @@ import { SUBJECT_NAMES } from '@/config';
 import { PROVINCES } from '@/config/provinces.config';
 import type { AvailabilitySchedule } from '@/types/availability';
 import { useToast } from '@/composables/useToast';
+import type { TeachingMethod } from '@/services/booking.service';
 
 interface StudentProfileForm {
   currentGrade: number | '';
@@ -691,7 +692,7 @@ interface TutorProfileForm {
   specializations: string[];
   subjects: string[];
   gradeLevels: number[];
-  teachingMethods: ('online' | 'offline')[];
+  teachingMethods: TeachingMethod[];
   hourlyRate: number;
   city: string;
   province: string;

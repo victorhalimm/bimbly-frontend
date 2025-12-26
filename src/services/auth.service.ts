@@ -1,5 +1,6 @@
 import axios from 'axios';
 import type { AvailabilitySchedule } from '@/types/availability';
+import type { TeachingMethod } from './booking.service';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -21,7 +22,7 @@ interface TutorProfileData {
   specializations?: string[];
   subjects: string[];
   gradeLevels: number[];
-  teachingMethods: ('online' | 'offline')[];
+  teachingMethods: TeachingMethod[];
   hourlyRate: number;
   availabilitySchedule?: AvailabilitySchedule;
   certifications?: CertificationData[];
