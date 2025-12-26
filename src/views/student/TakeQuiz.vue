@@ -106,14 +106,6 @@
 
             <div class="flex gap-4">
               <button
-                type="button"
-                @click="saveProgress"
-                :disabled="loadingAction"
-                class="flex-1 py-4 bg-gray-200 text-gray-900 rounded-full font-bold hover:bg-gray-300 transition-colors"
-              >
-                {{ loadingAction ? 'Saving...' : 'Save Progress' }}
-              </button>
-              <button
                 type="submit"
                 :disabled="loadingAction"
                 class="flex-1 py-4 bg-blue-600 text-white rounded-full font-bold hover:bg-blue-700 hover:scale-105 transition-all shadow-lg disabled:opacity-50"

@@ -1,3 +1,5 @@
+import type { TeachingMethod } from '@/services/booking.service';
+
 export interface FilterData {
   subject?: string;
   gradeLevel?: number;
@@ -5,6 +7,6 @@ export interface FilterData {
   province?: string;
   minPrice?: number;
   maxPrice?: number;
-  teachingMethod?: 'online' | 'offline';
+  teachingMethod?: TeachingMethod;
   minRating?: number;
 }
