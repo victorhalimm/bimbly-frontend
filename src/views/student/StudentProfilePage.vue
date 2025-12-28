@@ -95,6 +95,16 @@
                 placeholder="your@email.com"
               />
               <p class="text-xs text-gray-400 mt-1">Email cannot be changed</p>
+              <button
+                type="button"
+                @click="showChangePasswordModal = true"
+                class="w-full mt-3 bg-blue-600 text-white px-4 py-3 rounded-xl font-bold text-sm hover:bg-blue-700 transition-all ease-in-out shadow-lg cursor-pointer inline-flex items-center justify-center gap-2"
+              >
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z" clip-rule="evenodd"/>
+                </svg>
+                Change Password
+              </button>
             </div>
 
             <div>
@@ -226,6 +236,11 @@
           </form>
         </main>
       </div>
+
+      <ChangePasswordModal
+        :isOpen="showChangePasswordModal"
+        @close="showChangePasswordModal = false"
+      />
     </div>
     </div>
   </div>
@@ -236,9 +251,13 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useStudentStore } from '@/stores/student.store';
 import { useToast } from '@/composables/useToast';
 import { PROVINCES } from '@/config/provinces.config';
+import ChangePasswordModal from '@/components/common/ChangePasswordModal.vue';
 
 export default {
   name: 'StudentProfilePage',
+  components: {
+    ChangePasswordModal,
+  },
   setup() {
     const authStore = useAuthStore();
     const studentStore = useStudentStore();
@@ -250,6 +269,7 @@ export default {
     return {
       loading: true,
       saving: false,
+      showChangePasswordModal: false,
       profile: null,
       avatarPreview: null,
       avatarFile: null,

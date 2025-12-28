@@ -116,20 +116,5 @@ export const useAuthStore = defineStore('auth', {
         this.isAuthenticated = false;
       }
     },
-
-    async resetPassword(token: string, newPassword: string) {
-      this.loading = true;
-      this.error = null;
-      try {
-        const response = await authService.resetPassword(token, newPassword);
-        return response;
-      } catch (error: any) {
-        this.error =
-          error.response?.data?.message || 'Password reset failed';
-        throw error;
-      } finally {
-        this.loading = false;
-      }
-    },
   },
 });

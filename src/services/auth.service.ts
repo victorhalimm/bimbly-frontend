@@ -91,11 +91,17 @@ export const authService = {
     return response.data;
   },
 
-  async resetPassword(token: string, newPassword: string) {
-    const response = await axios.post(`${API_URL}/auth/reset-password`, {
-      token,
-      newPassword,
-    });
+  async resetPassword(currentPassword: string, newPassword: string) {
+    const response = await axios.post(
+      `${API_URL}/auth/reset-password`,
+      {
+        currentPassword,
+        newPassword,
+      },
+      {
+        withCredentials: true,
+      },
+    );
     return response.data;
   },
 };
