@@ -118,7 +118,7 @@
 
 <script>
 import { IconX, IconEye, IconEyeOff } from '@tabler/icons-vue';
-import { authService } from '@/services/auth.service';
+import { useAuthStore } from '@/stores/auth.store';
 import { useToast } from '@/composables/useToast';
 
 export default {
@@ -136,8 +136,9 @@ export default {
   },
   emits: ['close', 'success'],
   setup() {
+    const authStore = useAuthStore();
     const toast = useToast();
-    return { toast };
+    return { authStore, toast };
   },
   data() {
     return {
@@ -224,7 +225,7 @@ export default {
       try {
         this.submitting = true;
 
-        await authService.resetPassword(
+        await this.authStore.resetPassword(
           this.form.currentPassword,
           this.form.newPassword
         );
