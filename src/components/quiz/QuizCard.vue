@@ -91,79 +91,7 @@ import {
   IconCalendar,
   IconCheck,
 } from '@tabler/icons-vue';
-
-const SUBJECT_CONFIG: Record<string, { icon: string; gradient: string; badgeClass: string }> = {
-  Matematika: {
-    icon: 'IconMath',
-    gradient: 'bg-gradient-to-br from-blue-500 to-blue-600',
-    badgeClass: 'bg-blue-100 text-blue-700',
-  },
-  Fisika: {
-    icon: 'IconAtom',
-    gradient: 'bg-gradient-to-br from-purple-500 to-purple-600',
-    badgeClass: 'bg-purple-100 text-purple-700',
-  },
-  Kimia: {
-    icon: 'IconFlask2',
-    gradient: 'bg-gradient-to-br from-pink-500 to-pink-600',
-    badgeClass: 'bg-pink-100 text-pink-700',
-  },
-  Biologi: {
-    icon: 'IconPlant',
-    gradient: 'bg-gradient-to-br from-green-500 to-green-600',
-    badgeClass: 'bg-green-100 text-green-700',
-  },
-  'Bahasa Indonesia': {
-    icon: 'IconLanguage',
-    gradient: 'bg-gradient-to-br from-red-500 to-red-600',
-    badgeClass: 'bg-red-100 text-red-700',
-  },
-  'Bahasa Inggris': {
-    icon: 'IconLetterA',
-    gradient: 'bg-gradient-to-br from-indigo-500 to-indigo-600',
-    badgeClass: 'bg-indigo-100 text-indigo-700',
-  },
-  IPA: {
-    icon: 'IconAtom',
-    gradient: 'bg-gradient-to-br from-cyan-500 to-cyan-600',
-    badgeClass: 'bg-cyan-100 text-cyan-700',
-  },
-  IPS: {
-    icon: 'IconWorld',
-    gradient: 'bg-gradient-to-br from-amber-500 to-amber-600',
-    badgeClass: 'bg-amber-100 text-amber-700',
-  },
-  Ekonomi: {
-    icon: 'IconCoin',
-    gradient: 'bg-gradient-to-br from-yellow-500 to-yellow-600',
-    badgeClass: 'bg-yellow-100 text-yellow-700',
-  },
-  Geografi: {
-    icon: 'IconWorld',
-    gradient: 'bg-gradient-to-br from-teal-500 to-teal-600',
-    badgeClass: 'bg-teal-100 text-teal-700',
-  },
-  Sejarah: {
-    icon: 'IconArticle',
-    gradient: 'bg-gradient-to-br from-orange-500 to-orange-600',
-    badgeClass: 'bg-orange-100 text-orange-700',
-  },
-  PKN: {
-    icon: 'IconFriends',
-    gradient: 'bg-gradient-to-br from-rose-500 to-rose-600',
-    badgeClass: 'bg-rose-100 text-rose-700',
-  },
-  Informatika: {
-    icon: 'IconDeviceDesktop',
-    gradient: 'bg-gradient-to-br from-slate-600 to-slate-700',
-    badgeClass: 'bg-slate-100 text-slate-700',
-  },
-  default: {
-    icon: 'IconBook',
-    gradient: 'bg-gradient-to-br from-gray-500 to-gray-600',
-    badgeClass: 'bg-gray-100 text-gray-700',
-  },
-};
+import { DEFAULT_SUBJECT_CONFIG, SUBJECTS, type SubjectConfig } from '@/config';
 
 export default defineComponent({
   name: 'QuizCard',
@@ -239,10 +167,10 @@ export default defineComponent({
   },
   emits: ['click'],
   computed: {
-    subjectConfig(): { icon: string; gradient: string; badgeClass: string } {
-      return SUBJECT_CONFIG[this.subject] || SUBJECT_CONFIG.default;
+    subjectConfig(): SubjectConfig {
+      return SUBJECTS.find((subj) => subj.name === this.subject) || DEFAULT_SUBJECT_CONFIG;
     },
-    subjectIcon(): string {
+    subjectIcon(): object {
       return this.subjectConfig.icon;
     },
     subjectGradient(): string {

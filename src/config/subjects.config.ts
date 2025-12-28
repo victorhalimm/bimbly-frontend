@@ -130,11 +130,13 @@ export const SUBJECTS: SubjectConfig[] = [
   },
 ];
 
-export const DEFAULT_SUBJECT_CONFIG: Omit<SubjectConfig, 'name' | 'label'> = {
+export const DEFAULT_SUBJECT_CONFIG: SubjectConfig = {
   icon: IconBook,
   iconName: 'IconBook',
   gradient: 'bg-gradient-to-br from-gray-500 to-gray-600',
   badgeClass: 'bg-gray-100 text-gray-700',
+  name: '',
+  label: '',
 };
 
 export const SUBJECT_NAMES = SUBJECTS.map(s => s.name);
@@ -145,8 +147,6 @@ export const SUBJECT_MAP = new Map<string, SubjectConfig>(
 
 export function getSubjectConfig(name: string): SubjectConfig {
   return SUBJECT_MAP.get(name) || {
-    name,
-    label: name,
     ...DEFAULT_SUBJECT_CONFIG,
   };
 }

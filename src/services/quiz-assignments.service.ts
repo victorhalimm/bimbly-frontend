@@ -1,4 +1,6 @@
 import axios from 'axios';
+import type { QuizTemplate } from './quiz-templates.service';
+import type { User } from '@/stores/admin.store';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -23,9 +25,9 @@ export interface QuizAssignment {
   status: 'assigned' | 'in_progress' | 'submitted' | 'graded';
   createdAt: string;
   updatedAt: string;
-  quizTemplate?: any;
-  student?: any;
-  tutor?: any;
+  quizTemplate?: QuizTemplate;
+  student?: User;
+  tutor?: User;
 }
 
 export const quizAssignmentsService = {
