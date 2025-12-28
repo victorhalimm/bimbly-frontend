@@ -1,4 +1,6 @@
 import axios from 'axios';
+import type { Booking } from './booking.service';
+import type { QuizAssignment } from './quiz-assignments.service';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -22,19 +24,12 @@ export interface UpdateSessionSummaryDto {
 export interface SessionSummary {
   id: string;
   bookingId: string;
-  booking?: any;
+  booking?: Booking;
   strengths: string;
   areasForImprovement: string;
   notes?: string;
   quizAssignmentId?: string;
-  quizAssignment?: {
-    id: string;
-    quizTemplate: {
-      id: string;
-      title: string;
-    };
-    deadline?: string;
-  };
+  quizAssignment?: QuizAssignment;
   nextSessionPlan?: string;
   createdAt: string;
   updatedAt: string;
