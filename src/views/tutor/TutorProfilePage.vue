@@ -65,6 +65,17 @@
                       </svg>
                       <span class="font-bold text-sm">Not Approved</span>
                     </div>
+
+                    <button
+                      type="button"
+                      @click="showChangePasswordModal = true"
+                      class="w-full mt-4 bg-blue-600 text-white px-4 py-3 rounded-xl font-bold text-sm hover:bg-blue-700 transition-all ease-in-out shadow-lg cursor-pointer inline-flex items-center justify-center gap-2"
+                    >
+                      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z" clip-rule="evenodd"/>
+                      </svg>
+                      Change Password
+                    </button>
                   </div>
                 </div>
               </div>
@@ -542,6 +553,11 @@
           </div>
         </div>
       </div>
+
+      <ChangePasswordModal
+        :isOpen="showChangePasswordModal"
+        @close="showChangePasswordModal = false"
+      />
     </div>
   </div>
 </template>
@@ -554,11 +570,13 @@ import { useToast } from '@/composables/useToast';
 import { SUBJECT_NAMES } from '@/config';
 import { PROVINCES } from '@/config/provinces.config';
 import WeeklyAvailabilityInput from '@/components/tutor/WeeklyAvailabilityInput.vue';
+import ChangePasswordModal from '@/components/common/ChangePasswordModal.vue';
 
 export default {
   name: 'TutorProfilePage',
   components: {
     WeeklyAvailabilityInput,
+    ChangePasswordModal,
   },
   setup() {
     const authStore = useAuthStore();
@@ -579,6 +597,7 @@ export default {
       certificationName: '',
       certificationFile: null,
       showSubmitModal: false,
+      showChangePasswordModal: false,
       hasApplication: false,
       application: null,
       provinces: PROVINCES,

@@ -117,23 +117,15 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    async resetPassword(
-      oldPassword: string,
-      newPassword: string,
-      confirmPassword: string,
-    ) {
+    async resetPassword(currentPassword: string, newPassword: string) {
       this.loading = true;
       this.error = null;
       try {
-        const response = await authService.resetPassword(
-          oldPassword,
-          newPassword,
-          confirmPassword,
-        );
+        const response = await authService.resetPassword(currentPassword, newPassword);
         return response;
       } catch (error: any) {
         this.error =
-          error.response?.data?.message || 'Password change failed';
+          error.response?.data?.message || 'Password reset failed';
         throw error;
       } finally {
         this.loading = false;
