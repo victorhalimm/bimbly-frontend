@@ -1,1 +1,0 @@
-export { default as BFooter } from './Footer.vue';
