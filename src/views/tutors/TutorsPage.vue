@@ -154,13 +154,6 @@
                   </svg>
                 </span>
               </button>
-
-              <button
-                class="px-8 py-4 bg-white text-gray-700 font-bold text-base rounded-full border-2 border-gray-200 hover:border-blue-500 hover:text-blue-600 hover:scale-105 transition-all cursor-pointer"
-                @click="$router.push('/about')"
-              >
-                Learn More
-              </button>
             </div>
 
             <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 text-left">

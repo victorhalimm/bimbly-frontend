@@ -69,6 +69,26 @@
       </div>
 
       <div v-else class="space-y-4">
+        <div
+          v-if="hasPendingPayments && (activeTab === 'all' || activeTab === 'pending')"
+          class="bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-200 rounded-[2rem] p-6 shadow-lg"
+        >
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+              <svg class="w-6 h-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <div class="flex-1">
+              <h3 class="text-lg font-bold text-gray-900 mb-1">Payment Required</h3>
+              <p class="text-gray-700 mb-3">
+                You have {{ pendingPaymentCount }} booking{{ pendingPaymentCount > 1 ? 's' : '' }} waiting for payment.
+                Complete your payment to confirm your tutoring session{{ pendingPaymentCount > 1 ? 's' : '' }}.
+              </p>
+            </div>
+          </div>
+        </div>
+
         <BookingCard
           v-for="booking in filteredBookings"
           :key="booking.bookingId"
@@ -80,6 +100,7 @@
           @cancel="openCancelModal"
           @studentComplete="openStudentCompleteModal"
           @review="handleReview"
+          @continuePayment="handleContinuePayment"
         />
       </div>
 
@@ -287,6 +308,12 @@ export default defineComponent({
     cancelledCount(): number {
       return this.bookings.filter((b) => b.status === 'cancelled').length;
     },
+    pendingPaymentCount(): number {
+      return this.bookings.filter((b) => b.status === 'pending_payment').length;
+    },
+    hasPendingPayments(): boolean {
+      return this.pendingPaymentCount > 0;
+    },
     emptyStateMessage(): string {
       switch (this.activeTab) {
         case 'pending':
@@ -352,6 +379,9 @@ export default defineComponent({
     },
     handleView(bookingId: string) {
       this.$router.push(`/student/bookings/${bookingId}`);
+    },
+    handleContinuePayment(bookingId: string) {
+      this.$router.push(`/student/bookings/${bookingId}/payment`);
     },
     openCancelModal(bookingId: string) {
       this.cancelBookingId = bookingId;

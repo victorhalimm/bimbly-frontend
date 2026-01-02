@@ -2,7 +2,7 @@
   <div v-if="isOpen" class="fixed inset-0 backdrop-blur-sm bg-gray-900/50 flex items-center justify-center p-4 z-50">
     <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8">
       <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-black text-gray-900">Change Password</h2>
+        <h2 class="text-2xl font-black text-gray-900">Reset Password</h2>
         <button
           @click="closeModal"
           class="text-gray-400 hover:text-gray-600 transition-colors"
@@ -108,7 +108,7 @@
             :disabled="submitting"
             class="flex-1 bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700 transition-all ease-in-out shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {{ submitting ? 'Changing...' : 'Change Password' }}
+            {{ submitting ? 'Changing...' : 'Reset Password' }}
           </button>
         </div>
       </form>

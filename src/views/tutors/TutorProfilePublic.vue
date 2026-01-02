@@ -12,11 +12,11 @@
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 relative z-10">
         <div class="bg-white rounded-[2rem] shadow-xl overflow-hidden">
           <div class="flex flex-col lg:flex-row">
-            <div class="lg:w-1/3">
-              <div class="aspect-square lg:aspect-auto lg:h-full bg-gray-200 animate-pulse"></div>
+            <div class="w-full lg:w-1/3 lg:flex-shrink-0">
+              <div class="aspect-square bg-gray-200 animate-pulse"></div>
             </div>
 
-            <div class="lg:w-2/3 p-8 lg:p-10">
+            <div class="w-full lg:w-2/3 p-8 lg:p-10">
               <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
                 <div class="flex-1">
                   <div class="h-10 w-64 bg-gray-200 rounded-lg animate-pulse mb-4"></div>
@@ -126,9 +126,9 @@
 
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 relative z-10">
         <div class="bg-white rounded-[2rem] shadow-xl overflow-hidden">
-          <div class="flex flex-col lg:flex-row">
-            <div class="lg:w-1/3 relative">
-              <div class="aspect-square lg:aspect-auto lg:h-full bg-gradient-to-br from-blue-100 to-purple-100">
+          <div class="flex flex-col lg:flex-row ">
+            <div class="w-full lg:w-1/3 lg:flex-shrink-0 relative">
+              <div class="aspect-square lg:h-full bg-gradient-to-br from-blue-100 to-purple-100">
                 <img
                   :src="avatarUrl"
                   :alt="tutor.fullName"
@@ -137,13 +137,13 @@
               </div>
             </div>
 
-            <div class="lg:w-2/3 p-8 lg:p-10">
+            <div class="w-full lg:w-2/ p-8">
               <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
                 <div class="flex-1">
                   <h1 class="text-3xl lg:text-4xl font-black text-gray-900 mb-2 break-words">{{ tutor.fullName }}</h1>
 
                   <div class="flex items-center gap-3 mb-4">
-                    <div class="flex items-center gap-1 bg-yellow-50 px-3 py-1.5 rounded-full">
+                    <div class="flex items-center gap-1 bg-yellow-50 px-3 rounded-full">
                       <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                       </svg>
@@ -187,7 +187,7 @@
                   </div>
                 </div>
 
-                <div class="lg:text-right lg:min-w-[200px]">
+                <div class="lg:text-right lg:min-w-[230px]">
                   <p class="text-sm text-gray-500 mb-1">Hourly Rate</p>
                   <p class="text-3xl font-black text-blue-600 mb-4">{{ formattedPrice }}</p>
                   <div v-if="!isTutor" class="space-y-3">
@@ -321,8 +321,9 @@
                     <span class="font-semibold text-gray-900 break-words">{{ cert.name }}</span>
                   </div>
                   <a
-                    :href="cert.fileUrl"
+                    :href="getFileUrl(cert.fileUrl)"
                     target="_blank"
+                    rel="noopener noreferrer"
                     class="text-blue-600 font-bold text-sm hover:underline flex-shrink-0"
                   >
                     View
@@ -501,7 +502,6 @@ import { useReviewsStore } from '@/stores/reviews.store';
 import ReviewCard from '@/components/reviews/ReviewCard.vue';
 import TestimonialCard from '@/components/reviews/TestimonialCard.vue';
 import { IconArrowRight } from '@tabler/icons-vue';
-import { useToast } from '@/composables/useToast';
 
 export default defineComponent({
   name: 'TutorProfilePublic',
@@ -509,10 +509,6 @@ export default defineComponent({
     ReviewCard,
     TestimonialCard,
     IconArrowRight,
-  },
-  setup() {
-    const toast = useToast();
-    return { toast };
   },
   data() {
     return {
@@ -635,6 +631,15 @@ export default defineComponent({
         timeZone: 'Asia/Jakarta'
       });
     },
+    getFileUrl(filePath: string): string {
+      if (!filePath) return '';
+      if (filePath.startsWith('http://') || filePath.startsWith('https://')) {
+        return filePath;
+      }
+      const backendBaseUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:3000';
+      const normalizedPath = filePath.startsWith('/') ? filePath : `/${filePath}`;
+      return `${backendBaseUrl}${normalizedPath}`;
+    },
     handleBookSession() {
       const authStore = useAuthStore();
       if (!authStore.isAuthenticated) {
@@ -659,7 +664,7 @@ export default defineComponent({
         this.$router.push(`/chat?conversation=${conversation.id}`);
       } catch (error) {
         console.error('Failed to create conversation:', error);
-        this.toast.error('Failed to Start Conversation', 'Failed to start conversation. Please try again.');
+        alert('Failed to start conversation. Please try again.');
       } finally {
         this.sendingMessage = false;
       }
