@@ -74,6 +74,19 @@
           <p class="text-lg font-bold text-blue-600">{{ formattedPrice }}</p>
           <div class="flex gap-2 flex-wrap">
             <button
+              v-if="showContinuePaymentButton"
+              class="px-6 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-full hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl relative overflow-hidden group"
+              @click="$emit('continuePayment', booking.bookingId)"
+            >
+              <span class="relative z-10 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                </svg>
+                Complete Payment
+              </span>
+              <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity"></span>
+            </button>
+            <button
               v-if="showViewPaymentButton"
               class="px-4 py-2 text-sm font-semibold text-blue-600 bg-blue-50 rounded-full hover:bg-blue-100 transition-colors"
               @click="$emit('viewPayment', booking.bookingId)"
@@ -157,7 +170,7 @@ export default defineComponent({
       default: false,
     },
   },
-  emits: ['view', 'viewPayment', 'viewSummary', 'cancel', 'confirm', 'complete', 'studentComplete', 'review'],
+  emits: ['view', 'viewPayment', 'viewSummary', 'cancel', 'confirm', 'complete', 'studentComplete', 'review', 'continuePayment'],
   computed: {
     userName(): string {
       return this.viewAs === 'student'
@@ -218,6 +231,12 @@ export default defineComponent({
     },
     showLocationInfo(): boolean {
       return this.booking.status === 'confirmed';
+    },
+    showContinuePaymentButton(): boolean {
+      return (
+        this.viewAs === 'student' &&
+        this.booking.status === 'pending_payment'
+      );
     },
     showViewPaymentButton(): boolean {
       return (
