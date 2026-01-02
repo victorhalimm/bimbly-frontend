@@ -87,7 +87,6 @@
               <div class="text-sm text-blue-700 space-y-1">
                 <p v-if="selectedTemplate.description">{{ selectedTemplate.description }}</p>
                 <p>{{ selectedTemplate.questions.length }} questions | {{ selectedTemplate.totalPoints }} total points</p>
-                <p v-if="selectedTemplate.durationMinutes">Duration: {{ selectedTemplate.durationMinutes }} minutes</p>
               </div>
             </div>
           </div>

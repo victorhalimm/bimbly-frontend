@@ -71,20 +71,6 @@
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label for="duration" class="block text-sm font-semibold text-gray-700 mb-2">
-                Duration (minutes)
-              </label>
-              <input
-                id="duration"
-                v-model.number="formData.durationMinutes"
-                type="number"
-                min="1"
-                placeholder="Optional time limit"
-                class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all"
-              />
-            </div>
-
-            <div>
               <label for="gradeLevels" class="block text-sm font-semibold text-gray-700 mb-2">
                 Grade Levels <span class="text-red-500">*</span>
               </label>
@@ -97,18 +83,6 @@
                 class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all"
               />
             </div>
-          </div>
-
-          <div class="flex items-center gap-3">
-            <input
-              id="randomize"
-              v-model="formData.randomizeQuestions"
-              type="checkbox"
-              class="w-5 h-5 text-blue-600 rounded focus:ring-4 focus:ring-blue-100"
-            />
-            <label for="randomize" class="font-medium text-gray-700">
-              Randomize question order for each student
-            </label>
           </div>
 
           <div class="border-t-2 border-gray-200 pt-6">
@@ -186,8 +160,6 @@ interface EditQuizFormData {
   subject: string;
   gradeLevels: number[];
   questions: QuizQuestion[];
-  durationMinutes?: number;
-  randomizeQuestions: boolean;
 }
 
 interface ComponentData {
@@ -213,8 +185,6 @@ export default defineComponent({
         subject: '',
         gradeLevels: [],
         questions: [],
-        durationMinutes: undefined,
-        randomizeQuestions: false,
       },
       gradeLevelsInput: '',
       saving: false,
@@ -250,8 +220,6 @@ export default defineComponent({
           subject: template.subject,
           gradeLevels: template.gradeLevels,
           questions: [...template.questions],
-          durationMinutes: template.durationMinutes,
-          randomizeQuestions: template.randomizeQuestions,
         };
         this.gradeLevelsInput = template.gradeLevels.join(', ');
       } catch (error: any) {
@@ -292,7 +260,6 @@ export default defineComponent({
         await this.store.updateTemplate(this.templateId, {
           ...this.formData,
           description: this.formData.description || undefined,
-          durationMinutes: this.formData.durationMinutes || undefined,
         });
         this.toast.success('Quiz Updated', 'Quiz has been updated successfully!');
         this.$router.push('/tutor/quizzes');

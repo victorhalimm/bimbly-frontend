@@ -62,12 +62,6 @@ export const academicReportsService = {
     return response.data;
   },
 
-  async delete(id: string): Promise<void> {
-    await axios.delete(`${API_URL}/academic-reports/${id}`, {
-      withCredentials: true,
-    });
-  },
-
   async getCurriculumTemplate(
     curriculum: string,
     grade: number,

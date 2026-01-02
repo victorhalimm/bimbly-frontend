@@ -37,8 +37,6 @@ export interface QuizTemplate {
   authorId: string;
   questions: QuizQuestion[];
   totalPoints: number;
-  durationMinutes?: number;
-  randomizeQuestions: boolean;
   createdAt: string;
   updatedAt: string;
 }
