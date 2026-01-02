@@ -2,20 +2,10 @@ import { defineStore } from 'pinia';
 import { authService } from '../services/auth.service';
 import { useTutorStore } from './tutor.store';
 import { useStudentStore } from './student.store';
-
-export interface AuthUser {
-  id: string;
-  email: string;
-  fullName: string;
-  userType: 'student' | 'tutor' | 'admin';
-  phoneNumber: string;
-  profileImageUrl?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import type { User } from './admin.store';
 
 export interface AuthState {
-  user: AuthUser | null;
+  user: User | null;
   isAuthenticated: boolean;
   loading: boolean;
   error: string | null;

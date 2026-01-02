@@ -129,15 +129,6 @@
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                             </svg>
                           </button>
-                          <button
-                            @click.stop="deleteReport(report.id)"
-                            class="w-9 h-9 bg-red-100 text-red-600 rounded-full flex items-center justify-center hover:bg-red-200 transition-colors"
-                            aria-label="Delete report"
-                          >
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                          </button>
                         </div>
                       </div>
   
@@ -198,18 +189,6 @@
           @edit="editReportFromModal"
         />
       </div>
-
-      <SimpleConfirmModal
-        v-if="showDeleteConfirm"
-        title="Delete Report"
-        message="Are you sure you want to delete this report? This action cannot be undone."
-        confirm-text="Delete"
-        cancel-text="Cancel"
-        variant="danger"
-        :loading="deletingReport"
-        @confirm="confirmDelete"
-        @cancel="cancelDelete"
-      />
     </div>
   </div>
 </template>
@@ -343,29 +322,6 @@ export default defineComponent({
     editReportFromModal(report: AcademicReport) {
       this.closeSubjectDetail();
       this.editReport(report);
-    },
-    deleteReport(id: string) {
-      this.reportToDelete = id;
-      this.showDeleteConfirm = true;
-    },
-    async confirmDelete() {
-      if (!this.reportToDelete) return;
-
-      this.deletingReport = true;
-      try {
-        await this.store.deleteReport(this.reportToDelete);
-        this.toast.success('Deleted', 'Academic report has been deleted');
-      } catch (err: any) {
-        this.toast.error('Delete Failed', err.message || 'Failed to delete report');
-      } finally {
-        this.deletingReport = false;
-        this.showDeleteConfirm = false;
-        this.reportToDelete = null;
-      }
-    },
-    cancelDelete() {
-      this.showDeleteConfirm = false;
-      this.reportToDelete = null;
     },
     closeForm() {
       this.showForm = false;

@@ -78,20 +78,6 @@ export const useAcademicReportsStore = defineStore('academicReports', {
       }
     },
 
-    async deleteReport(id: string) {
-      this.loading = true;
-      this.error = null;
-      try {
-        await academicReportsService.delete(id);
-        this.reports = this.reports.filter((r) => r.id !== id);
-      } catch (error: any) {
-        this.error = error.response?.data?.message || 'Failed to delete report';
-        throw error;
-      } finally {
-        this.loading = false;
-      }
-    },
-
     async getCurriculumTemplate(
       curriculum: string,
       grade: number,

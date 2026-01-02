@@ -142,13 +142,6 @@
                   class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all resize-none"
                 ></textarea>
               </div>
-              <button
-                @click="saveGrade(answer, index)"
-                :disabled="gradingIndex === index"
-                class="px-6 py-2 bg-blue-600 text-white rounded-full font-bold hover:bg-blue-700 transition-colors disabled:opacity-50"
-              >
-                {{ gradingIndex === index ? 'Saving...' : 'Save Grade' }}
-              </button>
             </div>
 
             <div v-else class="border-t-2 border-gray-200 pt-4">
@@ -307,28 +300,20 @@ export default defineComponent({
       }
       return 'px-4 py-2 bg-yellow-100 text-yellow-900 rounded-full font-bold';
     },
-    async saveGrade(answer: StudentAnswer, index: number) {
-      this.gradingIndex = index;
-      try {
-        await this.store.gradeAnswer(
-          answer.assignmentId,
-          answer.questionIndex,
-          {
-            pointsEarned: this.gradeData[index].pointsEarned,
-            tutorFeedback: this.gradeData[index].tutorFeedback || undefined,
-          }
-        );
-        this.toast.success('Grade Saved', 'Grade has been saved successfully.');
-      } catch (error: any) {
-        this.toast.error('Failed to Save Grade', error.message || 'Failed to save grade');
-      } finally {
-        this.gradingIndex = null;
-      }
-    },
     async completeGrading() {
       if (!this.allEssaysGraded) {
         this.toast.warning('Incomplete Grading', 'Please grade all essay questions before completing');
         return;
+      }
+      for (const [index, answer] of Object.entries(this.answers)) {
+        await this.store.gradeAnswer(
+          answer.assignmentId,
+          answer.questionIndex,
+          {
+            pointsEarned: this.gradeData[Number(index)].pointsEarned,
+            tutorFeedback: this.gradeData[Number(index)].tutorFeedback || undefined,
+          }
+        );
       }
 
       this.completing = true;

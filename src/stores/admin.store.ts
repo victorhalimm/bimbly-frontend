@@ -19,7 +19,6 @@ export interface User {
   phoneNumber: string;
   userType: 'student' | 'tutor' | 'admin';
   isBlocked: boolean;
-  isEmailVerified: boolean;
   createdAt: string;
   updatedAt: string;
 }

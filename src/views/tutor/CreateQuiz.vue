@@ -59,20 +59,6 @@
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label for="duration" class="block text-sm font-semibold text-gray-700 mb-2">
-                Duration (minutes)
-              </label>
-              <input
-                id="duration"
-                v-model.number="formData.durationMinutes"
-                type="number"
-                min="1"
-                placeholder="Optional time limit"
-                class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all"
-              />
-            </div>
-
-            <div>
               <label for="gradeLevels" class="block text-sm font-semibold text-gray-700 mb-2">
                 Grade Levels <span class="text-red-500">*</span>
               </label>
@@ -87,31 +73,9 @@
             </div>
           </div>
 
-          <div class="flex items-center gap-3">
-            <input
-              id="randomize"
-              v-model="formData.randomizeQuestions"
-              type="checkbox"
-              class="w-5 h-5 text-blue-600 rounded focus:ring-4 focus:ring-blue-100"
-            />
-            <label for="randomize" class="font-medium text-gray-700">
-              Randomize question order for each student
-            </label>
-          </div>
-
           <div class="border-t-2 border-gray-200 pt-6">
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-2xl font-black text-gray-900">Questions</h3>
-              <button
-                type="button"
-                @click="addQuestion"
-                class="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-full font-bold hover:bg-blue-700 hover:scale-105 transition-all shadow-lg"
-              >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                Add Question
-              </button>
             </div>
 
             <div v-if="formData.questions.length === 0" class="text-center py-8 text-gray-500">
@@ -129,6 +93,16 @@
               />
             </div>
           </div>
+          <button
+            type="button"
+            @click="addQuestion"
+            class="w-full inline-flex cursor-pointer bg-white text-blue-600 font-semibold hover:bg-blue-50 border-2 border-blue-200 items-center gap-2 px-6 py-3 rounded-2xl hover:scale-105 transition-all justify-center"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Add Question
+          </button>
 
           <div class="bg-blue-50 rounded-2xl p-6">
             <div class="flex justify-between items-center">
@@ -155,7 +129,7 @@
               {{ loading ? 'Creating...' : 'Create Quiz' }}
             </button>
           </div>
-        </form>
+        </form> 
       </div>
     </div>
   </div>
@@ -175,8 +149,6 @@ interface CreateQuizFormData {
   subject: string;
   gradeLevels: number[];
   questions: QuizQuestion[];
-  durationMinutes?: number;
-  randomizeQuestions: boolean;
 }
 
 export default defineComponent({
@@ -196,8 +168,6 @@ export default defineComponent({
         subject: '',
         gradeLevels: [],
         questions: [],
-        durationMinutes: undefined,
-        randomizeQuestions: false,
       },
       gradeLevelsInput: '',
       loading: false,
@@ -245,7 +215,6 @@ export default defineComponent({
         await store.createTemplate({
           ...this.formData,
           description: this.formData.description || undefined,
-          durationMinutes: this.formData.durationMinutes || undefined,
         });
         this.toast.success('Quiz Created', 'Quiz has been created successfully!');
         this.$router.back();

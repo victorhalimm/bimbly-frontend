@@ -201,9 +201,15 @@ export default defineComponent({
     getDeadlineBadge(assignment: QuizAssignment): string {
       if (!assignment.deadline) return '';
       if (assignment.status === 'graded' || assignment.status === 'submitted') return '';
+
       const deadline = new Date(assignment.deadline);
       const now = new Date();
-      const diffDays = Math.ceil((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+
+      const deadlineDate = new Date(deadline.getFullYear(), deadline.getMonth(), deadline.getDate());
+      const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+      const diffDays = Math.ceil((deadlineDate.getTime() - todayDate.getTime()) / (1000 * 60 * 60 * 24));
+
       if (diffDays < 0) return 'Overdue';
       if (diffDays === 0) return 'Due Today';
       if (diffDays === 1) return 'Due Tomorrow';
@@ -213,7 +219,14 @@ export default defineComponent({
     isOverdue(assignment: QuizAssignment): boolean {
       if (!assignment.deadline) return false;
       if (assignment.status === 'graded' || assignment.status === 'submitted') return false;
-      return new Date(assignment.deadline) < new Date();
+
+      const deadline = new Date(assignment.deadline);
+      const now = new Date();
+
+      const deadlineDate = new Date(deadline.getFullYear(), deadline.getMonth(), deadline.getDate());
+      const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+      return deadlineDate < todayDate;
     },
     handleCardClick(assignment: QuizAssignment): void {
       if (assignment.status === 'graded') {
