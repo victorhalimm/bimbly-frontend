@@ -11,13 +11,13 @@
 
       <div class="max-w-7xl mx-auto relative z-10">
         <h1 class="text-5xl text-center md:text-6xl font-black text-gray-900 mb-4">
-          My
           <span class="relative inline-block px-1">
-            <span class="relative z-20 text-blue-600 font-cursive italic">Quizzes</span>
+            <span class="relative z-20 text-blue-600 font-cursive italic">Quiz</span>
             <svg class="absolute -bottom-2 left-0 w-full h-4 z-10" viewBox="0 0 100 12" preserveAspectRatio="none" fill="none">
               <path d="M2,8 Q25,2 50,8 T98,6" stroke="#3b82f6" stroke-width="4" stroke-linecap="round" opacity="0.4"/>
             </svg>
           </span>
+          Templates
         </h1>
         <p class="text-xl text-center text-gray-600 font-medium max-w-xl mx-auto mb-8">
           Create and manage quiz templates for your students

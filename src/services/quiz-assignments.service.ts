@@ -92,4 +92,18 @@ export const quizAssignmentsService = {
     return response.data;
   },
 
+  async completeGrading(
+    id: string,
+    grades: Array<{ questionIndex: number; pointsEarned: number; tutorFeedback?: string }>,
+  ): Promise<QuizAssignment> {
+    const response = await axios.post(
+      `${API_URL}/quiz-assignments/${id}/complete-grading`,
+      { grades },
+      {
+        withCredentials: true,
+      },
+    );
+    return response.data;
+  },
+
 };

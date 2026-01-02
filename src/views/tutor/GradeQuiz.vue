@@ -114,7 +114,7 @@
               </div>
             </div>
 
-            <div v-if="answer.questionType === 'essay'" class="border-t-2 border-gray-200 pt-4">
+            <div v-if="answer.questionType === 'essay' && gradeData[index]" class="border-t-2 border-gray-200 pt-4">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label :for="`points-${index}`" class="block text-sm font-semibold text-gray-700 mb-2">
@@ -256,6 +256,24 @@ export default defineComponent({
       );
     },
   },
+  watch: {
+    assignmentId: {
+      immediate: false,
+      async handler(newId, oldId) {
+        if (newId && newId !== oldId) {
+          await this.loadData();
+        }
+      },
+    },
+    answers: {
+      immediate: true,
+      handler(newAnswers) {
+        if (newAnswers && newAnswers.length > 0 && this.gradeData.length === 0) {
+          this.initializeGradeData();
+        }
+      },
+    },
+  },
   async mounted() {
     await this.loadData();
   },
@@ -305,20 +323,22 @@ export default defineComponent({
         this.toast.warning('Incomplete Grading', 'Please grade all essay questions before completing');
         return;
       }
-      for (const [index, answer] of Object.entries(this.answers)) {
-        await this.store.gradeAnswer(
-          answer.assignmentId,
-          answer.questionIndex,
-          {
-            pointsEarned: this.gradeData[Number(index)].pointsEarned,
-            tutorFeedback: this.gradeData[Number(index)].tutorFeedback || undefined,
-          }
-        );
-      }
 
       this.completing = true;
       try {
-        await quizAssignmentsService.updateScore(this.assignmentId, this.currentScore);
+        const grades = this.answers
+          .filter(a => a.questionType === 'essay')
+          .map((answer, index) => {
+            const gradeIndex = this.answers.indexOf(answer);
+            const pointsEarned = Number(this.gradeData[gradeIndex].pointsEarned) || 0;
+            return {
+              questionIndex: answer.questionIndex,
+              pointsEarned: pointsEarned,
+              tutorFeedback: this.gradeData[gradeIndex].tutorFeedback || undefined,
+            };
+          });
+
+        await quizAssignmentsService.completeGrading(this.assignmentId, grades);
         this.toast.success('Grading Completed', 'Quiz grading has been completed successfully!');
         this.$router.push('/tutor/assignments');
       } catch (error: any) {
