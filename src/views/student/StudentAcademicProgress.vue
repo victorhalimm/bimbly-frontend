@@ -172,7 +172,7 @@
       </div>
   
       <div v-if="showForm" class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50" @click.self="closeForm">
-        <div class="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="max-w-2xl w-full">
           <AcademicReportForm
             :report="editingReport"
             :default-grade="selectedGrade"

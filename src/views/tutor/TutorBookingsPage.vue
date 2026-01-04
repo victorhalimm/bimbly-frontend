@@ -1,11 +1,11 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <div class="bg-blue-100 pt-24 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div class="bg-blue-100 pt-36 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div class="absolute top-10 right-10 w-32 h-32 bg-blue-200 rounded-full opacity-50 blur-2xl"></div>
       <div class="absolute bottom-10 left-10 w-24 h-24 bg-purple-200 rounded-full opacity-40 blur-xl"></div>
 
       <div class="max-w-6xl mx-auto relative z-10">
-        <h1 class="text-3xl md:text-4xl font-black text-gray-900">Booking Requests</h1>
+        <h1 class="text-3xl md:text-4xl font-black text-gray-900">Student Bookings</h1>
         <p class="text-gray-600 mt-2">Manage your student bookings and sessions</p>
       </div>
     </div>

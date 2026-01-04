@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 px-4">
+  <div class="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 pt-36 px-4">
     <div class="max-w-4xl mx-auto">
       <div class="text-center mb-8">
         <h1 class="text-5xl font-black text-gray-900 mb-4">

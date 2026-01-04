@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-2xl max-w-4xl mx-auto">
+  <div class="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-2xl max-w-4xl mx-auto max-h-[90vh] overflow-y-auto">
     <div class="absolute top-10 right-10 w-32 h-32 bg-blue-200 rounded-full opacity-10 blur-3xl"></div>
 
     <div class="relative mb-8">
