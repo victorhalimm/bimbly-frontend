@@ -90,30 +90,11 @@
             </div>
           </div>
 
-          <button
-            class="w-10 h-10 rounded-full flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-all relative"
-            @click="$emit('open-notifications')"
-          >
-            <IconBell size="22" stroke="1.5" />
-            <span
-              v-if="notificationCount > 0"
-              class="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center"
-            >
-              {{ notificationCount > 9 ? '9+' : notificationCount }}
-            </span>
-          </button>
-
          <router-link
             to="/chat"
             class="w-10 h-10 rounded-full flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-all relative"
           >
             <IconMessage size="22" stroke="1.5" />
-            <span
-              v-if="unreadMessages > 0"
-              class="absolute top-1 right-1 w-4 h-4 bg-blue-500 text-white text-xs font-bold rounded-full flex items-center justify-center"
-            >
-              {{ unreadMessages > 9 ? '9+' : unreadMessages }}
-            </span>
           </router-link>
 
           <div class="h-6 w-px bg-gray-200 mx-1"></div>
@@ -275,7 +256,7 @@ interface NavigationChild {
   icon: string;
 }
 
-interface NavigationItem {
+export interface NavigationItem {
   name: string;
   href: string;
   hasDropdown?: boolean;
@@ -298,23 +279,12 @@ export default defineComponent({
     IconClipboardCheck,
     IconClock,
   },
-  props: {
-    notificationCount: {
-      type: Number,
-      default: 0,
-    },
-    unreadMessages: {
-      type: Number,
-      default: 0,
-    },
-  },
   setup() {
     const authStore = useAuthStore();
     const tutorStore = useTutorStore();
     const toast = useToast();
     return { toast, authStore, tutorStore };
   },
-  emits: ['open-notifications', 'open-chat'],
   data() {
     return {
       showProfileMenu: false,
