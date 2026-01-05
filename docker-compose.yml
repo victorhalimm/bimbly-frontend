@@ -6,6 +6,8 @@ services:
     container_name: bimbly-frontend
     ports:
       - "81:80"
+    env_file:
+      - .env
     restart: unless-stopped
     networks:
       - bimbly-network
