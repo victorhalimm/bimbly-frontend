@@ -32,7 +32,7 @@
                 {{ assignment?.quizTemplate?.title || 'Quiz' }}
               </h2>
               <p class="text-gray-600">
-                Student: {{ assignment?.student?.user?.name || 'Unknown' }}
+                Student: {{ assignment?.student?.user?.fullName || 'Unknown' }}
               </p>
             </div>
             <div class="flex items-center gap-4">
@@ -328,7 +328,7 @@ export default defineComponent({
       try {
         const grades = this.answers
           .filter(a => a.questionType === 'essay')
-          .map((answer, index) => {
+          .map((answer, _) => {
             const gradeIndex = this.answers.indexOf(answer);
             const pointsEarned = Number(this.gradeData[gradeIndex].pointsEarned) || 0;
             return {

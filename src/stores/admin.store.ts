@@ -12,12 +12,23 @@ export interface AdminStats {
   totalRevenue: number;
 }
 
+export interface UserDetail {
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  city: string;
+  province: string;
+  profileImageUrl?: string;
+}
+
 export interface User {
   id: string;
   email: string;
   fullName: string;
-  phoneNumber: string;
+  phoneNumber: string;  
   userType: 'student' | 'tutor' | 'admin';
+  profileImageUrl?: string;
+  user?: UserDetail;
   isBlocked: boolean;
   createdAt: string;
   updatedAt: string;
