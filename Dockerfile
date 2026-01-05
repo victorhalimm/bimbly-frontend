@@ -1,5 +1,8 @@
 FROM node:20-alpine AS builder
 
+ARG VITE_API_URL
+ARG VITE_WS_URL
+
 WORKDIR /app
 
 COPY package*.json ./

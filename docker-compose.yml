@@ -3,11 +3,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+        VITE_WS_URL: ${VITE_WS_URL}
     container_name: bimbly-frontend
     ports:
       - "81:80"
-    env_file:
-      - .env
     restart: unless-stopped
     networks:
       - bimbly-network
