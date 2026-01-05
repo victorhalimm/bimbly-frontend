@@ -1,0 +1,15 @@
+services:
+  bimbly-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bimbly-frontend
+    ports:
+      - "81:80"
+    restart: unless-stopped
+    networks:
+      - bimbly-network
+
+networks:
+  bimbly-network:
+    external: true
