@@ -41,7 +41,7 @@ jobs:
             echo "📦 Starting frontend deployment..."
 
             PROJECT_DIR="/home/ubuntu/bimbly/bimbly-frontend"
-            REPO_URL="https://github.com/darryleffendi/bimbly-frontend.git"
+            REPO_URL="https://github.com/victorhalimm/bimbly-frontend.git"
 
             if [ ! -d "$PROJECT_DIR/.git" ]; then
               echo "🆕 First time setup - cloning repository..."
