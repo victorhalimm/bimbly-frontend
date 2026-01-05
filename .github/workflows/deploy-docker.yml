@@ -54,7 +54,7 @@ jobs:
             fi
 
             echo "⬇️  Pulling latest code..."
-            git pull origin master || git fetch origin && git reset --hard origin/master
+            git pull origin main || git fetch origin && git reset --hard origin/main
 
             echo "🔐 Creating .env file..."
             cat > .env << 'EOF'
