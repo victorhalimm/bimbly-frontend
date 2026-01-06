@@ -3,7 +3,7 @@
     class="fixed left-0 right-0 z-50 px-4 py-3 transition-all duration-300"
     :class="navbarClass"
   >
-    <div class="max-w-7xl mx-auto px-12">
+    <div class="max-w-7xl mx-auto md:px-12">
       <div class="bg-white rounded-full shadow-lg px-4 py-2 flex items-center justify-between">
         <div class="flex items-center gap-8">
           <router-link :to="homeRoute" class="flex items-center gap-2 pl-2">
