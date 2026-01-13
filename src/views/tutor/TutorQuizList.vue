@@ -100,41 +100,8 @@
             >
               Assign
             </button>
-            <button
-              @click.stop="confirmDelete(template)"
-              class="p-2 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition-colors"
-            >
-              <IconTrash size="14" stroke="2" />
-            </button>
           </template>
         </QuizCard>
-      </div>
-
-      <div v-if="showDeleteModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
-        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
-          <div class="flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mx-auto mb-4">
-            <IconAlertTriangle size="32" stroke="2" class="text-red-600" />
-          </div>
-          <h3 class="text-2xl font-black text-gray-900 mb-2 text-center">Delete Quiz</h3>
-          <p class="text-gray-600 mb-6 text-center">
-            Are you sure you want to delete "<strong>{{ templateToDelete?.title }}</strong>"? This action cannot be undone.
-          </p>
-          <div class="flex gap-3">
-            <button
-              @click="showDeleteModal = false"
-              class="flex-1 py-3 bg-gray-100 text-gray-700 rounded-full font-bold hover:bg-gray-200 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              @click="deleteTemplate"
-              :disabled="deleting"
-              class="flex-1 py-3 bg-red-600 text-white rounded-full font-bold hover:bg-red-700 transition-colors disabled:opacity-50"
-            >
-              {{ deleting ? 'Deleting...' : 'Delete' }}
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -154,7 +121,6 @@ import type { QuizTemplate } from '../../services/quiz-templates.service';
 import { useToast } from '@/composables/useToast';
 
 interface ComponentData {
-  showDeleteModal: boolean;
   templateToDelete: QuizTemplate | null;
   deleting: boolean;
 }
@@ -174,7 +140,6 @@ export default defineComponent({
   },
   data(): ComponentData {
     return {
-      showDeleteModal: false,
       templateToDelete: null,
       deleting: false,
     };
@@ -211,24 +176,7 @@ export default defineComponent({
     },
     confirmDelete(template: QuizTemplate): void {
       this.templateToDelete = template;
-      this.showDeleteModal = true;
-    },
-    async deleteTemplate(): Promise<void> {
-      if (!this.templateToDelete) return;
-
-      this.deleting = true;
-      try {
-        await this.store.deleteTemplate(this.templateToDelete.id);
-        this.showDeleteModal = false;
-        this.templateToDelete = null;
-        this.toast.success('Quiz Deleted', 'Quiz has been deleted successfully.');
-      } catch (error: unknown) {
-        const message = error instanceof Error ? error.message : 'Failed to delete quiz';
-        this.toast.error('Failed to Delete Quiz', message);
-      } finally {
-        this.deleting = false;
-      }
-    },
+    }
   },
 });
 </script>
