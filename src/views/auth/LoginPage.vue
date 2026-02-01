@@ -139,21 +139,11 @@
             <p v-if="errors.password" class="mt-2 text-sm text-red-600">{{ errors.password }}</p>
           </div>
 
-          <!-- Forgot Password Link -->
-          <div class="text-right">
-            <router-link
-              to="/forgot-password"
-              class="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
-            >
-              Forgot password?
-            </router-link>
-          </div>
-
           <!-- Submit Button -->
           <button
             type="submit"
             :disabled="loading"
-            class="w-full inline-flex items-center justify-center gap-3 bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-blue-700 hover:scale-105 transition-all shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            class="w-full mt-8 inline-flex items-center justify-center gap-3 bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-blue-700 hover:scale-105 transition-all shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
             <span v-if="loading">Signing in...</span>
             <span v-else>Login</span>

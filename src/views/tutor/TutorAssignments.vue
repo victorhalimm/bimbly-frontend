@@ -135,11 +135,6 @@
               </span>
             </div>
 
-            <div v-if="assignment.score !== null && assignment.score !== undefined" class="flex items-center gap-1 text-xs text-green-600 font-semibold mb-3">
-              <IconCheck size="14" stroke="2" />
-              <span>{{ assignment.score }}/{{ assignment.quizTemplate?.totalPoints || 0 }}</span>
-            </div>
-
             <div class="flex items-center text-xs text-gray-400 mb-3">
               <IconCalendar size="14" stroke="2" class="mr-1" />
               <span>{{ formatDate(assignment.assignedAt) }}</span>
